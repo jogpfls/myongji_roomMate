@@ -5,18 +5,28 @@ import Footer from "./Footer";
 
 const Layout = ({ children }) => {
   return (
-    <div>
+    <LayoutContainer>
       <HeaderWrapper>
         <Header />
       </HeaderWrapper>
-      <main>{children}</main>
+      <Main>{children}</Main>
       <Footer />
-    </div>
+    </LayoutContainer>
   );
 };
 
+const LayoutContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+`;
+
 const HeaderWrapper = styled.div`
   height: 60px;
+`;
+
+const Main = styled.main`
+  flex: 1;
 `;
 
 export default Layout;
