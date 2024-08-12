@@ -1,6 +1,37 @@
-// import { css } from "styled-components";
+import { css } from "styled-components";
+
 export const Theme = {
-  fonts: {},
+  fonts: {
+    default: css`
+      font-family: "Freesentation-3Light", sans-serif;
+      font-size: 20px;
+    `,
+    title: css`
+      font-family: "Freesentation-7Bold", sans-serif;
+      font-style: normal;
+      font-size: 54px;
+    `,
+    text2: css`
+      font-family: "Freesentation-2ExtraLight", sans-serif;
+      font-style: normal;
+      font-size: 50px;
+    `,
+    text4: css`
+      font-family: "Freesentation-4Regular", sans-serif;
+      font-style: normal;
+      font-size: 50px;
+    `,
+    text5: css`
+      font-family: "Freesentation-5Medium", sans-serif;
+      font-style: normal;
+      font-size: 50px;
+    `,
+    other: css`
+      font-family: "Goorm Sans", sans-serif;
+      font-weight: 300;
+      font-style: normal;
+    `,
+  },
   colors: {
     white: "#fff",
     deepBlue: "#18236F",
