@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { useLocation, useNavigate } from "react-router-dom";
-import { FaHome, FaBuilding, FaDoorOpen } from "react-icons/fa"; // 아이콘 추가
+import { FaHome, FaBuilding } from "react-icons/fa";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -64,13 +64,16 @@ const Header = () => {
                 <FaHome style={{ marginRight: "8px" }} /> 명덕
               </LinkWrapper>
               <LinkWrapper onClick={() => handleNavigation("/dormitory")}>
+                <FaHome style={{ marginRight: "8px" }} /> 명현
+              </LinkWrapper>
+              <LinkWrapper onClick={() => handleNavigation("/dormitory")}>
                 <FaBuilding style={{ marginRight: "8px" }} /> 3동
               </LinkWrapper>
               <LinkWrapper onClick={() => handleNavigation("/dormitory")}>
                 <FaBuilding style={{ marginRight: "8px" }} /> 4동
               </LinkWrapper>
               <LinkWrapper onClick={() => handleNavigation("/dormitory")}>
-                <FaDoorOpen style={{ marginRight: "8px" }} /> 5동
+                <FaBuilding style={{ marginRight: "8px" }} /> 5동
               </LinkWrapper>
             </DroppedBox>
           )}
@@ -146,13 +149,11 @@ const Item = styled.span`
   transition: color 0.3s ease;
 
   ${({ post, theme }) =>
-    post !== "매칭" &&
-    `
+    post !== "매칭" && `
     &:hover {
       color: ${theme.colors.deepBlue};
       border-bottom: 4px solid ${theme.colors.deepBlue};
-    }
-  `}
+    }`}
 `;
 
 const DroppedBox = styled.div`
@@ -200,7 +201,8 @@ const LogoutContainer = styled.div`
 
 const Logout = styled.button`
   width: 8vw;
-  height: 2.5vw;
+  min-width: 50px;
+  height: 4vh;
   border-radius: 2vw;
   background-color: ${(props) => props.theme.colors.deepBlue};
   color: ${(props) => props.theme.colors.white};
