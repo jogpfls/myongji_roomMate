@@ -149,10 +149,13 @@ const Item = styled.span`
   transition: color 0.3s ease;
 
   ${({ post, theme }) =>
-    post !== "매칭" && `
+    post !== "매칭" ? `
     &:hover {
       color: ${theme.colors.deepBlue};
       border-bottom: 4px solid ${theme.colors.deepBlue};
+    }` : `
+    &:hover {
+      color: ${theme.colors.deepBlue};
     }`}
 `;
 
