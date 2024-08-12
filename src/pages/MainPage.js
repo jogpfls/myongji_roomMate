@@ -80,6 +80,7 @@ const Cir = styled.div`
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.4);
   ${(props) => props.theme.fonts.text4}
   font-size: 4vw;
+  cursor: pointer;
 
   transition: all 0.3s ease;
 
