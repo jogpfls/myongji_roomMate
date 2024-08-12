@@ -51,9 +51,9 @@ const Background = styled.div`
 `;
 
 const Wrapper = styled.div`
-  width: 60vw;
-  height: 48vw;
-  margin: 3.8vw 0;
+  width: 70%;
+  height: 85vh;
+  margin: 4.5vh 0;
 `;
 
 const TitleBox = styled.div`
@@ -61,18 +61,19 @@ const TitleBox = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  height: 8vw;
+  height: 15vh;
 `;
 
 const Title = styled.p`
-  ${({theme})=>theme.fonts.text5}
+  ${({theme})=>theme.fonts.title}
+  font-size: 45px;
 `;
 
 const SearchWrapper = styled.div`
   background-color: ${({theme})=>theme.colors.lightBlue};
-  width: 60vw;
-  height: 3.5vw;
-  border-radius: 0.7vw;
+  width: 100%;
+  height: 7vh;
+  border-radius: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -82,10 +83,10 @@ const Search = styled.input`
   background-color: ${({theme})=>theme.colors.white};
   border: none;
   width: 38vw;
-  height: 2.3vw;
-  border-radius: 0.5vw;
+  height: 5vh;
+  border-radius: 8px;
   outline: none;
-  padding: 0 0.8vw;
+  padding: 0 1.8vh;
 
   &:hover{
     outline: none;
@@ -95,12 +96,13 @@ const Search = styled.input`
 const SearchButton = styled.button`
   background-color: ${({theme})=>theme.colors.blue2};
   ${({theme})=>theme.fonts.text5}
-  font-size: 1.15vw;
+  font-size: 15px;
   color: ${({theme})=>theme.colors.white};
-  width: 5vw;
-  height: 2.3vw;
-  border-radius: 0.5vw;
-  margin-left: 1vw;
+  width: 6vw;
+  min-width: 60px;
+  height: 5vh;
+  border-radius: 8px;
+  margin-left: 2vh;
   transition: background-color 0.2s;
 
   &:hover {
@@ -115,17 +117,18 @@ const BottomWrapper = styled.div`
 `;
 
 const ListWrapper = styled.div`
-  width: 60vw;
-  height: 30vw;
-  margin: 3vw 0;
+  width: 100%;
+  height: 55vh;
+  margin: 4vh 0;
   display: flex;
   flex-direction: column;
   align-items: start;
   justify-content: start;
   overflow-y: scroll;
+  overflow-x: hidden;
 
   &::-webkit-scrollbar {
-    width: 1vw;
+    width: 1.3vh;
     background-color: white;
     }
 
