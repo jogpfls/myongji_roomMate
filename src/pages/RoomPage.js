@@ -14,6 +14,9 @@ const RoomPage = () => {
         <Category disabled>여자</Category>
         <Category disabled>2인실</Category>
         <Category disabled>아침형</Category>
+        <Category disabled>아침형</Category>
+        <Category disabled>아침형</Category>
+        <Category disabled>아침형</Category>
       </TagBox>
       <Content>
         -비흡연자 - 방 안 영상통화 X (방에 혼자 있을 때나 짧은 통화는 호실
@@ -35,7 +38,7 @@ const RoomPage = () => {
   );
 };
 const Container = styled.div`
-  width: 75%;
+  width: 80%;
   margin: auto;
   height: 95vh;
   display: flex;
@@ -57,9 +60,10 @@ const Title = styled.div`
   ${(props) => props.theme.fonts.text5}
 `;
 const TagBox = styled.div`
-  display: flex;
-  gap: 2vw;
-  flex-direction: initial;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: 1.85vw;
+  width: 100%;
 `;
 const Content = styled.div`
   width: 100%;

@@ -24,7 +24,9 @@ const Category = ({ children, onClick, bgc, disabled }) => {
 };
 
 const CaBox = styled.div`
-  width: 105px;
+  max-width: 105px;
+  width: 10vw;
+  min-width: 95px;
   height: 32px;
   border-radius: 20px;
   background-color: ${(props) =>
