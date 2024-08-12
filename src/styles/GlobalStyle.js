@@ -1,6 +1,7 @@
 import { createGlobalStyle } from "styled-components";
 import { reset } from "styled-reset";
 import "./font.css";
+import background from "../images/Background.svg";
 
 const GlobalStyle = createGlobalStyle`
   ${reset};
@@ -23,6 +24,8 @@ const GlobalStyle = createGlobalStyle`
     line-height: 1;
     margin: 0;
     padding: 0;
+    background: url(${background})  no-repeat center center fixed;
+    background-size: cover;
   }
 
   ol, ul {
