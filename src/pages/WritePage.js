@@ -69,7 +69,7 @@ const WrapperWrapper = styled.div`
 `;
 
 const AllWrapper = styled.div`
-  width: 75%;
+  width: 80%;
   height: 100vh;
   display: flex;
   align-items: center;
@@ -126,11 +126,10 @@ const CategoryBox = styled.div`
 `;
 
 const CategoryWrapper = styled.div`
-  display: flex;
-  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
   gap: 1.85vw;
-  flex-wrap: wrap;
-  justify-content: start;
+  width: 100%;
 `;
 
 const ContentsBox = styled.div`
