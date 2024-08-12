@@ -2,13 +2,15 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-const List = () => {
+const List = ({search, title}) => {
   const navigate = useNavigate();
+
   return (
     <div>
-      <Wrapper onClick={() => navigate('/room')}>
+      {title.includes(search) && (
+        <Wrapper onClick={() => navigate('/room')}>
         <TitleBox>
-          <Title>♀ 흡연 안하는 룸메 구해요</Title>
+          <Title>{title}</Title>
         </TitleBox>
           <TextBox>
           <CategoryBox>
@@ -18,6 +20,7 @@ const List = () => {
           <Date>2024.05.31</Date>
         </TextBox>
       </Wrapper>
+      )}
     </div>
   );
 };
@@ -34,6 +37,7 @@ const Wrapper = styled.div`
   gap: 1.2vw;
   cursor: pointer;
   transition: background-color 0.2s;
+  margin-bottom: 1.5vw;
   
   &:hover{
     background-color: ${({theme})=>theme.colors.lightBlueC};

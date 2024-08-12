@@ -1,11 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import List from "../components/List";
 import Button from "../components/Button";
 import { useNavigate } from "react-router-dom";
 
 const DormitoryPage = () => {
+  const [search, setSearch] = useState('');
   const navigate = useNavigate();
+
+  const handleSearchChange = (event) => {
+    setSearch(event.target.value)
+  }
+
   return (
     <Background>
       <Wrapper>
@@ -13,21 +19,23 @@ const DormitoryPage = () => {
           <Title>명덕</Title>
           <SearchWrapper>
             <div>
-              <Search></Search>
+              <Search 
+              onChange={handleSearchChange} 
+              value={search}
+              placeholder="찾고 싶은 방을 검색해보세요!"/>
               <SearchButton>검색</SearchButton>
             </div>
           </SearchWrapper>
         </TitleBox>
         <BottomWrapper>
           <ListWrapper>
-            <List />
-            <List />
-            <List />
-            <List />
-            <List />
-            <List />
-            <List />
-            <List />
+            <List title="♀ 흡연 안하는 룸메 구해요" search={search}/>
+            <List title="♀ 일찍 잠자는 사람 구해요" search={search}/>
+            <List title="♀ 담배 X" search={search}/>
+            <List title="♀ 흡연 X" search={search}/>
+            <List title="♀ 흡연 X" search={search}/>
+            <List title="♀ 코골이 X" search={search}/>
+            <List title="♀ 같이 친해져요~" search={search}/>
           </ListWrapper>
           <Button onClick={() => navigate("/write")}>글쓰기</Button>
         </BottomWrapper>
@@ -73,10 +81,11 @@ const SearchWrapper = styled.div`
 const Search = styled.input`
   background-color: ${({theme})=>theme.colors.white};
   border: none;
-  width: 40vw;
+  width: 38vw;
   height: 2.3vw;
   border-radius: 0.5vw;
   outline: none;
+  padding: 0 0.8vw;
 
   &:hover{
     outline: none;
@@ -112,7 +121,7 @@ const ListWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: start;
-  gap: 1.5vw;
+  justify-content: start;
   overflow-y: scroll;
 
   &::-webkit-scrollbar {
@@ -121,14 +130,11 @@ const ListWrapper = styled.div`
     }
 
   &::-webkit-scrollbar-thumb {
-    height: 3px;
-    width: 15px;
-    background-color:${({theme})=>theme.colors.gray2};
+    background-color:${({theme})=>theme.colors.gray};
   }
 
   &::-webkit-scrollbar-track {
-    width: 3px;
-    background-color:${({theme})=>theme.colors.gray};
+    background-color:${({theme})=>theme.colors.gray2};
   }
 
 `;
