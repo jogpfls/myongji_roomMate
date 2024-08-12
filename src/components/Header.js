@@ -60,6 +60,7 @@ const Title = styled.h1`
   font-size: 40px;
   padding-left: 40px;
   margin-bottom: 3px;
+  cursor: pointer;
 `;
 const Menu = styled.h1`
   width: 100%;
@@ -77,6 +78,7 @@ const Item = styled.p`
     props.$active ? `4px solid ${props.theme.colors.deepBlue}` : "none"};
   color: ${(props) =>
     props.$active ? props.theme.colors.deepBlue : props.theme.colors.gray};
+    cursor: pointer;
 `;
 const LogoutContainer = styled.div`
   margin-right: 40px;

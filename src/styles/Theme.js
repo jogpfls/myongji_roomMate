@@ -19,12 +19,12 @@ export const Theme = {
     text4: css`
       font-family: "Freesentation-4Regular", sans-serif;
       font-style: normal;
-      font-size: 50px;
+      font-size: 30px;
     `,
     text5: css`
       font-family: "Freesentation-5Medium", sans-serif;
       font-style: normal;
-      font-size: 50px;
+      font-size: 30px;
     `,
     other: css`
       font-family: "Goorm Sans", sans-serif;
@@ -44,5 +44,7 @@ export const Theme = {
     gray: "#9A9A9A",
     gray2: "#E9E9E9",
     black: "#000",
+    blue2C: "#5D65A1",
+    lightBlueC: "#CCDCFF",
   },
 };
