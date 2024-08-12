@@ -30,6 +30,12 @@ const ChatPage = () => {
     }
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      sendMessage();
+    }
+  };
+
   return (
     <ChatContainer>
       <ChatRoomList>
@@ -68,6 +74,7 @@ const ChatPage = () => {
             type="text"
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
+            onKeyPress={handleKeyPress}
             placeholder="메세지를 입력하세요."
           />
           <SendButton type="button" onClick={sendMessage}>
