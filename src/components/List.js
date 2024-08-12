@@ -27,17 +27,17 @@ const List = ({search, title}) => {
 
 const Wrapper = styled.div`
   background-color: ${({theme})=>theme.colors.lightBlue};
-  width: 58vw;
-  height: 6.38vw;
-  border-radius: 0.7vw;
+  width: 67vw;
+  height: 11.75vh;
+  border-radius: 10px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 1.2vw;
+  gap: 2vh;
   cursor: pointer;
   transition: background-color 0.2s;
-  margin-bottom: 1.5vw;
+  margin-bottom: 2.3vh;
   
   &:hover{
     background-color: ${({theme})=>theme.colors.lightBlueC};
@@ -46,8 +46,8 @@ const Wrapper = styled.div`
 
 const TitleBox = styled.div`
   background-color: ${({theme})=>theme.colors.white};
-  width: 55vw;
-  height: 2.2vw;
+  width: 90%;
+  height: 3.5vh;
   border-radius: 0.7vw;
   display: flex;
   align-items: center;
@@ -56,11 +56,11 @@ const TitleBox = styled.div`
 const Title = styled.p`
   ${({theme})=>theme.fonts.text4}
   margin-left: 0.8vw;
-  font-size: 1.1vw;
+  font-size: 15px;
 `;
 
 const TextBox = styled.div`
-  width: 55vw;
+  width: 90%;
   display: flex;
   justify-content: space-between;
 `;
@@ -73,12 +73,12 @@ const CategoryBox = styled.div`
 
 const Category = styled.p`
   color: ${({theme})=>theme.colors.gray};
-  font-size: 1.1vw;
+  font-size: 15px;
 `;
 
 const Date = styled.p`
   color: ${({theme})=>theme.colors.gray};
-  font-size: 1.1vw;
+  font-size: 15px;
 `;
 
 export default List;
