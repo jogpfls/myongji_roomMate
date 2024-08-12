@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import io from "socket.io-client";
+import ChatOut from "../images/ChatOut.svg";
 
 const socket = io("");
 
@@ -41,17 +42,27 @@ const ChatPage = () => {
       </ChatRoomList>
       <ChatRoom>
         <ChatRoomHeader>
-          <RoomTitle>흡연 안하는 룸메 구해요</RoomTitle>
-          <RoomStatus>3/4 모집 중...</RoomStatus>
+          <RoomInfo>
+            <RoomTitle>흡연 안하는 룸메 구해요</RoomTitle>
+            <RoomStatus>3/4 모집 중...</RoomStatus>
+          </RoomInfo>
+          <HeaderRight>
+            <ExitButton>
+              <img src={ChatOut} />
+            </ExitButton>
+          </HeaderRight>
         </ChatRoomHeader>
         <ChatMessages>
           {messages.map((message, index) => (
             <Message key={index} sent={message.sender === "나"}>
-              <MessageText>{message.text}</MessageText>
-              <Timestamp>12:13</Timestamp>
+              <Timestamp sent={message.sender === "나"}>12:13</Timestamp>
+              <MessageText sent={message.sender === "나"}>
+                {message.text}
+              </MessageText>
             </Message>
           ))}
         </ChatMessages>
+
         <ChatInputContainer>
           <ChatInput
             type="text"
@@ -110,19 +121,47 @@ const ChatRoom = styled.section`
 
 const ChatRoomHeader = styled.header`
   background-color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: 20px;
   border-bottom: 2px solid ${(props) => props.theme.colors.gray2};
 `;
+const RoomInfo = styled.div``;
 
 const RoomTitle = styled.h3`
   ${(props) => props.theme.fonts.text4};
   font-size: 23px;
 `;
 
+const HeaderRight = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 const RoomStatus = styled.span`
   color: #666;
   ${(props) => props.theme.fonts.text2};
   font-size: 15px;
+  margin-right: 20px;
+`;
+
+const ExitButton = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+
+  img {
+    width: 24px;
+    height: 24px;
+  }
+
+  &:hover {
+    opacity: 0.7;
+  }
 `;
 
 const ChatMessages = styled.div`
@@ -132,25 +171,29 @@ const ChatMessages = styled.div`
 `;
 
 const Message = styled.div`
-  margin-bottom: 20px;
-  max-width: 50%;
-  margin-left: ${({ sent }) => (sent ? "auto" : "0")};
-  margin-right: ${({ sent }) => (sent ? "0" : "auto")};
+  display: flex;
+  justify-content: ${({ sent }) => (sent ? "flex-end" : "flex-start")};
+  margin-bottom: 10px;
+  align-items: center;
+`;
+
+const MessageText = styled.p`
   background-color: ${({ sent }) =>
     sent ? (props) => props.theme.colors.lightBlue : "#ffecd4"};
   padding: 10px;
   border-radius: 10px;
-`;
-
-const MessageText = styled.p`
   margin: 0;
+  max-width: 70%;
+  word-break: break-word;
+  display: inline-block;
 `;
 
 const Timestamp = styled.span`
   font-size: 12px;
   color: #888;
-  display: block;
-  text-align: right;
+  margin: ${({ sent }) => (sent ? "0 10px 0 0" : "0 0 0 10px")};
+  order: ${({ sent }) => (sent ? "0" : "1")};
+  margin-top: 20px;
 `;
 
 const ChatInputContainer = styled.footer`
