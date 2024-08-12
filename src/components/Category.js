@@ -19,9 +19,9 @@ const Category = ({ children, onClick, bgc }) => {
 };
 
 const CaBox = styled.div`
-  width: 165px;
-  height: 48px;
-  border-radius: 30px;
+  width: 120px;
+  height: 32px;
+  border-radius: 20px;
   background-color: ${(props) =>
     props.isSelected
       ? props.bgc || props.theme.colors.blue2
@@ -32,7 +32,7 @@ const CaBox = styled.div`
   justify-content: center;
   cursor: pointer;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-  font-size: 20px;
+  font-size: 15px;
 `;
 
 export default Category;

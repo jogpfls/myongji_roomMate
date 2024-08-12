@@ -11,12 +11,12 @@ const Button = ({ children, onClick, bgc }) => {
   );
 };
 const Btn = styled.button`
-  width: 160px;
-  height: 55px;
-  border-radius: 10px;
+  width: 120px;
+  height: 40px;
+  border-radius: 7px;
   background-color: ${(props) => props.bgColor || props.theme.colors.blue2};
   color: white;
-  font-size: 20px;
+  font-size: 16px;
   text-align: center;
   cursor: pointer;
 `;
