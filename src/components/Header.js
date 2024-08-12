@@ -17,7 +17,7 @@ const Header = () => {
 
   return (
     <Container>
-      <Title onClick={() => handleNavigation("/main")}>로고</Title>
+      <Title onClick={() => handleNavigation("/main")}>명지메이트</Title>
       <Menu>
         <Item
           $active={
@@ -56,13 +56,14 @@ const Container = styled.div`
   justify-content: space-between;
   border-bottom: 1px solid ${(props) => props.theme.colors.gray};
   background-color: ${(props) => props.theme.colors.white};
+  padding-top: 10px;
 `;
 const Title = styled.h1`
-  width: 20%;
-  font-size: 40px;
+  width: 30%;
+  ${(props) => props.theme.fonts.logo};
   padding-left: 40px;
-  margin-bottom: 3px;
   cursor: pointer;
+  color: ${(props) => props.theme.colors.deepBlue};
 `;
 const Menu = styled.h1`
   width: 100%;
@@ -74,7 +75,7 @@ const Menu = styled.h1`
 `;
 const Item = styled.p`
   text-align: center;
-  padding: 18px 40px;
+  padding: 15px 40px;
   font-weight: ${(props) => (props.$active ? "bold" : "normal")};
   border-bottom: ${(props) =>
     props.$active ? `4px solid ${props.theme.colors.deepBlue}` : "none"};
