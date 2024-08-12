@@ -73,10 +73,15 @@ const Title = styled.div`
 const Info = styled.div`
   ${(props) => props.theme.fonts.text4}
   margin-bottom: 50px;
+  text-align: center;
   p {
     text-align: center;
     margin-top: 20px;
     color: ${(props) => props.theme.colors.gray};
+  }
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    width: 80%;
+    margin-bottom: 30px;
   }
 `;
 
@@ -86,6 +91,10 @@ const CirBox = styled.div`
   justify-content: center;
   gap: 1.5vw;
   padding-bottom: 50px;
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    flex-direction: column;
+    gap: 3vw;
+  }
 `;
 
 const Cir = styled.div`
@@ -112,6 +121,14 @@ const Cir = styled.div`
   &:active {
     transform: translateY(0);
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    width: 80vw;
+    height: 15vw;
+    border-radius: 7px;
+    ${(props) => props.theme.fonts.text4}
+    font-size: 7vw;
   }
 `;
 
