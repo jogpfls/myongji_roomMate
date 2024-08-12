@@ -45,13 +45,14 @@ const Header = () => {
   );
 };
 const Container = styled.div`
+  position: fixed;
+  z-index: 1000;
   width: 100%;
-  margin: 20px auto;
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid ${(props) => props.theme.colors.gray};
-  /* margin-bottom: 30px; */
   background-color: ${(props) => props.theme.colors.white};
 `;
 const Title = styled.h1`
@@ -70,7 +71,7 @@ const Menu = styled.h1`
 `;
 const Item = styled.p`
   text-align: center;
-  padding: 14px 40px;
+  padding: 18px 40px;
   font-weight: ${(props) => (props.$active ? "bold" : "normal")};
   border-bottom: ${(props) =>
     props.$active ? `4px solid ${props.theme.colors.deepBlue}` : "none"};
