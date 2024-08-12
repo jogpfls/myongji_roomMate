@@ -30,12 +30,14 @@ const WritePage = () => {
           <CategoryBox>
             <Title>카테고리</Title>
             <CategoryWrapper>
-              <Category add="작성">흡연 안함</Category>
-              <Category add="작성">4인실</Category>
-              <Category add="작성">2인실</Category>
-              <Category add="작성">여자</Category>
-              <Category add="작성">남자</Category>
-              <Category add="작성">+ 추가</Category>
+              <Category>흡연 안함</Category>
+              <Category>4인실</Category>
+              <Category>2인실</Category>
+              <Category>여자</Category>
+              <Category>남자</Category>
+              <Category>청결</Category>
+              <Category>아침형 인간</Category>
+              <Category>저녁형 인간</Category>
             </CategoryWrapper>
           </CategoryBox>
           <ContentsBox>
@@ -68,9 +70,10 @@ const WrapperWrapper = styled.div`
 
 const AllWrapper = styled.div`
   width: 75%;
-  height: 95vh;
+  height: 100vh;
   display: flex;
   align-items: center;
+  margin-bottom: 12vh;
 `;
 
 const Wrapper = styled.div`
@@ -124,7 +127,10 @@ const CategoryBox = styled.div`
 
 const CategoryWrapper = styled.div`
   display: flex;
-  gap: 2vw;
+  width: 100%;
+  gap: 1.85vw;
+  flex-wrap: wrap;
+  justify-content: start;
 `;
 
 const ContentsBox = styled.div`

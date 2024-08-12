@@ -26,7 +26,7 @@ const Img = styled.img`
 const Box = styled.div`
   background-color: ${(props) => props.theme.colors.black};
   opacity: 70%;
-  height: 150px;
+  height: 190px;
   color: ${(props) => props.theme.colors.white};
   display: flex;
   align-items: center;

@@ -10,7 +10,9 @@ const Layout = ({ children }) => {
         <Header />
       </HeaderWrapper>
       <Main>{children}</Main>
-      <Footer />
+      <FooterBox>
+        <Footer />
+      </FooterBox>
     </LayoutContainer>
   );
 };
@@ -28,5 +30,10 @@ const HeaderWrapper = styled.div`
 const Main = styled.main`
   flex: 1;
 `;
+
+const FooterBox = styled.div`
+margin-top: 5vh;
+`;
+
 
 export default Layout;
