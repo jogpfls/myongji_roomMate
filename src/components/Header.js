@@ -47,17 +47,18 @@ const Header = () => {
 const Container = styled.div`
   width: 100%;
   margin: 20px auto;
-  /* padding: 10px 20px; */
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid ${(props) => props.theme.colors.gray};
   /* margin-bottom: 30px; */
+  background-color: ${(props) => props.theme.colors.white};
 `;
 const Title = styled.h1`
   width: 20%;
   font-size: 40px;
   padding-left: 40px;
+  margin-bottom: 3px;
 `;
 const Menu = styled.h1`
   width: 100%;
@@ -85,6 +86,7 @@ const Logout = styled.button`
   border-radius: 2vw;
   background-color: ${(props) => props.theme.colors.deepBlue};
   color: ${(props) => props.theme.colors.white};
+  margin-bottom: 3px;
 `;
 
 export default Header;

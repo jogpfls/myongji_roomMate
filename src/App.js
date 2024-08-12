@@ -11,16 +11,17 @@ import DormitoryPage from "./pages/DormitoryPage";
 function App() {
   return (
     <>
-      <Layout />
-      <Routes>
-        <Route path="/" element={<Navigate to="/main" />} />
-        <Route path="/main" element={<MainPage />} />
-        <Route path="/auth/login" element={<Login />} />
-        <Route path="/room" element={<RoomPage />} />
-        <Route path="/write" element={<WritePage />} />
-        <Route path="/mypage" element={<MyPage />} />
-        <Route path="/dormitory" element={<DormitoryPage />} />
-      </Routes>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<Navigate to="/main" />} />
+          <Route path="/main" element={<MainPage />} />
+          <Route path="/auth/login" element={<Login />} />
+          <Route path="/room" element={<RoomPage />} />
+          <Route path="/write" element={<WritePage />} />
+          <Route path="/mypage" element={<MyPage />} />
+          <Route path="/dormitory" element={<DormitoryPage />} />
+        </Routes>
+      </Layout>
     </>
   );
 }
