@@ -41,7 +41,7 @@ const Header = () => {
         </Item>
       </Menu>
       <LogoutContainer>
-        <Logout>로그아웃</Logout>
+        <Logout onClick={()=>navigate('/auth/login')}>로그인</Logout>
       </LogoutContainer>
     </Container>
   );
