@@ -7,6 +7,7 @@ import RoomPage from "./pages/RoomPage";
 import WritePage from "./pages/WritePage";
 import MyPage from "./pages/MyPage";
 import DormitoryPage from "./pages/DormitoryPage";
+import ChatPage from "./pages/ChatPage";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/write" element={<WritePage />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/dormitory" element={<DormitoryPage />} />
+          <Route path="/chat" element={<ChatPage />} />
         </Routes>
       </Layout>
     </>
