@@ -9,6 +9,11 @@ const MainPage = () => {
     <div>
       <BackgroundImage src={tree} />
       <ContentContainer>
+        <Title>명지메이트</Title>
+        <Info>
+          명지대학교 자연캠퍼스 룸메이트 매칭 웹사이트
+          <p>입주할 기숙사 건물을 선택해주세요</p>
+        </Info>
         <CirBox>
           <Cir backgroundColor="blue3" onClick={() => navigate("/dormitory/")}>
             명덕
@@ -43,7 +48,7 @@ const BackgroundImage = styled.img`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  opacity: 0.3;
+  opacity: 0.15;
   height: 90vh;
   width: 90vw;
   object-fit: contain;
@@ -57,6 +62,22 @@ const ContentContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
+`;
+const Title = styled.div`
+  ${(props) => props.theme.fonts.logo}
+  color: ${(props) => props.theme.colors.deepBlue};
+  font-size: 60px;
+  margin-bottom: 20px;
+`;
+const Info = styled.div`
+  ${(props) => props.theme.fonts.text4}
+  margin-bottom: 50px;
+  p {
+    text-align: center;
+    margin-top: 20px;
+    color: ${(props) => props.theme.colors.gray};
+  }
 `;
 
 const CirBox = styled.div`
