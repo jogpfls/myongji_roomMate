@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef, useLayoutEffect } from "react";
 import styled from "styled-components";
 import io from "socket.io-client";
 import ChatOut from "../images/ChatOut.svg";
@@ -8,6 +8,7 @@ const socket = io("");
 const ChatPage = () => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
+  const chatMessagesRef = useRef(null);
 
   useEffect(() => {
     socket.on("message", (message) => {
@@ -18,6 +19,14 @@ const ChatPage = () => {
       socket.off("message");
     };
   }, []);
+
+  useLayoutEffect(() => {
+    const chatMessagesElement = chatMessagesRef.current;
+
+    if (chatMessagesElement) {
+      chatMessagesElement.scrollTop = chatMessagesElement.scrollHeight;
+    }
+  }, [messages]);
 
   const sendMessage = () => {
     if (inputMessage.trim()) {
@@ -58,7 +67,7 @@ const ChatPage = () => {
             </ExitButton>
           </HeaderRight>
         </ChatRoomHeader>
-        <ChatMessages>
+        <ChatMessages ref={chatMessagesRef}>
           {messages.map((message, index) => (
             <Message key={index} sent={message.sender === "나"}>
               <Timestamp sent={message.sender === "나"}>12:13</Timestamp>
