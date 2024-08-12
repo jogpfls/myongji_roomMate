@@ -2,6 +2,11 @@ import { css } from "styled-components";
 
 export const Theme = {
   fonts: {
+    logo: css`
+      font-family: "TTHakgyoansimTtwimteulR", sans-serif;
+      font-size: 30px;
+    `,
+
     default: css`
       font-family: "Freesentation-3Light", sans-serif;
       font-size: 20px;

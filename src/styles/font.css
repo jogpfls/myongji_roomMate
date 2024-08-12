@@ -39,3 +39,11 @@
   font-weight: 700;
   font-style: normal;
 }
+
+@font-face {
+  font-family: "TTHakgyoansimTtwimteulR";
+  src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2402_keris@1.0/TTHakgyoansimTtwimteulR.woff2")
+    format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
