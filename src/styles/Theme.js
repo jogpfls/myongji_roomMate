@@ -53,4 +53,9 @@ export const Theme = {
     lightBlueC: "#CCDCFF",
     gray3: "#F7F7F7",
   },
+  breakpoints: {
+    mobile: "480px",
+    tablet: "769px",
+    desktop: "1024px",
+  },
 };
