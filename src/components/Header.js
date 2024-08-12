@@ -20,7 +20,9 @@ const Header = () => {
       <Title onClick={() => handleNavigation("/main")}>로고</Title>
       <Menu>
         <Item
-          $active={isActive("/dormitory")}
+          $active={
+            isActive("/dormitory") || isActive("/room") || isActive("/write")
+          }
           onClick={() => handleNavigation("/dormitory")}
         >
           매칭게시판
@@ -78,7 +80,7 @@ const Item = styled.p`
     props.$active ? `4px solid ${props.theme.colors.deepBlue}` : "none"};
   color: ${(props) =>
     props.$active ? props.theme.colors.deepBlue : props.theme.colors.gray};
-    cursor: pointer;
+  cursor: pointer;
 `;
 const LogoutContainer = styled.div`
   margin-right: 40px;
