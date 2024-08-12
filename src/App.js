@@ -8,6 +8,7 @@ import WritePage from "./pages/WritePage";
 import MyPage from "./pages/MyPage";
 import DormitoryPage from "./pages/DormitoryPage";
 import ChatPage from "./pages/ChatPage";
+import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="/chat" element={<ChatPage />} />
         </Routes>
       </Layout>
+      <ScrollToTop />
     </>
   );
 }
