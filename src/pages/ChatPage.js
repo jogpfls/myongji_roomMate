@@ -63,7 +63,7 @@ const ChatPage = () => {
           </RoomInfo>
           <HeaderRight>
             <ExitButton>
-              <img src={ChatOut} />
+              <img src={ChatOut} alt="나가기"/>
             </ExitButton>
           </HeaderRight>
         </ChatRoomHeader>
