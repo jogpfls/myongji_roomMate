@@ -51,5 +51,6 @@ export const Theme = {
     black: "#000",
     blue2C: "#5D65A1",
     lightBlueC: "#CCDCFF",
+    gray3: "#F7F7F7",
   },
 };
