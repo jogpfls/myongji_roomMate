@@ -9,6 +9,7 @@ import MyPage from "./pages/MyPage";
 import DormitoryPage from "./pages/DormitoryPage";
 import ChatPage from "./pages/ChatPage";
 import ScrollToTop from "./components/ScrollToTop";
+import InfoPage from './pages/InfoPage';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/dormitory" element={<DormitoryPage />} />
           <Route path="/chat" element={<ChatPage />} />
+          <Route path="/info" element={<InfoPage />} />
         </Routes>
       </Layout>
       <ScrollToTop />
