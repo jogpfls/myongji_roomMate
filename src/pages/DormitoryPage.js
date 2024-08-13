@@ -39,6 +39,7 @@ const DormitoryPage = () => {
             <List title="♀ 같이 친해져요~" search={search}/>
             <List title="♀ 같이 친해져요~" search={search}/>
             <List title="♀ 같이 친해져요~" search={search}/>
+            <List title="♀ 흡연 X" search={search} status="모집완료"/>
             
           </ListWrapper>
           <Button onClick={() => navigate("/write")}>글쓰기</Button>

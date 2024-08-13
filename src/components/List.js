@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-const List = ({search, title}) => {
+const List = ({search, title, status}) => {
   const navigate = useNavigate();
   const [maxLength, setMaxLength] = useState(12);
 
@@ -34,7 +34,9 @@ const List = ({search, title}) => {
   return (
     <div>
       {title.includes(search) && (
-        <Wrapper onClick={() => navigate('/room')}>
+        <Wrapper 
+        status={status}
+        onClick={() => navigate('/room')}>
           <LeftBox>
           <div>
             <Title>{title}</Title>
@@ -60,8 +62,12 @@ const List = ({search, title}) => {
             </TextBox>
           </LeftBox>
           <RightBox>
-            <ChatTextBox>
-              <ChatText>4/3 모집중...</ChatText>
+            <ChatTextBox status={status}>
+              {status === '모집완료' ? <ChatText>모집 완료</ChatText> 
+              : <>
+              <Count>3/4 모집 중..</Count>
+              <ChatText>채팅방 입장하기</ChatText>
+              </>}
             </ChatTextBox>
           </RightBox>
         </Wrapper>
@@ -71,19 +77,19 @@ const List = ({search, title}) => {
 };
 
 const Wrapper = styled.div`
-  background-color: ${({theme})=>theme.colors.white};
+  background-color: ${({theme, status})=>status === '모집완료' ? theme.colors.gray3 : theme.colors.white};
   width: 100%;
   height: 25vh;
   border-radius: 10px;
   display: flex;
-  cursor: pointer;
+  cursor: ${({status})=>status === '모집완료' ? "" : "pointer"};
   transition: background-color 0.2s;
   margin-bottom: 2.3vh;
   border: solid 1px ${({theme})=>theme.colors.gray2};
-  
-  &:hover{
-    background-color: ${({theme})=>theme.colors.lightBlue};
-    border: none;
+
+&:hover{
+    background-color: ${({theme, status})=>status === '모집완료' ? 'none' : theme.colors.lightBlue};
+    border: ${({status})=>status === '모집완료' ? "" : "none"};
   }
 `;
 
@@ -143,13 +149,20 @@ const RightBox = styled.div`
 `;
 
 const ChatTextBox = styled.div`
-  background-color: ${({theme})=>theme.colors.gray3};
+  background-color: ${({theme, status})=>status === '모집완료' ? theme.colors.gray2 : "#F7FAFF"};
   height: 90%;
   width: 90%;
   border-radius: 10px;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+`;
+
+const Count = styled.p`
+  color: ${({theme})=>theme.colors.gray};
+  font-size: 15px;
+  margin-bottom: 5px;
 `;
 
 const ChatText = styled.p`
