@@ -44,6 +44,12 @@ const Header = () => {
     <Container>
       <Title onClick={() => handleNavigation("/main")}>명지메이트</Title>
       <Menu>
+      <Item
+          $active={isActive("/info")}
+          onClick={() => handleNavigation("/info")}
+        >
+          입사 안내
+        </Item>
         <ItemBox
           ref={menuRef}
           onMouseEnter={handleMouseEnter}
@@ -53,7 +59,6 @@ const Header = () => {
             $active={
               isActive("/dormitory") || isActive("/room") || isActive("/write")
             }
-            onClick={()=>navigate('/main')}
             post="매칭"
           >
             매칭게시판
@@ -109,7 +114,6 @@ const Container = styled.div`
   border-bottom: 1px solid ${(props) => props.theme.colors.gray};
   background-color: ${(props) => props.theme.colors.white};
   padding-top: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 `;
 
 const Title = styled.h1`
@@ -163,11 +167,7 @@ const DroppedBox = styled.div`
   position: absolute;
   top: 50px;
   left: 0;
-  background: linear-gradient(
-    135deg,
-    ${(props) => props.theme.colors.white},
-    ${(props) => props.theme.colors.gray2}
-  );
+  background-color: white;
   border-radius: 8px;
   width: 160px;
   display: flex;
@@ -189,8 +189,10 @@ const LinkWrapper = styled.a`
   padding: 10px 16px;
   display: flex;
   align-items: center;
+  justify-content: center;
   cursor: pointer;
   transition: background-color 0.2s ease, color 0.2s ease;
+  font-size: 18px;
 
   &:hover {
     background-color: ${({ theme }) => theme.colors.deepBlue};
