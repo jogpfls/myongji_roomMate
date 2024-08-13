@@ -293,6 +293,7 @@ const Text = styled.p`
     &:hover {
       color: ${(props) => props.theme.colors.blue2};
     }
+    word-wrap: break-word;
   }
 `;
 
