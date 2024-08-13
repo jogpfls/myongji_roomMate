@@ -36,6 +36,10 @@ const DormitoryPage = () => {
             <List title="♀ 흡연 X" search={search}/>
             <List title="♀ 코골이 X" search={search}/>
             <List title="♀ 같이 친해져요~" search={search}/>
+            <List title="♀ 같이 친해져요~" search={search}/>
+            <List title="♀ 같이 친해져요~" search={search}/>
+            <List title="♀ 같이 친해져요~" search={search}/>
+            
           </ListWrapper>
           <Button onClick={() => navigate("/write")}>글쓰기</Button>
         </BottomWrapper>
@@ -52,7 +56,6 @@ const Background = styled.div`
 
 const Wrapper = styled.div`
   width: 70%;
-  height: 85vh;
   margin: 4.5vh 0;
 `;
 
@@ -73,7 +76,7 @@ const SearchWrapper = styled.div`
   background-color: ${({theme})=>theme.colors.lightBlue};
   width: 100%;
   height: 7vh;
-  border-radius: 10px;
+  border-radius: 5px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -118,28 +121,9 @@ const BottomWrapper = styled.div`
 
 const ListWrapper = styled.div`
   width: 100%;
-  height: 55vh;
   margin: 4vh 0;
   display: flex;
   flex-direction: column;
-  align-items: start;
-  justify-content: start;
-  overflow-y: scroll;
-  overflow-x: hidden;
-
-  &::-webkit-scrollbar {
-    width: 1.3vh;
-    background-color: white;
-    }
-
-  &::-webkit-scrollbar-thumb {
-    background-color:${({theme})=>theme.colors.gray};
-  }
-
-  &::-webkit-scrollbar-track {
-    background-color:${({theme})=>theme.colors.gray2};
-  }
-
 `;
 
 export default DormitoryPage;
