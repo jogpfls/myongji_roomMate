@@ -1,13 +1,37 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import styled, { useTheme } from "styled-components";
 import Button from "../components/Button";
+import MyList from "../components/MyList";
+import next from "../images/next.svg";
+import back from "../images/back.svg";
 
-const Mypage = () => {
+const MyPage = () => {
   const [isEditing, setIsEditing] = useState(false);
   const theme = useTheme();
+  const listWrapperRef = useRef(null);
 
   const handleCancel = () => {
     setIsEditing(false);
+  };
+
+  const handleNext = () => {
+    if (listWrapperRef.current) {
+      const scrollAmount = window.innerWidth * 0.26;
+      listWrapperRef.current.scrollBy({
+        left: scrollAmount,
+        behavior: 'smooth',
+      });
+    }
+  };
+
+  const handleBack = () => {
+    if (listWrapperRef.current) {
+      const scrollAmount = window.innerWidth * 0.26;
+      listWrapperRef.current.scrollBy({
+        left: -scrollAmount,
+        behavior: 'smooth',
+      });
+    }
   };
 
   return (
@@ -29,7 +53,14 @@ const Mypage = () => {
           </TBox>
           <Title>내가 쓴 글</Title>
           <BBox>
-            <WriteList></WriteList>
+            <WriteList>
+            <Back src={back} alt="화살표" onClick={handleBack} />
+              <ListWrapper ref={listWrapperRef}>
+                <MyList title="흡연"/>
+                <MyList title="나나나"/>
+              </ListWrapper>
+              <Next src={next} alt="화살표" onClick={handleNext}/>
+            </WriteList>
           </BBox>
         </Left>
         <Right>
@@ -102,7 +133,7 @@ const BoxList = ({ isEditing }) => {
 };
 
 const Container = styled.div`
-  width: 80%;
+  width: 70%;
   margin: auto;
   height: 95vh;
 `;
@@ -149,7 +180,6 @@ const TBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  /* flex-direction: column; */
   gap: 3vw;
   width: 100%;
   padding: 30px;
@@ -183,7 +213,9 @@ const BBox = styled.div`
   height: 30%;
   min-height: 100px;
   background-color: ${(props) => props.theme.colors.white};
-  padding: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const LBox = styled.div`
@@ -286,6 +318,36 @@ const CancelButton = styled(Button)`
   color: ${(props) => props.theme.colors.white};
 `;
 
-const WriteList = styled.div``;
+const WriteList = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 72%;
+  position: relative;
+`;
 
-export default Mypage;
+const Back = styled.img`
+  width: 30px;
+  position: absolute;
+  cursor: pointer;
+  z-index: 999;
+  left: -14%;
+`;
+
+const ListWrapper = styled.div`
+  width: 100%;
+  overflow-x: hidden;
+  display: flex;
+  gap: 1vw;
+  scroll-behavior: smooth;
+`;
+
+const Next = styled.img`
+  width: 30px;
+  position: absolute;
+  left: 105%;
+  cursor: pointer;
+  z-index: 999;
+`;
+
+export default MyPage;
