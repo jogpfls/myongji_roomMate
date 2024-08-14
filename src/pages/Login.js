@@ -24,9 +24,9 @@ const Login = () => {
               <Text>아이디</Text>
               <InputFilledBox>
                 <InputFilled 
-                placeholder="학번(601234)을 입력해주세요"
-                type="id"
-                onChange={(event)=>setId(event.target.value)}
+                  placeholder="학번(601234)을 입력해주세요"
+                  type="id"
+                  onChange={(event)=>setId(event.target.value)}
                 />
               </InputFilledBox>
             </FilledBox>
