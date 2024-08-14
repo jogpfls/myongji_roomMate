@@ -3,6 +3,7 @@ import styled, { keyframes } from "styled-components";
 import tree from "../images/Tree.png";
 import { useNavigate } from "react-router-dom";
 import Map from "../components/Map";
+import { scroller } from "react-scroll";
 
 const MainPage = () => {
   const navigate = useNavigate();
@@ -31,6 +32,15 @@ const MainPage = () => {
     };
   }, []);
 
+  const handleScrollToMap = () => {
+    scroller.scrollTo("map-section", {
+      duration: 800,
+      delay: 0,
+      smooth: "easeInOutQuart",
+      offset: -200,
+    });
+  };
+
   return (
     <div>
       <BackgroundImage src={tree} />
@@ -48,7 +58,6 @@ const MainPage = () => {
             backgroundColor="deepBlue"
             onClick={() => navigate("/dormitory/")}
           >
-            {" "}
             명현
           </Cir>
           <Cir backgroundColor="blue2" onClick={() => navigate("/dormitory/")}>
@@ -64,10 +73,12 @@ const MainPage = () => {
             5동
           </Cir>
         </CirBox>
+        <DownArrow onClick={handleScrollToMap}>❯</DownArrow>
       </ContentContainer>
       <AnimatedMapContainer
         ref={mapRef}
         className={mapVisible ? "visible" : ""}
+        name="map-section"
       >
         <Map />
       </AnimatedMapContainer>
@@ -90,7 +101,6 @@ const AnimatedMapContainer = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
-  padding-top: 50px;
   opacity: 0;
   transform: translateY(20px);
   transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out;
@@ -191,6 +201,16 @@ const Cir = styled.div`
     ${(props) => props.theme.fonts.text4}
     font-size: 7vw;
   }
+`;
+
+const DownArrow = styled.div`
+  transform: rotate(90deg);
+  margin-top: 20px;
+  cursor: pointer;
+  font-size: 30px;
+  color: ${(props) => props.theme.colors.blue};
+  transition: transform 0.3s ease;
+  font-size: 50px;
 `;
 
 export default MainPage;

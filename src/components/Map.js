@@ -42,6 +42,7 @@ const MapContainer = styled.div`
   margin: 0 auto;
   img {
     border-radius: 5px;
+    opacity: 0.8;
   }
 `;
 
