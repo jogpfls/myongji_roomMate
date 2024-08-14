@@ -95,10 +95,10 @@ const Header = () => {
         >
           마이페이지
         </Item>
-      </Menu>
-      <LogoutContainer>
+        <LogoutContainer>
         <Logout onClick={() => navigate("/auth/login")}>로그인</Logout>
       </LogoutContainer>
+      </Menu>
     </Container>
   );
 };
@@ -116,21 +116,22 @@ const Container = styled.div`
   padding-top: 10px;
 `;
 
-const Title = styled.h1`
-  width: 30%;
+const Title = styled.p`
+  width: 33%;
   ${(props) => props.theme.fonts.logo};
-  padding-left: 40px;
+  padding-left: 3vw;
   cursor: pointer;
   color: ${(props) => props.theme.colors.deepBlue};
+  white-space: nowrap
 `;
 
 const Menu = styled.h1`
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-evenly;
-  gap: 4vw;
+  justify-content: space-between;
   font-size: 20px;
+  margin-right: 7vw;
 `;
 
 const ItemBox = styled.div`
@@ -139,8 +140,10 @@ const ItemBox = styled.div`
 `;
 
 const Item = styled.span`
+  margin-left: 3vw;
   text-align: center;
-  padding: 15px 40px;
+  white-space: nowrap;
+  padding: 15px 0;
   font-weight: ${(props) => (props.$active ? "bold" : "normal")};
   border-bottom: ${(props) =>
     props.$active ? `4px solid ${props.theme.colors.deepBlue}` : "none"};
@@ -201,7 +204,7 @@ const LinkWrapper = styled.a`
 `;
 
 const LogoutContainer = styled.div`
-  margin-right: 40px;
+  margin-left: 3vw;
 `;
 
 const Logout = styled.button`
