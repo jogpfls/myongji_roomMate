@@ -50,10 +50,7 @@ const List = ({search, title, status}) => {
           </div>
           <ContentsBox>
             <Contents >
-              {truncateText("-비흡연자 - 방 안 영상통화 X (방에 혼자 있을 때나 짧은 통화는 호실\
-              내에서 해도 괜찮아요!) 긴 통화는 호실 밖에서 해주세요:) - 청소 규칙\
-              정해서 해주실 분 (음식물 쓰레기, 머리 말린 후 머리카락 제때 치워주기)\
-              음식물 쓰레기 변기에 버리지 X - 영상, 노래 들을 때 이어폰 사용 - 밤에", maxLength)}
+              {truncateText("나나나", maxLength)}
             </Contents>
           </ContentsBox>
             <TextBox>
