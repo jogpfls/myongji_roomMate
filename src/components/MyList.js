@@ -1,9 +1,11 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const MyList = ({title}) => {
+  const navigate = useNavigate();
   return (
-    <AllWrapper>
+    <AllWrapper onClick={()=>navigate('/room')}>
       <Wrapper>
         <TitleWrapper>
           <Title>{title}</Title>
@@ -17,6 +19,7 @@ const MyList = ({title}) => {
 };
 
 const AllWrapper = styled.div`
+  cursor: pointer;
 `;
 
 const Wrapper = styled.div`
