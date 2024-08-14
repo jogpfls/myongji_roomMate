@@ -21,13 +21,15 @@ const MainPage = () => {
       { threshold: 0.1 }
     );
 
-    if (mapRef.current) {
-      observer.observe(mapRef.current);
+    const currentMapRef = mapRef.current;
+
+    if (currentMapRef) {
+      observer.observe(currentMapRef);
     }
 
     return () => {
-      if (mapRef.current) {
-        observer.unobserve(mapRef.current);
+      if (currentMapRef) {
+        observer.unobserve(currentMapRef);
       }
     };
   }, []);
