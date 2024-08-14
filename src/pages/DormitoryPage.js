@@ -3,46 +3,50 @@ import styled from "styled-components";
 import List from "../components/List";
 import Button from "../components/Button";
 import { useNavigate } from "react-router-dom";
+import SearchImg from "../images/search.svg";
 
 const DormitoryPage = () => {
   const [search, setSearch] = useState('');
+  const [filteredSearch, setFilteredSearch] = useState('');
   const navigate = useNavigate();
 
   const handleSearchChange = (event) => {
     setSearch(event.target.value)
   }
 
+  const handleSearchClick = () => {
+    setFilteredSearch(search);
+  };
+
   return (
     <Background>
       <Wrapper>
         <TitleBox>
           <Title>명덕</Title>
-          <SearchWrapper>
-            <div>
-              <Search 
+          <SearchBox>
+          <Search 
               onChange={handleSearchChange} 
               value={search}
-              placeholder="찾고 싶은 방을 검색해보세요!"/>
-              <SearchButton>검색</SearchButton>
-            </div>
-          </SearchWrapper>
+              placeholder="찾고 싶은 방을 검색해보세요!"></Search>
+              <SearchButton src={SearchImg} alt="검색" onClick={handleSearchClick}/>
+              <Button onClick={() => navigate("/write")}>글쓰기</Button>
+          </SearchBox>
         </TitleBox>
         <BottomWrapper>
           <ListWrapper>
-            <List title="♀ 흡연 안하는 룸메 구해요" search={search}/>
-            <List title="♀ 일찍 잠자는 사람 구해요" search={search}/>
-            <List title="♀ 담배 X" search={search}/>
-            <List title="♀ 흡연 X" search={search}/>
-            <List title="♀ 흡연 X" search={search}/>
-            <List title="♀ 코골이 X" search={search}/>
-            <List title="♀ 같이 친해져요~" search={search}/>
-            <List title="♀ 같이 친해져요~" search={search}/>
-            <List title="♀ 같이 친해져요~" search={search}/>
-            <List title="♀ 같이 친해져요~" search={search}/>
-            <List title="♀ 흡연 X" search={search} status="모집완료"/>
+            <List title="♀ 흡연 안하는 룸메 구해요" search={filteredSearch}/>
+            <List title="♀ 일찍 잠자는 사람 구해요" search={filteredSearch}/>
+            <List title="♀ 담배 X" search={filteredSearch}/>
+            <List title="♀ 흡연 X" search={filteredSearch}/>
+            <List title="♀ 흡연 X" search={filteredSearch}/>
+            <List title="♀ 코골이 X" search={filteredSearch}/>
+            <List title="♀ 같이 친해져요~" search={filteredSearch}/>
+            <List title="♀ 같이 친해져요~" search={filteredSearch}/>
+            <List title="♀ 같이 친해져요~" search={filteredSearch}/>
+            <List title="♀ 같이 친해져요~" search={filteredSearch}/>
+            <List title="♀ 흡연 X" search={filteredSearch} status="모집완료"/>
             
           </ListWrapper>
-          <Button onClick={() => navigate("/write")}>글쓰기</Button>
         </BottomWrapper>
       </Wrapper>
     </Background>
@@ -73,21 +77,19 @@ const Title = styled.p`
   font-size: 45px;
 `;
 
-const SearchWrapper = styled.div`
-  background-color: ${({theme})=>theme.colors.lightBlue};
+const SearchBox = styled.div`
+position: relative;
   width: 100%;
-  height: 7vh;
-  border-radius: 5px;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: space-between;
 `;
 
 const Search = styled.input`
   background-color: ${({theme})=>theme.colors.white};
-  border: none;
-  width: 38vw;
-  height: 5vh;
+  border: solid 1px ${({theme})=>theme.colors.gray2};
+  width: 84%;
+  height: 40px;
   border-radius: 8px;
   outline: none;
   padding: 0 1.8vh;
@@ -97,21 +99,10 @@ const Search = styled.input`
   }
 `;
 
-const SearchButton = styled.button`
-  background-color: ${({theme})=>theme.colors.blue2};
-  ${({theme})=>theme.fonts.text5}
-  font-size: 15px;
-  color: ${({theme})=>theme.colors.white};
-  width: 6vw;
-  min-width: 60px;
-  height: 5vh;
-  border-radius: 8px;
-  margin-left: 2vh;
-  transition: background-color 0.2s;
-
-  &:hover {
-    background-color: ${({theme})=>theme.colors.blue2C};
-  }
+const SearchButton = styled.img`
+  cursor: pointer;
+  position: absolute;
+  right: 14.5%;
 `;
 
 const BottomWrapper = styled.div`
@@ -122,7 +113,7 @@ const BottomWrapper = styled.div`
 
 const ListWrapper = styled.div`
   width: 100%;
-  margin: 4vh 0;
+  margin: 1vh 0;
   display: flex;
   flex-direction: column;
 `;
