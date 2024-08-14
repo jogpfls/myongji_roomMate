@@ -1,10 +1,36 @@
-import React from "react";
-import styled from "styled-components";
+import React, { useEffect, useRef, useState } from "react";
+import styled, { keyframes } from "styled-components";
 import tree from "../images/Tree.png";
 import { useNavigate } from "react-router-dom";
+import Map from "../components/Map";
 
 const MainPage = () => {
   const navigate = useNavigate();
+  const [mapVisible, setMapVisible] = useState(false);
+  const mapRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setMapVisible(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (mapRef.current) {
+      observer.observe(mapRef.current);
+    }
+
+    return () => {
+      if (mapRef.current) {
+        observer.unobserve(mapRef.current);
+      }
+    };
+  }, []);
+
   return (
     <div>
       <BackgroundImage src={tree} />
@@ -39,9 +65,42 @@ const MainPage = () => {
           </Cir>
         </CirBox>
       </ContentContainer>
+      <AnimatedMapContainer
+        ref={mapRef}
+        className={mapVisible ? "visible" : ""}
+      >
+        <Map />
+      </AnimatedMapContainer>
     </div>
   );
 };
+
+const fadeInUp = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
+const AnimatedMapContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-top: 50px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out;
+
+  &.visible {
+    opacity: 1;
+    transform: translateY(0);
+    animation: ${fadeInUp} 0.8s ease-in-out;
+  }
+`;
 
 const BackgroundImage = styled.img`
   position: absolute;
@@ -58,18 +117,20 @@ const BackgroundImage = styled.img`
 const ContentContainer = styled.div`
   position: relative;
   z-index: 1;
-  height: 100vh;
+  padding: 150px 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
 `;
+
 const Title = styled.div`
   ${(props) => props.theme.fonts.logo}
   color: ${(props) => props.theme.colors.deepBlue};
   font-size: 60px;
   margin-bottom: 20px;
 `;
+
 const Info = styled.div`
   ${(props) => props.theme.fonts.text4}
   margin-bottom: 50px;

@@ -70,7 +70,7 @@ const DormIcon = styled.div`
   background-size: contain;
 
   p {
-    margin-bottom: 4px;
+    margin-bottom: 8px;
     font-size: 15px;
     color: red;
   }
