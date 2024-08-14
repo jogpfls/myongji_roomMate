@@ -23,14 +23,16 @@ const DormitoryPage = () => {
       <Wrapper>
         <TitleBox>
           <Title>명덕</Title>
-          <SearchBox>
-          <Search 
-              onChange={handleSearchChange} 
-              value={search}
-              placeholder="찾고 싶은 방을 검색해보세요!"></Search>
-              <SearchButton src={SearchImg} alt="검색" onClick={handleSearchClick}/>
+          <HighSearchBox>
+            <SearchBox>
+              <Search 
+                onChange={handleSearchChange} 
+                value={search}
+                placeholder="찾고 싶은 방을 검색해보세요!"></Search>
+                <SearchButton src={SearchImg} alt="검색" onClick={handleSearchClick}/>
+            </SearchBox>
               <Button onClick={() => navigate("/write")}>글쓰기</Button>
-          </SearchBox>
+          </HighSearchBox>
         </TitleBox>
         <BottomWrapper>
           <ListWrapper>
@@ -77,7 +79,7 @@ const Title = styled.p`
   font-size: 45px;
 `;
 
-const SearchBox = styled.div`
+const HighSearchBox = styled.div`
 position: relative;
   width: 100%;
   display: flex;
@@ -85,14 +87,27 @@ position: relative;
   justify-content: space-between;
 `;
 
-const Search = styled.input`
+const SearchBox = styled.div`
+  background-color: red;
+  display: flex;
+  justify-content: space-between;
   background-color: ${({theme})=>theme.colors.white};
   border: solid 1px ${({theme})=>theme.colors.gray2};
-  width: 84%;
+  width: 90%;
   height: 40px;
   border-radius: 8px;
-  outline: none;
   padding: 0 1.8vh;
+  margin-right: 2vh;
+
+  &:hover{
+    outline: none;
+  }
+`;
+
+const Search = styled.input`
+  border: none;
+  outline: none;
+  width: 80%;
 
   &:hover{
     outline: none;
@@ -101,8 +116,8 @@ const Search = styled.input`
 
 const SearchButton = styled.img`
   cursor: pointer;
-  position: absolute;
-  right: 14.5%;
+  width: 30px;
+  background-color: bl;
 `;
 
 const BottomWrapper = styled.div`
@@ -113,7 +128,7 @@ const BottomWrapper = styled.div`
 
 const ListWrapper = styled.div`
   width: 100%;
-  margin: 1vh 0;
+  margin-top: 2vh;
   display: flex;
   flex-direction: column;
 `;
