@@ -7,11 +7,31 @@ import { useNavigate } from "react-router-dom";
 const WritePage = () => {
   const [contents, setContents] = useState('');
   const [title, setTitle] = useState('');
+  const [inputTitleCount, setInputTitleCount] = useState(0);
+  const [inputCount, setInputCount] = useState(0);
+  const maxContentsLength = 500;
+  const maxTitleLength = 20;
   const navigate = useNavigate();
 
   const handleSubmit = () => {
     navigate('/room')
   }
+
+  const onTextareaContentsHandler = (event) => {
+    const value = event.target.value;
+    if (value.length <= maxContentsLength) {
+      setContents(value);
+      setInputCount(value.length);
+    }
+  };
+
+  const onTextareaTitlesHandler = (event) => {
+    const value = event.target.value;
+    if (value.length <= maxTitleLength) {
+      setTitle(value);
+      setInputTitleCount(value.length);
+    }
+  };
 
   return (
     <WrapperWrapper>
@@ -22,10 +42,17 @@ const WritePage = () => {
           </DormitoryBox>
           <TitleBox>
             <Title>제목</Title>
-            <TitleWrite 
-            placeholder="제목을 입력해주세요(최대 20자)"
-            onChange={(event)=>setTitle(event.target.value)}
-            />
+            <TitleTitle>
+              <TitleWrite 
+              placeholder="제목을 입력해주세요(최대 20자)"
+              maxLength={20}
+              onChange={onTextareaTitlesHandler}
+              value={title}
+              />
+              <CountBox>
+                <Count>{inputTitleCount}/20자</Count>
+              </CountBox>
+            </TitleTitle>
           </TitleBox>
           <CategoryBox>
             <Title>카테고리</Title>
@@ -42,10 +69,18 @@ const WritePage = () => {
           </CategoryBox>
           <ContentsBox>
             <Title>내용</Title>
+            <Box>
             <Contents 
             placeholder="내용을 입력해주세요(최대 500자)"
-            onChange={(event) => setContents(event.target.value)}
-            />
+            onChange={onTextareaContentsHandler}
+            maxLength={500}
+            value={contents}
+            >
+            </Contents>
+              <CountBox>
+                <Count>{inputCount}/500자</Count>
+              </CountBox>
+            </Box>
           </ContentsBox>
           <ButtonBox>
             <Button onClick={()=>navigate('/dormitory')}>취소</Button>
@@ -69,7 +104,7 @@ const WrapperWrapper = styled.div`
 `;
 
 const AllWrapper = styled.div`
-  width: 80%;
+  width: 70%;
   height: 100vh;
   display: flex;
   align-items: center;
@@ -82,6 +117,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
+  margin-bottom: 5.5vh;
 `;
 
 const DormitoryBox = styled.div`
@@ -106,15 +142,23 @@ const Title = styled.p`
   margin-left: 8px;
 `;
 
-
-const TitleWrite = styled.input`
+const TitleTitle = styled.div`
   background-color: ${({theme})=>theme.colors.lightBlue};
   padding-left:10px;
   height: 6vh;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+`;
+
+const TitleWrite = styled.input`
   outline: none;
   border: none;
-  border-radius: 10px;
-  font-size: 20px;
+  width: 50%;
+  margin-bottom: 1.2%;
+  margin-left: 1.1%;
+  background-color: transparent;
 
   &:hover{
     outline: none;
@@ -137,18 +181,37 @@ const ContentsBox = styled.div`
   flex-direction: column;
 `;
 
-const Contents = styled.input`
+const Box = styled.div`
   background-color: ${({theme})=>theme.colors.lightBlue};
-  padding-left:10px;
   height: 40vh;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+`;
+
+const Contents = styled.textarea`
+  width: 95%;
+  height: 33vh;
+  margin: 2.5%;
   outline: none;
   border: none;
-  border-radius: 10px;
-  font-size: 20px;
+  background-color: transparent;
+  resize: none;
 
   &:hover{
     outline: none;
   }
+`;
+
+const CountBox = styled.div`
+  margin-right: 3.8%;
+  margin-bottom: 1.5%;
+`
+
+const Count = styled.p`
+  font-size: 17px;
+  color: ${({theme})=>theme.colors.gray};
 `;
 
 const ButtonBox = styled.div`
