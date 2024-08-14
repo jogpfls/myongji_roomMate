@@ -38,7 +38,7 @@ const RoomPage = () => {
   );
 };
 const Container = styled.div`
-  width: 80%;
+  width: 70%;
   margin: auto;
   height: 95vh;
   display: flex;

@@ -69,7 +69,7 @@ const WrapperWrapper = styled.div`
 `;
 
 const AllWrapper = styled.div`
-  width: 80%;
+  width: 70%;
   height: 100vh;
   display: flex;
   align-items: center;
@@ -82,6 +82,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
+  margin-bottom: 5.5vh;
 `;
 
 const DormitoryBox = styled.div`
@@ -114,7 +115,7 @@ const TitleWrite = styled.input`
   outline: none;
   border: none;
   border-radius: 10px;
-  font-size: 20px;
+  font-size: 17px;
 
   &:hover{
     outline: none;
@@ -144,7 +145,7 @@ const Contents = styled.input`
   outline: none;
   border: none;
   border-radius: 10px;
-  font-size: 20px;
+  font-size: 17px;
 
   &:hover{
     outline: none;
