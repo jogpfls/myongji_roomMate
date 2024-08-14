@@ -24,9 +24,9 @@ const Login = () => {
               <Text>아이디</Text>
               <InputFilledBox>
                 <InputFilled 
-                placeholder="학번(601234)을 입력해주세요"
-                type="id"
-                onChange={(event)=>setId(event.target.value)}
+                  placeholder="학번(601234)을 입력해주세요"
+                  type="id"
+                  onChange={(event)=>setId(event.target.value)}
                 />
               </InputFilledBox>
             </FilledBox>
@@ -69,16 +69,27 @@ const TitleBox = styled.div`
   align-items: center;
   gap: 0.8vh;
   margin-top: 10vh;
+
+  @media screen and (max-width: ${({theme})=>theme.breakpoints.mobile}){
+    width: 85vw;
+    margin-top: 8vh;
+  }
 `;
 
 const LoginText = styled.p`
   ${({theme})=>theme.fonts.title}
   font-size: 40px;
   margin-bottom: 1.5vh;
+  white-space: nowrap;
 `;
 
 const IntegrationText = styled.p`
   font-size: 17px;
+
+  @media screen and (max-width: ${({theme})=>theme.breakpoints.mobile}){
+    font-size: 20px;
+    text-align: center;
+  }
 `;
 
 const LoginBox = styled.div`
@@ -92,6 +103,12 @@ const LoginBox = styled.div`
   flex-direction: column;
   gap: 6vh;
   margin-top: 3vh;
+
+  @media screen and (max-width: ${({theme})=>theme.breakpoints.mobile}){
+    width: 80vw;
+    height: 50vh;
+    margin-top: 5vh;
+  }
 `;
 
 const AllFilledBox = styled.div`
@@ -99,6 +116,11 @@ const AllFilledBox = styled.div`
   flex-direction: column;
   width: 30vw;
   gap: 1.5vw;
+
+  @media screen and (max-width: ${({theme})=>theme.breakpoints.mobile}){
+    width: 60vw;
+    gap: 4vh;
+  }
 `;
 
 const FilledBox = styled.div`
@@ -124,6 +146,10 @@ const InputFilled = styled.input`
     ${({theme})=>theme.fonts.default};
     font-size: 1.8vh;
   }
+
+  @media screen and (max-width: ${({theme})=>theme.breakpoints.mobile}){
+    width: 60vw;
+  }
 `;
 
 const Text = styled.div`
@@ -132,6 +158,10 @@ const Text = styled.div`
   width: 10vw;
   padding-left: 0.5vw;
   margin-bottom: 0.5vh;
+
+  @media screen and (max-width: ${({theme})=>theme.breakpoints.mobile}){
+    width: auto;
+  }
 `;
 
 const LoginButton = styled.button`
@@ -147,6 +177,10 @@ const LoginButton = styled.button`
 
   &:hover{
     background-color: ${({theme, status})=>status === 'none' ? 'none' : theme.colors.deepBlue};
+  }
+
+  @media screen and (max-width: ${({theme})=>theme.breakpoints.mobile}){
+    width: 60vw;
   }
 `;
 
