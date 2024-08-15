@@ -23,7 +23,6 @@ const DormitoryPage = () => {
   const [choseModal, setChoseModal] = useState(false);
   const navigate = useNavigate();
 
-  console.log(name)
   useEffect(() => {
     fetchDormitoryPosts(name).then((boardDtoList) => {
       setPosts(boardDtoList);
@@ -38,17 +37,22 @@ const DormitoryPage = () => {
     setFilteredSearch(search);
   };
 
+  const openModal = () => {
+    setChoseModal(true);
+  };
+
+  const closeModal = () => {
+    setChoseModal(false);
+  };
+
   const filteredPosts = posts.filter((post) =>
     post.title.toLowerCase().includes(filteredSearch.toLowerCase())
   );
 
-  const openModal = () => {
-    setChoseModal(true);
-  }
-  
-  const closeModal = () => {
-    setChoseModal(false);
-  }
+  const handleNavigate = (post) => {
+    const path = `/dormitory/${name}/room/${post.id}`;
+    navigate(path);
+  };
 
   return (
     <Background>
@@ -68,15 +72,25 @@ const DormitoryPage = () => {
                 onClick={handleSearchClick}
               />
             </SearchBox>
-            {(name === "dormitory3" || name === "myounghyun") ? 
-            <Button onClick={openModal}>글쓰기</Button> : 
-            <Button onClick={() => navigate("/write")}>글쓰기</Button>}
+            {name === "dormitory3" || name === "myounghyun" ? (
+              <Button onClick={openModal}>글쓰기</Button>
+            ) : (
+              <Button onClick={() => navigate(`/dormitory/${name}/write`)}>
+                글쓰기
+              </Button>
+            )}
           </HighSearchBox>
         </TitleBox>
         <BottomWrapper>
           <ListWrapper>
             {filteredPosts.map((post) => (
-              <List key={post.id} title={post.title} search={filteredSearch} />
+              <List
+                key={post.id}
+                title={post.title}
+                search={filteredSearch}
+                status={post.status}
+                onClick={() => handleNavigate(post)} // 이 부분에서 handleNavigate 함수 전달
+              />
             ))}
           </ListWrapper>
         </BottomWrapper>
