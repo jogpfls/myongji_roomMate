@@ -5,6 +5,7 @@ import Button from "../components/Button";
 import { useNavigate, useParams } from "react-router-dom";
 import SearchImg from "../images/search.svg";
 import { fetchDormitoryPosts } from "../api/DormitoryApi";
+import CountChoseBox from "../components/CountChoseBox";
 
 const dormitoryNames = {
   dormitory3: "3동",
@@ -19,10 +20,11 @@ const DormitoryPage = () => {
   const [search, setSearch] = useState("");
   const [filteredSearch, setFilteredSearch] = useState("");
   const [posts, setPosts] = useState([]);
+  const [choseModal, setChoseModal] = useState(false);
   const navigate = useNavigate();
 
+  console.log(name)
   useEffect(() => {
-    // 분리된 API 호출 함수 사용
     fetchDormitoryPosts(name).then((boardDtoList) => {
       setPosts(boardDtoList);
     });
@@ -39,6 +41,14 @@ const DormitoryPage = () => {
   const filteredPosts = posts.filter((post) =>
     post.title.toLowerCase().includes(filteredSearch.toLowerCase())
   );
+
+  const openModal = () => {
+    setChoseModal(true);
+  }
+  
+  const closeModal = () => {
+    setChoseModal(false);
+  }
 
   return (
     <Background>
@@ -58,7 +68,9 @@ const DormitoryPage = () => {
                 onClick={handleSearchClick}
               />
             </SearchBox>
-            <Button onClick={() => navigate("/write")}>글쓰기</Button>
+            {(name === "dormitory3" || name === "myounghyun") ? 
+            <Button onClick={openModal}>글쓰기</Button> : 
+            <Button onClick={() => navigate("/write")}>글쓰기</Button>}
           </HighSearchBox>
         </TitleBox>
         <BottomWrapper>
@@ -69,6 +81,7 @@ const DormitoryPage = () => {
           </ListWrapper>
         </BottomWrapper>
       </Wrapper>
+      {choseModal && <CountChoseBox closeModal={closeModal} />}
     </Background>
   );
 };
