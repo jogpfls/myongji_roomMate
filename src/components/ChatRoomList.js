@@ -1,18 +1,34 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { getChatRooms } from "../api/ChatApi";
 
-const ChatRoomList = ({ rooms, activeRoom, onRoomClick }) => {
+const ChatRoomList = ({ activeRoom, onRoomClick }) => {
+  const [rooms, setRooms] = useState([]);
+
+  useEffect(() => {
+    const fetchChatRooms = async () => {
+      try {
+        const chatRooms = await getChatRooms();
+        setRooms(chatRooms);
+      } catch (error) {
+        console.error("채팅방목록조회실패:", error);
+      }
+    };
+
+    fetchChatRooms();
+  }, []);
+
   return (
     <Container>
       <Title>채팅방</Title>
       <RoomList>
-        {rooms.map((room, index) => (
+        {rooms.map((room) => (
           <RoomItem
-            key={index}
-            active={room.name === activeRoom}
-            onClick={() => onRoomClick(room.name)}
+            key={room.id}
+            active={room.title === activeRoom}
+            onClick={() => onRoomClick(room.title)}
           >
-            {room.name}
+            {room.title} ({room.memberCount})
           </RoomItem>
         ))}
       </RoomList>
