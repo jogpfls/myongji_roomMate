@@ -174,14 +174,13 @@ const TitleTitle = styled.div`
   border-radius: 10px;
   display: flex;
   justify-content: space-between;
-  align-items: end;
+  align-items: center;
 `;
 
 const TitleWrite = styled.input`
   outline: none;
   border: none;
-  width: 50%;
-  margin-bottom: 1.2%;
+  width: 85%;
   margin-left: 1.1%;
   background-color: transparent;
 
@@ -213,6 +212,7 @@ const Box = styled.div`
   display: flex;
   flex-direction: column;
   align-items: end;
+  padding-bottom: 1vh;
 `;
 
 const Contents = styled.textarea`
@@ -231,12 +231,12 @@ const Contents = styled.textarea`
 
 const CountBox = styled.div`
   margin-right: 3.8%;
-  margin-bottom: 1.5%;
 `
 
 const Count = styled.p`
   font-size: 17px;
   color: ${({theme})=>theme.colors.gray};
+  white-space: nowrap;
 `;
 
 const ButtonBox = styled.div`

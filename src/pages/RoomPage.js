@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Category from "../components/Category";
 import Button from "../components/Button";
 import { useNavigate, useParams } from "react-router-dom";
-import { getBoardDetail } from "../api/RoomApi";
+import { getBoardDetail, deleteBoardDetail, patchBoardDetail } from "../api/RoomApi";
 
 const dormitoryNames = {
   dormitory3: "3동",
@@ -17,6 +17,8 @@ const RoomPage = () => {
   const navigate = useNavigate();
   const { id, name } = useParams();
   const [post, setPost] = useState(null);
+  const [patchPost, setPatchPost] = useState(false);
+  const [editedContent, setEditedContent] = useState("");
 
   useEffect(() => {
     console.log(`Fetching data for dormitory: ${name}, room ID: ${id}`);
@@ -34,6 +36,37 @@ const RoomPage = () => {
     return <div>로딩중...</div>;
   }
 
+  const changeClick = () => {
+    setPatchPost(!patchPost);
+    setEditedContent(post.content);
+  };
+
+  const handlePatch = async () => {
+      const result = await patchBoardDetail(id, name, editedContent);
+      if(result.errorCode === 404){
+        alert("본인 게시글만 수정 가능합니다.");
+        setPatchPost(false);
+      }else{
+        navigate(`/dormitory/${name}`)
+      }
+  };
+
+  const handleDelete = async() => {
+    const result = await deleteBoardDetail(id, name);
+    if(result.errorCode === 404) {
+      alert("본인 게시글만 삭제 가능합니다.");
+      setPatchPost(false);
+    }
+    else{
+      navigate(`/dormitory/${name}`)
+    }
+    
+  };
+
+  const handleContentChange = (e) => {
+    setEditedContent(e.target.value);
+  };
+
   return (
     <Container>
       <Dormitory>{dormitoryNames[name]}</Dormitory>
@@ -46,16 +79,67 @@ const RoomPage = () => {
         <Category disabled>아침형</Category>
         <Category disabled>아침형</Category>
       </TagBox>
-      <Content>{post.content}</Content>
-      <BtnBox>
-        <Text>※ 채팅 버튼을 누르면 작성자에게 개인정보가 공개됩니다.</Text>
-        <Btn>
-          <Button onClick={() => navigate("/chat")}>채팅하기</Button>
-        </Btn>
-      </BtnBox>
+      <Content>
+        {patchPost ? (
+          <Input
+            type="text"
+            value={editedContent}
+            onChange={handleContentChange}
+          />
+        ) : (
+          post.content
+        )}
+      </Content>
+      {/* <BtnBox>
+        {!patchPost && 
+          <Btn>
+            <Button onClick={openPatch}>수정하기</Button>
+          </Btn>
+          }
+          {patchPost ? 
+          <>
+          <TextBox>
+            <Text>※ 채팅 버튼을 누르면 작성자에게 개인정보가 공개됩니다.</Text>
+          </TextBox>
+            <Btn>
+              <Button onClick={() => navigate("/chat")}>수정완료</Button>
+            </Btn>
+          </>
+          : 
+          <ButtonBox>
+            <Btn>
+              <Button onClick={() => navigate("/chat")}>채팅하기</Button>
+            </Btn>
+          </ButtonBox>}
+      </BtnBox> */}
+      <Box>
+      {!patchPost &&
+        <Text>※ 채팅 버튼을 누르면 작성자에게 개인정보가 공개됩니다.</Text>}
+        <BtnBox>
+        {!patchPost ?
+        <>
+        <ButtonBox>
+          <Button onClick={changeClick}>수정하기</Button>
+        </ButtonBox>
+        <Button onClick={() => navigate("/chat")}>채팅하기</Button>
+        </>
+        : <>
+        <BoxBox>
+          <Button onClick={handleDelete}>삭제하기</Button>
+          <Button onClick={handlePatch}>수정완료</Button>
+        </BoxBox>
+        </>}
+        </BtnBox>
+      </Box>
     </Container>
   );
 };
+
+const Box = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
 const Container = styled.div`
   width: 70%;
   margin: auto;
@@ -92,18 +176,39 @@ const Content = styled.div`
   border-radius: 10px;
   background-color: ${(props) => props.theme.colors.lightBlue};
 `;
+
+const Input = styled.textarea`
+  background-color: transparent;
+  width: 100%;
+  height: 100%;
+  outline: none;
+  resize: none;
+
+  &:hover{
+    outline: none;
+  }
+`;
+
 const BtnBox = styled.div`
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  width: 100%;
+  margin-top: 10px;
+  justify-content: ${({patchPost})=>!patchPost ? "end" : "space-between"};
 `;
+
 const Text = styled.div`
   display: flex;
   flex-direction: row-reverse;
   font-size: 15px;
 `;
-const Btn = styled.div`
-  display: flex;
-  flex-direction: row-reverse;
+
+const ButtonBox = styled.div`
+  width: 100%;
 `;
+
+const BoxBox = styled.div`
+  display: flex;
+  gap: 1vw;
+`;
+
 export default RoomPage;
