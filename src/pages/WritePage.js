@@ -108,7 +108,7 @@ const WritePage = () => {
             </Box>
           </ContentsBox>
           <ButtonBox>
-            <Button onClick={()=>navigate('/dormitory')}>취소</Button>
+            <Button onClick={()=>navigate(`/dormitory/${name}`)}>취소</Button>
             {title === '' || contents === ''? 
             <Button 
             bgc={({theme})=>theme.colors.blue3}
@@ -117,7 +117,7 @@ const WritePage = () => {
             <Button onClick={()=>handleSubmit()}>작성하기</Button>}
           </ButtonBox>
         </Wrapper>
-      </AllWrapper>
+      </AllWrapper> 
     </WrapperWrapper>
   );
 };
