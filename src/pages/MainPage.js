@@ -4,6 +4,7 @@ import tree from "../images/Tree.png";
 import { useNavigate } from "react-router-dom";
 import Map from "../components/Map";
 import { scroller } from "react-scroll";
+import Cookies from "js-cookie";
 
 const MainPage = () => {
   const navigate = useNavigate();
@@ -43,6 +44,17 @@ const MainPage = () => {
     });
   };
 
+  const handleCirClick = (path) => {
+    const token = Cookies.get("accessToken");
+
+    if (!token) {
+      alert("로그인이 필요합니다.");
+      navigate("/auth/login");
+    } else {
+      navigate(path);
+    }
+  };
+
   return (
     <div>
       <BackgroundImage src={tree} />
@@ -55,31 +67,31 @@ const MainPage = () => {
         <CirBox>
           <Cir
             backgroundColor="blue3"
-            onClick={() => navigate("/dormitory/:myoungdeok")}
+            onClick={() => handleCirClick("/dormitory/:myoungdeok")}
           >
             명덕
           </Cir>
           <Cir
             backgroundColor="deepBlue"
-            onClick={() => navigate("/dormitory/myounghyun")}
+            onClick={() => handleCirClick("/dormitory/myounghyun")}
           >
             명현
           </Cir>
           <Cir
             backgroundColor="blue2"
-            onClick={() => navigate("/dormitory/dormitory3")}
+            onClick={() => handleCirClick("/dormitory/dormitory3")}
           >
             3동
           </Cir>
           <Cir
             backgroundColor="deepBlue2"
-            onClick={() => navigate("/dormitory/ dormitory4")}
+            onClick={() => handleCirClick("/dormitory/ dormitory4")}
           >
             4동
           </Cir>
           <Cir
             backgroundColor="blue"
-            onClick={() => navigate("/dormitory/dormitory5,")}
+            onClick={() => handleCirClick("/dormitory/dormitory5,")}
           >
             5동
           </Cir>
