@@ -134,6 +134,10 @@ const AllWrapper = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 12vh;
+
+  @media screen and (max-width: ${({theme})=>theme.breakpoints.mobile}){
+    width: 80%;
+  }
 `;
 
 const Wrapper = styled.div`
@@ -165,6 +169,7 @@ const Title = styled.p`
   font-size: 20px;
   margin-bottom: 7px;
   margin-left: 8px;
+
 `;
 
 const TitleTitle = styled.div`
@@ -183,6 +188,10 @@ const TitleWrite = styled.input`
   width: 85%;
   margin-left: 1.1%;
   background-color: transparent;
+
+  @media screen and (max-width: ${({theme})=>theme.breakpoints.mobile}){
+    font-size: 16px;
+  }
 
   &:hover{
     outline: none;
