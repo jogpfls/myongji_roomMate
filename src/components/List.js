@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
-const List = ({ search, title, status, onClick }) => {
+const List = ({ search, title, status, onClick, contents, date, total }) => {
   const [maxLength, setMaxLength] = useState(12);
 
   useEffect(() => {
@@ -30,6 +30,11 @@ const List = ({ search, title, status, onClick }) => {
     return text;
   };
 
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    const [datePart] = dateString.split(" ");
+    return datePart.replace(/-/g, ".");
+  }
   return (
     <div>
       {title.includes(search) && (
@@ -42,14 +47,14 @@ const List = ({ search, title, status, onClick }) => {
               <Title>{title}</Title>
             </div>
             <ContentsBox>
-              <Contents>{truncateText("나나나", maxLength)}</Contents>
+              <Contents>{truncateText(contents, maxLength)}</Contents>
             </ContentsBox>
             <TextBox>
               <CategoryBox>
                 <Category>#흡연안함</Category>
                 <Category>#4인실</Category>
               </CategoryBox>
-              <Date>2024.05.31</Date>
+              <Date>{formatDate(date)}</Date>
             </TextBox>
           </LeftBox>
           <RightBox>
@@ -58,7 +63,7 @@ const List = ({ search, title, status, onClick }) => {
                 <ChatText>모집 완료</ChatText>
               ) : (
                 <>
-                  <Count>3/4 모집 중..</Count>
+                  <Count>1/{total} 모집 중..</Count>
                   <ChatText>채팅방 입장하기</ChatText>
                 </>
               )}

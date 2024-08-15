@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-const CountChoseBox = ({closeModal}) => {
+const CountChoseBox = ({closeModal, name}) => {
   const navigate = useNavigate();
 
   const handleClose = (e) => {
@@ -10,18 +10,19 @@ const CountChoseBox = ({closeModal}) => {
     closeModal();
     };
 
-  const handleWrite = (e) => {
-    e.stopPropagation()
-    closeModal();
-    navigate(`/write`)
-  }
+    const handleWrite = (total) => (e) => {
+      e.stopPropagation();
+      closeModal();
+      navigate(`/dormitory/${name}/write`, { state: { total } });
+    }
+
   return (
     <Wrapper onClick={handleClose}>
       <BoxWrapper>
-        <ChoseBox onClick={handleWrite}>
+        <ChoseBox onClick={handleWrite(2)}>
           <Text>2인실</Text>
         </ChoseBox>
-        <ChoseBox onClick={handleWrite}>
+        <ChoseBox onClick={handleWrite(4)}>
           <Text>4인실</Text>
         </ChoseBox>
       </BoxWrapper>
@@ -72,58 +73,5 @@ const Text = styled.p`
   ${({theme})=>theme.fonts.font4}
   font-size: 50px;
 `;
-
-// const Wrapper = styled.div`
-//   background-color: rgba(0, 0, 0, 0.5);
-//   position: fixed;
-//   top: 0;
-//   right: 0;
-//   bottom: 0;
-//   left: 0;
-//   z-index: 1000;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-// `;
-
-// const BoxWrapper = styled.div`
-//   display: flex;
-//   position: absolute;
-//   width: 100%;
-//   height: 100%;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   gap: 5%;
-//   background-color: ${({theme})=>theme.colors.white};
-//   width: 50%;
-//   height: 40%;
-//   padding: 0 30px;
-//   border-radius: 10px;
-
-// `;
-
-// const ChoseBox = styled.div`
-//   background-color: ${({theme})=>theme.colors.lightBlue};
-//   width: 90%;
-//   height: 90%;
-//   max-width: 400px;
-//   max-height: 400px;
-//   border-radius: 10px;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   cursor: pointer;
-//   transition: background-color 0.2s;
-
-//   &:hover{
-//     background-color: ${({theme})=>theme.colors.lightBlueC};
-//   }
-// `;
-
-// const Text = styled.p`
-//   ${({theme})=>theme.fonts.font4}
-//   font-size: 50px;
-// `;
 
 export default CountChoseBox;
