@@ -19,10 +19,10 @@ function App() {
           <Route path="/" element={<Navigate to="/main" />} />
           <Route path="/main" element={<MainPage />} />
           <Route path="/auth/login" element={<Login />} />
-          <Route path="/room" element={<RoomPage />} />
+          <Route path="/domitory/:name/room/:id" element={<RoomPage />} />
           <Route path="/write" element={<WritePage />} />
           <Route path="/mypage" element={<MyPage />} />
-          <Route path="/dormitory" element={<DormitoryPage />} />
+          <Route path="/dormitory/:name" element={<DormitoryPage />} />
           <Route path="/chat" element={<ChatPage />} />
           <Route path="/info" element={<InfoPage />} />
         </Routes>
