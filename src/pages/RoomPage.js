@@ -87,31 +87,11 @@ const RoomPage = () => {
             onChange={handleContentChange}
           />
         ) : (
-          post.content
+          <ContentsText>
+            {post.content}
+          </ContentsText>
         )}
       </Content>
-      {/* <BtnBox>
-        {!patchPost && 
-          <Btn>
-            <Button onClick={openPatch}>수정하기</Button>
-          </Btn>
-          }
-          {patchPost ? 
-          <>
-          <TextBox>
-            <Text>※ 채팅 버튼을 누르면 작성자에게 개인정보가 공개됩니다.</Text>
-          </TextBox>
-            <Btn>
-              <Button onClick={() => navigate("/chat")}>수정완료</Button>
-            </Btn>
-          </>
-          : 
-          <ButtonBox>
-            <Btn>
-              <Button onClick={() => navigate("/chat")}>채팅하기</Button>
-            </Btn>
-          </ButtonBox>}
-      </BtnBox> */}
       <Box>
       {!patchPost &&
         <Text>※ 채팅 버튼을 누르면 작성자에게 개인정보가 공개됩니다.</Text>}
@@ -135,6 +115,13 @@ const RoomPage = () => {
   );
 };
 
+const ContentsText = styled.p`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  word-break: break-word;
+`;
+
 const Box = styled.div`
   display: flex;
   flex-direction: column;
@@ -148,6 +135,10 @@ const Container = styled.div`
   justify-content: center;
   flex-direction: column;
   gap: 20px;
+
+  @media screen and (max-width: ${({theme})=>theme.breakpoints.mobile}){
+    width: 80%;
+  }
 `;
 const Dormitory = styled.div`
   ${(props) => props.theme.fonts.title}

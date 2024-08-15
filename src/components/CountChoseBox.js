@@ -67,11 +67,19 @@ const ChoseBox = styled.div`
   &:hover{
     background-color: ${({theme})=>theme.colors.lightBlueC};
   }
+
+  @media screen and (max-width: ${({theme})=>theme.breakpoints.mobile}){
+    height: 30%;
+  }
 `;
 
 const Text = styled.p`
   ${({theme})=>theme.fonts.font4}
   font-size: 50px;
+
+  @media screen and (max-width: ${({theme})=>theme.breakpoints.mobile}){
+    font-size: 30px;
+  }
 `;
 
 export default CountChoseBox;
