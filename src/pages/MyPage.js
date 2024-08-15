@@ -4,7 +4,8 @@ import Button from "../components/Button";
 import MyList from "../components/MyList";
 import next from "../images/next.svg";
 import back from "../images/back.svg";
-import { getUserData } from "../api/MyApi";
+import { getUserData, updateUserName } from "../api/MyApi";
+import { FaPen, FaCheck } from "react-icons/fa";
 
 const MyPage = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -16,6 +17,8 @@ const MyPage = () => {
     major: "",
     studentNumber: "",
   });
+  const [nameEditMode, setNameEditMode] = useState(false);
+  const [newName, setNewName] = useState("");
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -29,6 +32,24 @@ const MyPage = () => {
 
     fetchUserData();
   }, []);
+
+  const handleNameEdit = () => {
+    setNameEditMode(true);
+  };
+
+  const handleNameChange = (e) => {
+    setNewName(e.target.value);
+  };
+
+  const handleNameSubmit = async () => {
+    try {
+      await updateUserName(newName);
+      setUserData({ ...userData, name: newName });
+      setNameEditMode(false);
+    } catch (error) {
+      console.error("이름 수정에 실패했습니다.", error);
+    }
+  };
 
   const handleCancel = () => {
     setIsEditing(false);
@@ -92,13 +113,47 @@ const MyPage = () => {
               <TBox>
                 <Profile>
                   <Img></Img>
-                  <Name>{userData.name}</Name>
+                  <NameBox>
+                    {nameEditMode ? (
+                      <Name>
+                        <FaCheck
+                          onClick={handleNameSubmit}
+                          style={{
+                            cursor: "pointer",
+                            width: "15px",
+                            marginRight: "5px",
+                          }}
+                        />
+                        <input
+                          type="text"
+                          value={newName}
+                          onChange={handleNameChange}
+                          onKeyPress={(e) => {
+                            if (e.key === "Enter") handleNameSubmit();
+                          }}
+                          autoFocus
+                        />
+                      </Name>
+                    ) : (
+                      <Name>
+                        <FaPen
+                          onClick={handleNameEdit}
+                          style={{
+                            cursor: "pointer",
+                            width: "15px",
+                          }}
+                        />
+                        <span>{userData?.name}</span>
+                      </Name>
+                    )}
+                  </NameBox>
                 </Profile>
                 <Info>
-                  소속: {userData.major} <br />
+                  학번: {userData.studentNumber}
+                  <br />
                   구분: ICT학부
                   <br />
-                  학년: {userData.studentNumber}
+                  소속: {userData.major}
                 </Info>
               </TBox>
               <Title>내가 쓴 글</Title>
@@ -316,9 +371,30 @@ const Img = styled.div`
   background-color: ${(props) => props.theme.colors.lightBlue};
 `;
 
-const Name = styled.div`
+const NameBox = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
   margin-top: 10px;
+  flex-wrap: wrap;
 `;
+const Name = styled.div`
+  display: flex;
+  span {
+    margin-left: 10px;
+    word-break: break-word;
+    text-align: center;
+  }
+  input {
+    background-color: ${(props) => props.theme.colors.lightBlue};
+    border-radius: 5px;
+    outline: none;
+    width: 100px;
+    display: flex;
+  }
+`;
+
 const Info = styled.div`
   width: 60%;
   line-height: 1.5em;
