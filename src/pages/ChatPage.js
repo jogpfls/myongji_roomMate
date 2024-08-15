@@ -2,12 +2,14 @@ import React, { useEffect, useState, useRef, useLayoutEffect } from "react";
 import styled from "styled-components";
 import io from "socket.io-client";
 import ChatOut from "../images/ChatOut.svg";
+import ChatRoomList from "../components/ChatRoomList";
 
 const socket = io("");
 
 const ChatPage = () => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
+  const [activeRoom, setActiveRoom] = useState("");
   const chatMessagesRef = useRef(null);
 
   useEffect(() => {
@@ -45,25 +47,22 @@ const ChatPage = () => {
     }
   };
 
+  const handleRoomClick = (roomName) => {
+    setActiveRoom(roomName);
+  };
+
   return (
     <ChatContainer>
-      <ChatRoomList>
-        <Title>채팅방</Title>
-        <RoomList>
-          <RoomItem active>흡연 안하는 룸메 구해요</RoomItem>
-          <RoomItem>4동 룸메 구해요</RoomItem>
-          <RoomItem>잘 안들어오는 룸메 환영</RoomItem>
-        </RoomList>
-      </ChatRoomList>
+      <ChatRoomList activeRoom={activeRoom} onRoomClick={handleRoomClick} />
       <ChatRoom>
         <ChatRoomHeader>
           <RoomInfo>
-            <RoomTitle>흡연 안하는 룸메 구해요</RoomTitle>
+            <RoomTitle>{activeRoom}</RoomTitle>
             <RoomStatus>3/4 모집 중...</RoomStatus>
           </RoomInfo>
           <HeaderRight>
             <ExitButton>
-              <img src={ChatOut} alt="나가기"/>
+              <img src={ChatOut} alt="나가기" />
             </ExitButton>
           </HeaderRight>
         </ChatRoomHeader>
@@ -102,33 +101,6 @@ const ChatContainer = styled.div`
   height: 94vh;
 `;
 
-const ChatRoomList = styled.aside`
-  width: 30%;
-  background-color: ${(props) => props.theme.colors.white};
-  border-right: 1px solid ${(props) => props.theme.colors.gray};
-`;
-
-const Title = styled.h2`
-  padding: 25px 0px;
-  ${(props) => props.theme.fonts.title};
-  font-size: 30px;
-  padding-left: 20px;
-  border-bottom: 2px solid ${(props) => props.theme.colors.gray2};
-`;
-
-const RoomList = styled.ul`
-  list-style: none;
-  padding: 0;
-`;
-
-const RoomItem = styled.li`
-  padding: 25px 10px;
-  background-color: ${({ active }) =>
-    active ? (props) => props.theme.colors.lightBlue : "#fff"};
-  cursor: pointer;
-  border-bottom: 1px solid ${(props) => props.theme.colors.gray2};
-`;
-
 const ChatRoom = styled.section`
   width: 70%;
   display: flex;
@@ -146,7 +118,7 @@ const ChatRoomHeader = styled.header`
 const RoomInfo = styled.div``;
 
 const RoomTitle = styled.h3`
-  ${(props) => props.theme.fonts.text4};
+  ${(props) => props.theme.fonts.text5};
   font-size: 23px;
 `;
 
