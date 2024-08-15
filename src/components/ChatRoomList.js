@@ -46,7 +46,7 @@ const Container = styled.aside`
 
 const Title = styled.h2`
   padding: 25px 0;
-  ${(props) => props.theme.fonts.title};
+  ${(props) => props.theme.fonts.text7};
   font-size: 30px;
   padding-left: 20px;
   border-bottom: 2px solid ${(props) => props.theme.colors.gray2};
@@ -54,13 +54,14 @@ const Title = styled.h2`
 
 const RoomList = styled.ul`
   list-style: none;
-  padding: 0;
 `;
 
 const RoomItem = styled.li`
-  padding: 25px 10px;
+  padding: 25px 20px;
   background-color: ${({ active, theme }) =>
-    active ? theme.colors.lightBlue : "#fff"};
+    active ? theme.colors.lightBlue : theme.colors.white};
   cursor: pointer;
   border-bottom: 1px solid ${(props) => props.theme.colors.gray2};
+  ${(props) => props.theme.fonts.text4};
+  font-size: 20px;
 `;

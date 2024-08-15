@@ -96,7 +96,6 @@ const ChatPage = () => {
 
 export default ChatPage;
 
-// ... existing styled components
 const ChatContainer = styled.div`
   display: flex;
   height: 94vh;
@@ -119,7 +118,7 @@ const ChatRoomHeader = styled.header`
 const RoomInfo = styled.div``;
 
 const RoomTitle = styled.h3`
-  ${(props) => props.theme.fonts.text4};
+  ${(props) => props.theme.fonts.text5};
   font-size: 23px;
 `;
 
