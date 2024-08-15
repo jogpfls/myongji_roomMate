@@ -4,12 +4,31 @@ import Button from "../components/Button";
 import MyList from "../components/MyList";
 import next from "../images/next.svg";
 import back from "../images/back.svg";
+import { getUserData } from "../api/MyApi";
 
 const MyPage = () => {
   const [isEditing, setIsEditing] = useState(false);
   const theme = useTheme();
   const [width, setWidth] = useState(window.innerWidth);
   const listWrapperRef = useRef(null);
+  const [userData, setUserData] = useState({
+    name: "",
+    major: "",
+    studentNumber: "",
+  });
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const data = await getUserData();
+        setUserData(data);
+      } catch (error) {
+        console.error("유저 정보를 가져오는데 실패했습니다.", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   const handleCancel = () => {
     setIsEditing(false);
@@ -17,36 +36,36 @@ const MyPage = () => {
 
   const handleNext = () => {
     if (listWrapperRef.current) {
-      if(width > 480) {
+      if (width > 480) {
         const scrollAmount = window.innerWidth * 0.26;
-      listWrapperRef.current.scrollBy({
-        left: scrollAmount,
-        behavior: 'smooth',
-      });
-      }else{
+        listWrapperRef.current.scrollBy({
+          left: scrollAmount,
+          behavior: "smooth",
+        });
+      } else {
         const scrollAmount = window.innerWidth * 0.573;
-      listWrapperRef.current.scrollBy({
-        left: scrollAmount,
-        behavior: 'smooth',
-      });
+        listWrapperRef.current.scrollBy({
+          left: scrollAmount,
+          behavior: "smooth",
+        });
       }
     }
   };
 
   const handleBack = () => {
     if (listWrapperRef.current) {
-      if(width > 480) {
+      if (width > 480) {
         const scrollAmount = window.innerWidth * 0.26;
-      listWrapperRef.current.scrollBy({
-        left: -scrollAmount,
-        behavior: 'smooth',
-      });
-      }else{
+        listWrapperRef.current.scrollBy({
+          left: -scrollAmount,
+          behavior: "smooth",
+        });
+      } else {
         const scrollAmount = window.innerWidth * 0.573;
-      listWrapperRef.current.scrollBy({
-        left: -scrollAmount,
-        behavior: 'smooth',
-      });
+        listWrapperRef.current.scrollBy({
+          left: -scrollAmount,
+          behavior: "smooth",
+        });
       }
     }
   };
@@ -66,77 +85,79 @@ const MyPage = () => {
   return (
     <Container>
       <LRBox>
-        {width > 480 ?
+        {width > 480 ? (
           <>
             <Left>
-            <Title>개인정보</Title>
-            <TBox>
-              <Profile>
-                <Img></Img>
-                <Name>김희수</Name>
-              </Profile>
-              <Info>
-                소속: 정보통신공학과 <br />
-                구분: ICT학부
-                <br />
-                학년: 4
-              </Info>
-            </TBox>
-            <Title>내가 쓴 글</Title>
-            <BBox>
-              <WriteList>
-              <Back src={back} alt="화살표" onClick={handleBack} />
-                <ListWrapper ref={listWrapperRef}>
-                  <MyList title="흡연"/>
-                  <MyList title="나나나"/>
-                </ListWrapper>
-                <Next src={next} alt="화살표" onClick={handleNext}/>
-              </WriteList>
-            </BBox>
-          </Left>
-          <Right>
-            <Title>INFO</Title>
-            <LBox>
-              <BoxList isEditing={isEditing} />
-            </LBox>
-          </Right>
-          </> : 
+              <Title>개인정보</Title>
+              <TBox>
+                <Profile>
+                  <Img></Img>
+                  <Name>{userData.name}</Name>
+                </Profile>
+                <Info>
+                  소속: {userData.major} <br />
+                  구분: ICT학부
+                  <br />
+                  학년: {userData.studentNumber}
+                </Info>
+              </TBox>
+              <Title>내가 쓴 글</Title>
+              <BBox>
+                <WriteList>
+                  <Back src={back} alt="화살표" onClick={handleBack} />
+                  <ListWrapper ref={listWrapperRef}>
+                    <MyList title="흡연" />
+                    <MyList title="나나나" />
+                  </ListWrapper>
+                  <Next src={next} alt="화살표" onClick={handleNext} />
+                </WriteList>
+              </BBox>
+            </Left>
+            <Right>
+              <Title>INFO</Title>
+              <LBox>
+                <BoxList isEditing={isEditing} />
+              </LBox>
+            </Right>
+          </>
+        ) : (
           <Wrapper>
-          <div>
-            <Title>개인정보</Title>
-            <TBox>
-              <Profile>
-                <Img></Img>
-                <Name>김희수</Name>
-              </Profile>
-              <Info>
-                소속: 정보통신공학과 <br />
-                구분: ICT학부
-                <br />
-                학년: 4
-              </Info>
-            </TBox>
-          </div>
-        <div>
-          <Title>INFO</Title>
-          <LBox>
-            <BoxList isEditing={isEditing} />
-          </LBox>
-        </div>
-          <div>
-            <Title>내가 쓴 글</Title>
-            <BBox>
-              <WriteList>
-              <Back src={back} alt="화살표" onClick={handleBack} />
-                <ListWrapper ref={listWrapperRef}>
-                  <MyList title="흡연"/>
-                  <MyList title="나나나"/>
-                </ListWrapper>
-                <Next src={next} alt="화살표" onClick={handleNext}/>
-              </WriteList>
-            </BBox>
-          </div>
-          </Wrapper>}
+            <div>
+              <Title>개인정보</Title>
+              <TBox>
+                <Profile>
+                  <Img></Img>
+                  <Name>김희수</Name>
+                </Profile>
+                <Info>
+                  소속: 정보통신공학과 <br />
+                  구분: ICT학부
+                  <br />
+                  학년: 4
+                </Info>
+              </TBox>
+            </div>
+            <div>
+              <Title>INFO</Title>
+              <LBox>
+                <BoxList isEditing={isEditing} />
+              </LBox>
+            </div>
+            <div>
+              <Title>내가 쓴 글</Title>
+              <BBox>
+                <WriteList>
+                  <Back src={back} alt="화살표" onClick={handleBack} />
+                  <ListWrapper ref={listWrapperRef}>
+                    <MyList title="흡연" />
+                    <MyList title="나나나" />
+                  </ListWrapper>
+                  <Next src={next} alt="화살표" onClick={handleNext} />
+                </WriteList>
+              </BBox>
+            </div>
+          </Wrapper>
+        )}
       </LRBox>
       <BtnBox>
         {isEditing && <CancelButton onClick={handleCancel}>취소</CancelButton>}
@@ -205,7 +226,7 @@ const Container = styled.div`
   margin: auto;
   height: 95vh;
 
-  @media screen and (max-width: ${({theme})=>theme.breakpoints.mobile}){
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: 80%;
     display: flex;
     flex-direction: column;
@@ -223,7 +244,6 @@ const LRBox = styled.div`
   align-items: center;
   justify-content: center;
   gap: 3vw;
-
 `;
 
 const Left = styled.div`
@@ -247,7 +267,7 @@ const Title = styled.div`
   ${(props) => props.theme.fonts.text4}
   font-size: 27px;
 
-  @media screen and (max-width: ${({theme})=>theme.breakpoints.mobile}){
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     margin-bottom: 8px;
     font-size: 25px;
     margin-top: 3px;
@@ -268,7 +288,7 @@ const TBox = styled.div`
   width: 100%;
   padding: 30px;
 
-  @media screen and (max-width: ${({theme})=>theme.breakpoints.mobile}){
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     display: flex;
     justify-content: space-between;
     padding: 0 6vw;
@@ -285,7 +305,7 @@ const Profile = styled.div`
   justify-content: center;
   flex-direction: column;
 
-  @media screen and (max-width: ${({theme})=>theme.breakpoints.mobile}){
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: auto;
   }
 `;
@@ -303,7 +323,7 @@ const Info = styled.div`
   width: 60%;
   line-height: 1.5em;
 
-  @media screen and (max-width: ${({theme})=>theme.breakpoints.mobile}){
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: auto;
   }
 `;
@@ -318,7 +338,7 @@ const BBox = styled.div`
   justify-content: center;
   align-items: center;
 
-  @media screen and (max-width: ${({theme})=>theme.breakpoints.mobile}){
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: auto;
     border-radius: 20px;
   }
@@ -335,12 +355,11 @@ const LBox = styled.div`
   justify-content: space-between;
   padding: 30px;
 
-  @media screen and (max-width: ${({theme})=>theme.breakpoints.mobile}){
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     min-height: 40px;
     height: 80%;
     padding: 30px 0 0 20px;
     border-radius: 20px;
-
   }
 `;
 
@@ -351,10 +370,9 @@ const BtnBox = styled.div`
   gap: 10px;
   margin-top: -6vh;
 
-  @media screen and (max-width: ${({theme})=>theme.breakpoints.mobile}){
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     margin-top: 3vh;
   }
-
 `;
 
 const BoxListContainer = styled.div`
@@ -406,14 +424,13 @@ const RemoveButton = styled.button`
 const Label = styled.div`
   margin-left: 10px;
   font-size: 20px;
-
 `;
 
 const AddItemContainer = styled.div`
   display: flex;
   align-items: center;
 
-  @media screen and (max-width: ${({theme})=>theme.breakpoints.mobile}) {
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: 73vw;
     margin-bottom: 1vh;
   }
@@ -427,7 +444,7 @@ const Input = styled.input`
   border: 1px solid ${(props) => props.theme.colors.deepBlue2};
   margin-right: 10px;
 
-  @media screen and (max-width: ${({theme})=>theme.breakpoints.mobile}) {
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: 75%;
     border-radius: 10px;
   }
@@ -442,7 +459,7 @@ const AddButton = styled.button`
   border-radius: 5px;
   cursor: pointer;
 
-  @media screen and (max-width: ${({theme})=>theme.breakpoints.mobile}) {
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: 12vw;
     border-radius: 10px;
     white-space: nowrap;
@@ -494,6 +511,5 @@ const Wrapper = styled.div`
   gap: 1vh;
   padding-top: 5%;
 `;
-
 
 export default MyPage;
