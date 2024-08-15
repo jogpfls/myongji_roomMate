@@ -30,6 +30,10 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  @media screen and (max-width: ${({theme})=>theme.breakpoints.mobile}){
+    width: 57.3vw;
+  }
 `;
 
 const TitleWrapper = styled.div`
