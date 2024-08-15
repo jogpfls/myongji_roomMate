@@ -4,7 +4,7 @@ import Button from "../components/Button";
 import MyList from "../components/MyList";
 import next from "../images/next.svg";
 import back from "../images/back.svg";
-import { getUserData, updateUserName } from "../api/MyApi";
+import { getUserData, updateUserName, getUserBoards } from "../api/MyApi";
 import { FaPen, FaCheck } from "react-icons/fa";
 
 const MyPage = () => {
@@ -19,6 +19,7 @@ const MyPage = () => {
   });
   const [nameEditMode, setNameEditMode] = useState(false);
   const [newName, setNewName] = useState("");
+  const [userBoards, setUserBoards] = useState([]);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -50,6 +51,19 @@ const MyPage = () => {
       console.error("이름 수정에 실패했습니다.", error);
     }
   };
+
+  useEffect(() => {
+    const fetchUserBoards = async () => {
+      try {
+        const boards = await getUserBoards();
+        setUserBoards(boards);
+      } catch (error) {
+        console.error("게시글을 가져오는데 실패했습니다.", error);
+      }
+    };
+
+    fetchUserBoards();
+  }, []);
 
   const handleCancel = () => {
     setIsEditing(false);
@@ -161,8 +175,9 @@ const MyPage = () => {
                 <WriteList>
                   <Back src={back} alt="화살표" onClick={handleBack} />
                   <ListWrapper ref={listWrapperRef}>
-                    <MyList title="흡연" />
-                    <MyList title="나나나" />
+                    {userBoards.map((board) => (
+                      <MyList key={board.id} title={board.title} />
+                    ))}
                   </ListWrapper>
                   <Next src={next} alt="화살표" onClick={handleNext} />
                 </WriteList>

@@ -19,3 +19,13 @@ export const updateUserName = async (newName) => {
     throw error;
   }
 };
+
+export const getUserBoards = async () => {
+  try {
+    const response = await Axios.get("/users/board");
+    return response.data.data.myBoardDtoList;
+  } catch (error) {
+    console.error("게시글을 가져오는데 실패했습니다.", error);
+    throw error;
+  }
+};
