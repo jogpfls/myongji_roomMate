@@ -1,53 +1,71 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import List from "../components/List";
 import Button from "../components/Button";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import SearchImg from "../images/search.svg";
+import { fetchDormitoryPosts } from "../api/DormitoryApi";
+
+const dormitoryNames = {
+  dormitory3: "3동",
+  dormitory4: "4동",
+  dormitory5: "5동",
+  myoungdeok: "명덕",
+  myounghyun: "명현",
+};
 
 const DormitoryPage = () => {
-  const [search, setSearch] = useState('');
-  const [filteredSearch, setFilteredSearch] = useState('');
+  const { name } = useParams();
+  const [search, setSearch] = useState("");
+  const [filteredSearch, setFilteredSearch] = useState("");
+  const [posts, setPosts] = useState([]);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    // 분리된 API 호출 함수 사용
+    fetchDormitoryPosts(name).then((boardDtoList) => {
+      setPosts(boardDtoList);
+    });
+  }, [name]);
+
   const handleSearchChange = (event) => {
-    setSearch(event.target.value)
-  }
+    setSearch(event.target.value);
+  };
 
   const handleSearchClick = () => {
     setFilteredSearch(search);
   };
 
+  const filteredPosts = posts.filter((post) =>
+    post.title.toLowerCase().includes(filteredSearch.toLowerCase())
+  );
+
   return (
     <Background>
       <Wrapper>
         <TitleBox>
-          <Title>명덕</Title>
+          <Title>{dormitoryNames[name]}</Title>
           <HighSearchBox>
             <SearchBox>
-              <Search 
-                onChange={handleSearchChange} 
+              <Search
+                onChange={handleSearchChange}
                 value={search}
-                placeholder="찾고 싶은 방을 검색해보세요!"></Search>
-                <SearchButton src={SearchImg} alt="검색" onClick={handleSearchClick}/>
+                placeholder="찾고 싶은 방을 검색해보세요!"
+              ></Search>
+              <SearchButton
+                src={SearchImg}
+                alt="검색"
+                onClick={handleSearchClick}
+              />
             </SearchBox>
-              <Button onClick={() => navigate("/write")}>글쓰기</Button>
+            <Button onClick={() => navigate("/write")}>글쓰기</Button>
           </HighSearchBox>
         </TitleBox>
         <BottomWrapper>
           <ListWrapper>
-            <List title="♀ 흡연 안하는 룸메 구해요" search={filteredSearch}/>
-            <List title="♀ 일찍 잠자는 사람 구해요" search={filteredSearch}/>
-            <List title="♀ 담배 X" search={filteredSearch}/>
-            <List title="♀ 흡연 X" search={filteredSearch}/>
-            <List title="♀ 흡연 X" search={filteredSearch}/>
-            <List title="♀ 코골이 X" search={filteredSearch}/>
-            <List title="♀ 같이 친해져요~" search={filteredSearch}/>
-            <List title="♀ 같이 친해져요~" search={filteredSearch}/>
-            <List title="♀ 같이 친해져요~" search={filteredSearch}/>
-            <List title="♀ 같이 친해져요~" search={filteredSearch}/>
-            <List title="♀ 흡연 X" search={filteredSearch} status="모집완료"/>
-            
+            {filteredPosts.map((post) => (
+              <List key={post.id} title={post.title} search={filteredSearch} />
+            ))}
           </ListWrapper>
         </BottomWrapper>
       </Wrapper>
@@ -75,12 +93,12 @@ const TitleBox = styled.div`
 `;
 
 const Title = styled.p`
-  ${({theme})=>theme.fonts.title}
+  ${({ theme }) => theme.fonts.title}
   font-size: 45px;
 `;
 
 const HighSearchBox = styled.div`
-position: relative;
+  position: relative;
   width: 100%;
   display: flex;
   align-items: center;
@@ -88,18 +106,17 @@ position: relative;
 `;
 
 const SearchBox = styled.div`
-  background-color: red;
   display: flex;
   justify-content: space-between;
-  background-color: ${({theme})=>theme.colors.white};
-  border: solid 1px ${({theme})=>theme.colors.gray2};
+  background-color: ${({ theme }) => theme.colors.white};
+  border: solid 1px ${({ theme }) => theme.colors.gray2};
   width: 90%;
   height: 40px;
   border-radius: 8px;
   padding: 0 1.8vh;
   margin-right: 2vh;
 
-  &:hover{
+  &:hover {
     outline: none;
   }
 `;
@@ -109,7 +126,7 @@ const Search = styled.input`
   outline: none;
   width: 80%;
 
-  &:hover{
+  &:hover {
     outline: none;
   }
 `;
@@ -117,7 +134,6 @@ const Search = styled.input`
 const SearchButton = styled.img`
   cursor: pointer;
   width: 30px;
-  background-color: bl;
 `;
 
 const BottomWrapper = styled.div`
