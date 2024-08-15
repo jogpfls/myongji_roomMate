@@ -9,7 +9,7 @@ import MyPage from "./pages/MyPage";
 import DormitoryPage from "./pages/DormitoryPage";
 import ChatPage from "./pages/ChatPage";
 import ScrollToTop from "./components/ScrollToTop";
-import InfoPage from './pages/InfoPage';
+import InfoPage from "./pages/InfoPage";
 
 function App() {
   return (
@@ -19,10 +19,10 @@ function App() {
           <Route path="/" element={<Navigate to="/main" />} />
           <Route path="/main" element={<MainPage />} />
           <Route path="/auth/login" element={<Login />} />
-          <Route path="/domitory/:name/room/:id" element={<RoomPage />} />
-          <Route path="/write" element={<WritePage />} />
-          <Route path="/mypage" element={<MyPage />} />
           <Route path="/dormitory/:name" element={<DormitoryPage />} />
+          <Route path="/dormitory/:name/room/:id" element={<RoomPage />} />
+          <Route path="/dormitory/:name/write" element={<WritePage />} />
+          <Route path="/mypage" element={<MyPage />} />
           <Route path="/chat" element={<ChatPage />} />
           <Route path="/info" element={<InfoPage />} />
         </Routes>
