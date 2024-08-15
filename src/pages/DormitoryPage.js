@@ -115,6 +115,10 @@ const Background = styled.div`
 const Wrapper = styled.div`
   width: 70%;
   margin: 4.5vh 0;
+
+  @media screen and (max-width: ${({theme})=>theme.breakpoints.mobile}){
+    width: 80%;
+  }
 `;
 
 const TitleBox = styled.div`
@@ -161,6 +165,10 @@ const Search = styled.input`
 
   &:hover {
     outline: none;
+  }
+
+  @media screen and (max-width: ${({theme})=>theme.breakpoints.mobile}){
+    font-size: 15px;
   }
 `;
 

@@ -6,10 +6,10 @@ const List = ({ search, title, status, onClick, contents, date, total }) => {
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth <= 1200) {
-        setMaxLength(100);
+      if (window.innerWidth <= 480) {
+        setMaxLength(50);
       } else {
-        setMaxLength(200);
+        setMaxLength(100);
       }
     };
 
@@ -92,15 +92,25 @@ const Wrapper = styled.div`
       status === "모집완료" ? "none" : theme.colors.lightBlue};
     border: ${({ status }) => (status === "모집완료" ? "" : "none")};
   }
+
+  @media screen and (max-width: ${({theme})=>theme.breakpoints.mobile}){
+    height: 18vh;
+  }
 `;
 
 const LeftBox = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-around;
   width: 75%;
   height: 100%;
   margin-left: 1vw;
+
+  @media screen and (max-width: ${({theme})=>theme.breakpoints.mobile}){
+    //margin-left: 2vw;
+    padding: 1.5vh 3vw;
+    width: 100%;
+  }
 `;
 
 const Title = styled.p`
@@ -112,6 +122,10 @@ const TextBox = styled.div`
   width: 95%;
   display: flex;
   justify-content: space-between;
+
+  @media screen and (max-width: ${({theme})=>theme.breakpoints.mobile}){
+    width: 100%;
+  }
 `;
 
 const ContentsBox = styled.div`
@@ -119,6 +133,11 @@ const ContentsBox = styled.div`
   height: 11vh;
   display: flex;
   align-items: center;
+
+  @media screen and (max-width:  ${({theme})=>theme.breakpoints.mobile}) {
+    height: 6vh;
+    width: 60%;
+  }
 `;
 
 const Contents = styled.p`
@@ -146,6 +165,10 @@ const RightBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  @media screen and (max-width: ${({theme})=>theme.breakpoints.mobile}){
+    display: none;
+  }
 `;
 
 const ChatTextBox = styled.div`
@@ -158,6 +181,10 @@ const ChatTextBox = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  @media screen and (max-width: ${({theme})=>theme.breakpoints.mobile}){
+    display: ${({status})=>!status && "none" };
+  }
 `;
 
 const Count = styled.p`
