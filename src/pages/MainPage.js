@@ -53,25 +53,34 @@ const MainPage = () => {
           <p>입주할 기숙사 건물을 선택해주세요</p>
         </Info>
         <CirBox>
-          <Cir backgroundColor="blue3" onClick={() => navigate("/dormitory/")}>
+          <Cir
+            backgroundColor="blue3"
+            onClick={() => navigate("/dormitory/:myoungdeok")}
+          >
             명덕
           </Cir>
           <Cir
             backgroundColor="deepBlue"
-            onClick={() => navigate("/dormitory/")}
+            onClick={() => navigate("/dormitory/myounghyun")}
           >
             명현
           </Cir>
-          <Cir backgroundColor="blue2" onClick={() => navigate("/dormitory/")}>
+          <Cir
+            backgroundColor="blue2"
+            onClick={() => navigate("/dormitory/dormitory3")}
+          >
             3동
           </Cir>
           <Cir
             backgroundColor="deepBlue2"
-            onClick={() => navigate("/dormitory/")}
+            onClick={() => navigate("/dormitory/ dormitory4")}
           >
             4동
           </Cir>
-          <Cir backgroundColor="blue" onClick={() => navigate("/dormitory/")}>
+          <Cir
+            backgroundColor="blue"
+            onClick={() => navigate("/dormitory/dormitory5,")}
+          >
             5동
           </Cir>
         </CirBox>
