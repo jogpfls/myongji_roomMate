@@ -3,6 +3,7 @@ import styled from "styled-components";
 import MapImg from "../images/map.png";
 import Pin from "../images/pin.png";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const dormLocations = [
   { id: 1, name: "명덕관", top: "27%", left: "22%", link: "/dormitory/" },
@@ -15,9 +16,17 @@ const dormLocations = [
 const Map = () => {
   const navigate = useNavigate();
 
-  const handleNavigation = (link) => {
-    navigate(link);
+  const handleCirClick = (path) => {
+    const token = Cookies.get("accessToken");
+
+    if (!token) {
+      alert("로그인이 필요합니다.");
+      navigate("/auth/login");
+    } else {
+      navigate(path);
+    }
   };
+
   return (
     <MapContainer>
       <img src={MapImg} alt="Map" style={{ width: "100%", height: "auto" }} />
@@ -26,7 +35,7 @@ const Map = () => {
           key={dorm.id}
           style={{ top: dorm.top, left: dorm.left }}
           title={dorm.name}
-          onClick={() => handleNavigation(dorm.link)}
+          onClick={() => handleCirClick(dorm.link)}
         >
           <p>{dorm.id}</p>
         </DormIcon>

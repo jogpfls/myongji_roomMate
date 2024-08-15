@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FaHome, FaBuilding, FaBars, FaTimes } from "react-icons/fa";
+import {logout} from "../api/LoginApi";
+import Cookies from "js-cookie";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -11,6 +13,7 @@ const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const activePath = location.pathname.toLowerCase();
+  const token = Cookies.get("accessToken");
 
   const isActive = (path) => {
     return activePath.startsWith(path.toLowerCase());
@@ -56,6 +59,26 @@ const Header = () => {
     };
   }, []);
 
+  const handleLogout = async() => {
+    try{
+      await logout();
+      navigate("/")
+    }catch(error) {
+      console.error("로그아웃 실패: ", error);
+    }
+  }
+
+  const handleCirClick = (path) => {
+    const token = Cookies.get("accessToken");
+
+    if (!token) {
+      alert("로그인이 필요합니다.");
+      navigate("/auth/login");
+    } else {
+      navigate(path);
+    }
+  };
+
   return (
     <Container>
       <Box>
@@ -63,7 +86,10 @@ const Header = () => {
           <Title onClick={() => handleNavigation("/main")}>명지메이트</Title>
           {windowWidth <= 480 && (
             <LogoutContainer>
-              <Logout onClick={() => navigate("/auth/login")}>로그인</Logout>
+              {!token ? 
+              <Logout onClick={() => navigate("/auth/login")}>로그인</Logout> :
+              <Logout onClick={handleLogout}>로그아웃</Logout>}
+              
             </LogoutContainer>
           )}
           <SideMenu onClick={() => setMenuOpen(!menuOpen)}>
@@ -83,26 +109,27 @@ const Header = () => {
             onMouseLeave={handleMouseLeave}
           >
             {windowWidth > 480 ? (
-              <Item
-                $active={
-                  isActive("/dormitory") ||
-                  isActive("/room") ||
-                  isActive("/write")
-                }
-                post="매칭"
-              >
-                매칭게시판
-              </Item>
+              !token ? <Item onClick={handleCirClick}>매칭게시판</Item> :
+                <Item
+                  $active={
+                    isActive("/dormitory") ||
+                    isActive("/room") ||
+                    isActive("/write")
+                  }
+                  post="매칭"
+                >
+                  매칭게시판
+                </Item>
             ) : (
               <Item
                 $active={isActive("/main")}
-                onClick={() => handleNavigation("/main")}
+                onClick={() => handleCirClick("/main")}
               >
                 매칭게시판
               </Item>
             )}
 
-            {isOpen && (
+            {isOpen && token && (
               <DroppedBox>
                 <LinkWrapper
                   onClick={() => handleNavigation("/dormitory/myoungdeok")}
@@ -134,20 +161,24 @@ const Header = () => {
           </ItemBox>
           <Item
             $active={isActive("/chat")}
-            onClick={() => handleNavigation("/chat")}
+            onClick={() => handleCirClick("/chat")}
           >
             채팅방
           </Item>
           <Item
             $active={isActive("/mypage")}
-            onClick={() => handleNavigation("/mypage")}
+            onClick={() => handleCirClick("/mypage")}
           >
             마이페이지
           </Item>
           {windowWidth > 480 && (
+            !token ?
             <LogoutContainer>
-              <Logout onClick={() => navigate("/auth/login")}>로그인</Logout>
-            </LogoutContainer>
+                <Logout onClick={() => navigate("/auth/login")}>로그인</Logout>
+            </LogoutContainer> : 
+            <LogoutContainer>
+            <Logout onClick={handleLogout}>로그아웃</Logout>
+        </LogoutContainer>
           )}
         </Menu>
       </Box>
@@ -369,6 +400,7 @@ const Logout = styled.button`
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: 100%;
+    white-space: nowrap;
   }
 `;
 
