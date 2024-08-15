@@ -1,30 +1,75 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import MapImg from "../images/map.png";
 import Pin from "../images/pin.png";
 import { useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
+import { fetchDormitoryCounts } from "../api/MainApi";
+
+const dormitoryNames = {
+  dormitory3: "기숙사 3동",
+  dormitory4: "기숙사 4동",
+  dormitory5: "기숙사 5동",
+  myoungdeok: "명덕관",
+  myounghyun: "명현관",
+};
 
 const dormLocations = [
-  { id: 1, name: "명덕관", top: "27%", left: "22%", link: "/dormitory/" },
-  { id: 2, name: "명현관", top: "49%", left: "19%", link: "/dormitory" },
-  { id: 3, name: "기숙사 3동", top: "51%", left: "48%", link: "/dormitory" },
-  { id: 4, name: "기숙사 4동", top: "37%", left: "64%", link: "/dormitory" },
-  { id: 5, name: "기숙사 5동", top: "37%", left: "41%", link: "/dormitory" },
+  {
+    id: 1,
+    name: "myoungdeok",
+    top: "25%",
+    left: "22%",
+    link: "/dormitory/myoungdeok",
+  },
+  {
+    id: 2,
+    name: "myounghyun",
+    top: "49%",
+    left: "19%",
+    link: "/dormitory/myounghyun",
+  },
+  {
+    id: 3,
+    name: "dormitory3",
+    top: "51%",
+    left: "48%",
+    link: "/dormitory/dormitory3",
+  },
+  {
+    id: 4,
+    name: "dormitory4",
+    top: "37%",
+    left: "64%",
+    link: "/dormitory/dormitory4",
+  },
+  {
+    id: 5,
+    name: "dormitory5",
+    top: "37%",
+    left: "41%",
+    link: "/dormitory/dormitory5",
+  },
 ];
 
 const Map = () => {
   const navigate = useNavigate();
+  const [counts, setCounts] = useState({});
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const countData = await fetchDormitoryCounts(dormLocations);
+        setCounts(countData);
+      } catch (error) {
+        console.error("데이터 조회 실패:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleCirClick = (path) => {
-    const token = Cookies.get("accessToken");
-
-    if (!token) {
-      alert("로그인이 필요합니다.");
-      navigate("/auth/login");
-    } else {
-      navigate(path);
-    }
+    navigate(path);
   };
 
   return (
@@ -34,10 +79,10 @@ const Map = () => {
         <DormIcon
           key={dorm.id}
           style={{ top: dorm.top, left: dorm.left }}
-          title={dorm.name}
+          title={`${dormitoryNames[dorm.name]} (${counts[dorm.name] || 0})`}
           onClick={() => handleCirClick(dorm.link)}
         >
-          <p>{dorm.id}</p>
+          <p>{counts[dorm.name] || 0}</p>
         </DormIcon>
       ))}
     </MapContainer>
