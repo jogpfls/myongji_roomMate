@@ -75,7 +75,9 @@ const DormitoryPage = () => {
             {name === "dormitory3" || name === "myounghyun" ? (
               <Button onClick={openModal}>글쓰기</Button>
             ) : (
-              <Button onClick={() => navigate(`/dormitory/${name}/write`)}>
+              <Button 
+              name={name}
+              onClick={() => navigate(`/dormitory/${name}/write`)}>
                 글쓰기
               </Button>
             )}
@@ -87,15 +89,19 @@ const DormitoryPage = () => {
               <List
                 key={post.id}
                 title={post.title}
+                contents={post.content}
                 search={filteredSearch}
                 status={post.status}
-                onClick={() => handleNavigate(post)} // 이 부분에서 handleNavigate 함수 전달
+                date={post.createdAt}
+                total={post.total}
+                onClick={() => handleNavigate(post)}
               />
             ))}
           </ListWrapper>
         </BottomWrapper>
       </Wrapper>
-      {choseModal && <CountChoseBox closeModal={closeModal} />}
+      {choseModal && <CountChoseBox name = {name}
+      closeModal={closeModal} />}
     </Background>
   );
 };

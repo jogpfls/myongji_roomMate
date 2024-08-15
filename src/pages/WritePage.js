@@ -2,7 +2,16 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Category from "../components/Category"
 import Button from "../components/Button";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { WriteApi } from "../api/WriteApi";
+
+const dormitoryNames = {
+  dormitory3: "3동",
+  dormitory4: "4동",
+  dormitory5: "5동",
+  myoungdeok: "명덕",
+  myounghyun: "명현",
+};
 
 const WritePage = () => {
   const [contents, setContents] = useState('');
@@ -12,10 +21,9 @@ const WritePage = () => {
   const maxContentsLength = 500;
   const maxTitleLength = 20;
   const navigate = useNavigate();
-
-  const handleSubmit = () => {
-    navigate('/room')
-  }
+  const {name} = useParams();
+  const location = useLocation();
+  const { total } = location.state || {};
 
   const onTextareaContentsHandler = (event) => {
     const value = event.target.value;
@@ -33,12 +41,29 @@ const WritePage = () => {
     }
   };
 
+
+
+  const handleSubmit = async () => {
+    try {
+      const response = await WriteApi({
+        total: total,
+        title: title,
+        content: contents,
+        name: name,
+      });
+      console.log("게시글 작성 성공:", response);
+      navigate(`/dormitory/${name}`)
+    } catch (error) {
+      console.error("게시글 작성 실패:", error);
+    }
+  };
+
   return (
     <WrapperWrapper>
       <AllWrapper>
         <Wrapper>
           <DormitoryBox>
-            <DormitoryTitle>명덕</DormitoryTitle>
+            <DormitoryTitle>{dormitoryNames[name]}</DormitoryTitle>
           </DormitoryBox>
           <TitleBox>
             <Title>제목</Title>
