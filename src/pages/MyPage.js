@@ -157,7 +157,13 @@ const MyPage = () => {
               <Back src={back} alt="화살표" onClick={handleBack} />
               <ListWrapper ref={listWrapperRef}>
                 {userBoards.map((board) => (
-                  <MyList key={board.id} title={board.title} />
+                  <MyList
+                    key={board.id}
+                    id={board.id}
+                    dormitory={board.dormitory}
+                    title={board.title}
+                    date={board.createdAt}
+                  />
                 ))}
               </ListWrapper>
               <Next src={next} alt="화살표" onClick={handleNext} />
@@ -253,7 +259,7 @@ const Title = styled.div`
 `;
 
 const TBox = styled.div`
-  border: 2px solid ${(props) => props.theme.colors.deepBlue2};
+  border: 1.5px solid ${(props) => props.theme.colors.deepBlue2};
   border-radius: 30px;
   height: 70%;
   min-height: 300px;
@@ -329,7 +335,7 @@ const Info = styled.div`
 `;
 
 const BBox = styled.div`
-  border: 2px solid ${(props) => props.theme.colors.deepBlue2};
+  border: 1.5px solid ${(props) => props.theme.colors.deepBlue2};
   border-radius: 30px;
   height: 30%;
   min-height: 100px;
@@ -345,7 +351,7 @@ const BBox = styled.div`
 `;
 
 const LBox = styled.div`
-  border: 2px solid ${(props) => props.theme.colors.deepBlue2};
+  border: 1.5px solid ${(props) => props.theme.colors.deepBlue2};
   border-radius: 30px;
   height: 100%;
   min-height: 450px;

@@ -1,21 +1,33 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 
-const MyList = ({title}) => {
+const MyList = ({ id, dormitory, title, date }) => {
   const navigate = useNavigate();
+
+  const handleClick = () => {
+    const lowerCaseDormitory = dormitory.toLowerCase();
+    navigate(`/dormitory/${lowerCaseDormitory}/room/${id}`);
+  };
+
   return (
-    <AllWrapper onClick={()=>navigate('/room')}>
+    <AllWrapper onClick={handleClick}>
       <Wrapper>
         <TitleWrapper>
           <Title>{title}</Title>
         </TitleWrapper>
         <DateBox>
-          <Date>2024.08.14</Date>
+          <Date>{formatDate(date)}</Date>
         </DateBox>
       </Wrapper>
     </AllWrapper>
   );
+};
+
+const formatDate = (dateString) => {
+  if (!dateString) return "";
+  const [datePart] = dateString.split("T");
+  return datePart ? datePart.replace(/-/g, ".") : "";
 };
 
 const AllWrapper = styled.div`
@@ -23,7 +35,7 @@ const AllWrapper = styled.div`
 `;
 
 const Wrapper = styled.div`
-  background-color: ${({theme})=>theme.colors.lightBlue};
+  background-color: ${({ theme }) => theme.colors.lightBlue};
   width: 25vw;
   height: 7vh;
   border-radius: 20px;
@@ -31,7 +43,7 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: space-between;
 
-  @media screen and (max-width: ${({theme})=>theme.breakpoints.mobile}){
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: 57.3vw;
   }
 `;
@@ -41,6 +53,7 @@ const TitleWrapper = styled.div`
 `;
 
 const Title = styled.p`
+  margin: 0;
 `;
 
 const DateBox = styled.div`
@@ -52,8 +65,9 @@ const DateBox = styled.div`
 `;
 
 const Date = styled.p`
-  color: ${({theme})=>theme.colors.gray};
+  color: ${({ theme }) => theme.colors.gray};
   font-size: 15px;
+  margin: 0;
 `;
 
 export default MyList;
