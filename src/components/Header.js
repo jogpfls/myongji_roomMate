@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FaHome, FaBuilding, FaBars, FaTimes } from "react-icons/fa";
-import {logout} from "../api/LoginApi";
+import { logout } from "../api/LoginApi";
 import Cookies from "js-cookie";
 
 const Header = () => {
@@ -59,14 +59,14 @@ const Header = () => {
     };
   }, []);
 
-  const handleLogout = async() => {
-    try{
+  const handleLogout = async () => {
+    try {
       await logout();
-      navigate("/")
-    }catch(error) {
+      navigate("/");
+    } catch (error) {
       console.error("로그아웃 실패: ", error);
     }
-  }
+  };
 
   const handleCirClick = (path) => {
     const token = Cookies.get("accessToken");
@@ -76,6 +76,7 @@ const Header = () => {
       navigate("/auth/login");
     } else {
       navigate(path);
+      setMenuOpen(false); // 메뉴를 닫음
     }
   };
 
@@ -86,10 +87,11 @@ const Header = () => {
           <Title onClick={() => handleNavigation("/main")}>명지메이트</Title>
           {windowWidth <= 480 && (
             <LogoutContainer>
-              {!token ? 
-              <Logout onClick={() => navigate("/auth/login")}>로그인</Logout> :
-              <Logout onClick={handleLogout}>로그아웃</Logout>}
-              
+              {!token ? (
+                <Logout onClick={() => navigate("/auth/login")}>로그인</Logout>
+              ) : (
+                <Logout onClick={handleLogout}>로그아웃</Logout>
+              )}
             </LogoutContainer>
           )}
           <SideMenu onClick={() => setMenuOpen(!menuOpen)}>
@@ -109,7 +111,9 @@ const Header = () => {
             onMouseLeave={handleMouseLeave}
           >
             {windowWidth > 480 ? (
-              !token ? <Item onClick={handleCirClick}>매칭게시판</Item> :
+              !token ? (
+                <Item onClick={() => handleCirClick("/main")}>매칭게시판</Item>
+              ) : (
                 <Item
                   $active={
                     isActive("/dormitory") ||
@@ -117,9 +121,11 @@ const Header = () => {
                     isActive("/write")
                   }
                   post="매칭"
+                  onClick={() => handleCirClick("/main")}
                 >
                   매칭게시판
                 </Item>
+              )
             ) : (
               <Item
                 $active={isActive("/main")}
@@ -171,15 +177,16 @@ const Header = () => {
           >
             마이페이지
           </Item>
-          {windowWidth > 480 && (
-            !token ?
-            <LogoutContainer>
+          {windowWidth > 480 &&
+            (!token ? (
+              <LogoutContainer>
                 <Logout onClick={() => navigate("/auth/login")}>로그인</Logout>
-            </LogoutContainer> : 
-            <LogoutContainer>
-            <Logout onClick={handleLogout}>로그아웃</Logout>
-        </LogoutContainer>
-          )}
+              </LogoutContainer>
+            ) : (
+              <LogoutContainer>
+                <Logout onClick={handleLogout}>로그아웃</Logout>
+              </LogoutContainer>
+            ))}
         </Menu>
       </Box>
     </Container>
