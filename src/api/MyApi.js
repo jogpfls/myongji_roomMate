@@ -43,3 +43,11 @@ export const addUserCategory = async (category) => {
     throw new Error("카테고리를 추가하는 데 실패했습니다.");
   }
 };
+
+export const deleteUserCategory = async (categoryId) => {
+  try {
+    await Axios.delete(`/users/category/${categoryId}`);
+  } catch (error) {
+    throw new Error("카테고리를 삭제하는 데 실패했습니다.");
+  }
+};

@@ -10,6 +10,7 @@ import {
   getUserBoards,
   getUserCategories,
   addUserCategory,
+  deleteUserCategory,
 } from "../api/MyApi";
 import { FaPen, FaCheck } from "react-icons/fa";
 
@@ -258,6 +259,7 @@ const BoxList = ({ isEditing }) => {
         const response = await getUserCategories();
         const categories = response.data.categoryResponseDto.map(
           (category) => ({
+            id: category.id,
             label: category.category,
           })
         );
@@ -274,7 +276,14 @@ const BoxList = ({ isEditing }) => {
     if (newItem.trim()) {
       try {
         await addUserCategory(newItem.trim());
-        setItems([...items, { label: newItem }]);
+        const response = await getUserCategories();
+        const categories = response.data.categoryResponseDto.map(
+          (category) => ({
+            id: category.id,
+            label: category.category,
+          })
+        );
+        setItems(categories);
         setNewItem("");
       } catch (error) {
         console.error("Info추가에 실패했습니다.", error);
@@ -282,9 +291,15 @@ const BoxList = ({ isEditing }) => {
     }
   };
 
-  const removeItem = (index) => {
-    const updatedItems = items.filter((_, i) => i !== index);
-    setItems(updatedItems);
+  const removeItem = async (index) => {
+    const categoryId = items[index].id;
+    try {
+      await deleteUserCategory(categoryId);
+      const updatedItems = items.filter((_, i) => i !== index);
+      setItems(updatedItems);
+    } catch (error) {
+      console.error("카테고리를 삭제하는 데 실패했습니다.", error);
+    }
   };
 
   return (
