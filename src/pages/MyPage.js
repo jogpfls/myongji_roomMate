@@ -4,7 +4,12 @@ import Button from "../components/Button";
 import MyList from "../components/MyList";
 import next from "../images/next.svg";
 import back from "../images/back.svg";
-import { getUserData, updateUserName, getUserBoards } from "../api/MyApi";
+import {
+  getUserData,
+  updateUserName,
+  getUserBoards,
+  getUserCategories,
+} from "../api/MyApi";
 import { FaPen, FaCheck } from "react-icons/fa";
 
 const MyPage = () => {
@@ -243,12 +248,26 @@ const MyPage = () => {
 };
 
 const BoxList = ({ isEditing }) => {
-  const [items, setItems] = useState([
-    { label: "금연" },
-    { label: "아침형인간" },
-    { label: "결벽증" },
-  ]);
+  const [items, setItems] = useState([]);
   const [newItem, setNewItem] = useState("");
+
+  useEffect(() => {
+    const fetchUserCategories = async () => {
+      try {
+        const response = await getUserCategories();
+        const categories = response.data.categoryResponseDto.map(
+          (category) => ({
+            label: category.category,
+          })
+        );
+        setItems(categories);
+      } catch (error) {
+        console.error("info 목록을 가져오는데 실패했습니다.", error);
+      }
+    };
+
+    fetchUserCategories();
+  }, []);
 
   const addItem = () => {
     if (newItem.trim()) {
