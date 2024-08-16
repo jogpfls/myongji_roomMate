@@ -29,3 +29,8 @@ export const getUserBoards = async () => {
     throw error;
   }
 };
+
+export const getUserCategories = async () => {
+  const response = await Axios.get("/users/category");
+  return response.data;
+};
