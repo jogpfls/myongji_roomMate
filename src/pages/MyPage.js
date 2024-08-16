@@ -158,7 +158,16 @@ const MyPage = () => {
                             width: "15px",
                           }}
                         />
-                        <span>{userData?.name}</span>
+                        <span
+                          style={{
+                            color: userData?.name
+                              ? theme.colors.text
+                              : theme.colors.gray,
+                            fontStyle: userData?.name ? "normal" : "italic",
+                          }}
+                        >
+                          {userData?.name || <p>닉네임설정</p>}
+                        </span>
                       </Name>
                     )}
                   </NameBox>
@@ -358,6 +367,7 @@ const Name = styled.div`
     outline: none;
     width: 100px;
     display: flex;
+    text-align: center;
   }
 `;
 
