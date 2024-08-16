@@ -11,7 +11,6 @@ import { FaPen, FaCheck } from "react-icons/fa";
 const MyPage = () => {
   const [isEditing, setIsEditing] = useState(false);
   const theme = useTheme();
-  const [width, setWidth] = useState(window.innerWidth);
   const listWrapperRef = useRef(null);
   const [userData, setUserData] = useState({
     name: "",
@@ -66,178 +65,111 @@ const MyPage = () => {
     fetchUserBoards();
   }, []);
 
-  const handleCancel = () => {
-    setIsEditing(false);
-  };
-
   const handleNext = () => {
     if (listWrapperRef.current) {
-      if (width > 480) {
-        const scrollAmount = window.innerWidth * 0.26;
-        listWrapperRef.current.scrollBy({
-          left: scrollAmount,
-          behavior: "smooth",
-        });
-      } else {
-        const scrollAmount = window.innerWidth * 0.573;
-        listWrapperRef.current.scrollBy({
-          left: scrollAmount,
-          behavior: "smooth",
-        });
-      }
+      const scrollAmount =
+        window.innerWidth > 480
+          ? window.innerWidth * 0.26
+          : window.innerWidth * 0.58;
+      listWrapperRef.current.scrollBy({
+        left: scrollAmount,
+        behavior: "smooth",
+      });
     }
   };
 
   const handleBack = () => {
     if (listWrapperRef.current) {
-      if (width > 480) {
-        const scrollAmount = window.innerWidth * 0.26;
-        listWrapperRef.current.scrollBy({
-          left: -scrollAmount,
-          behavior: "smooth",
-        });
-      } else {
-        const scrollAmount = window.innerWidth * 0.573;
-        listWrapperRef.current.scrollBy({
-          left: -scrollAmount,
-          behavior: "smooth",
-        });
-      }
+      const scrollAmount =
+        window.innerWidth > 480
+          ? window.innerWidth * 0.26
+          : window.innerWidth * 0.573;
+      listWrapperRef.current.scrollBy({
+        left: -scrollAmount,
+        behavior: "smooth",
+      });
     }
   };
-
-  useEffect(() => {
-    const handleResize = () => {
-      setWidth(window.innerWidth);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
 
   return (
     <Container>
       <LRBox>
-        {width > 480 ? (
-          <>
-            <Left>
-              <Title>개인정보</Title>
-              <TBox>
-                <Profile>
-                  <Img></Img>
-                  <NameBox>
-                    {nameEditMode ? (
-                      <Name>
-                        <FaCheck
-                          onClick={handleNameSubmit}
-                          style={{
-                            cursor: "pointer",
-                            width: "15px",
-                            marginRight: "5px",
-                          }}
-                        />
-                        <input
-                          type="text"
-                          value={newName}
-                          onChange={handleNameChange}
-                          onKeyPress={(e) => {
-                            if (e.key === "Enter") handleNameSubmit();
-                          }}
-                          autoFocus
-                        />
-                      </Name>
-                    ) : (
-                      <Name>
-                        <FaPen
-                          onClick={handleNameEdit}
-                          style={{
-                            cursor: "pointer",
-                            width: "15px",
-                          }}
-                        />
-                        <span
-                          style={{
-                            color: userData?.name
-                              ? theme.colors.text
-                              : theme.colors.gray,
-                            fontStyle: userData?.name ? "normal" : "italic",
-                          }}
-                        >
-                          {userData?.name || <p>닉네임설정</p>}
-                        </span>
-                      </Name>
-                    )}
-                  </NameBox>
-                </Profile>
-                <Info>
-                  학번: {userData.studentNumber}
-                  <br />
-                  구분: ICT학부
-                  <br />
-                  소속: {userData.major}
-                </Info>
-              </TBox>
-              <Title>내가 쓴 글</Title>
-              <BBox>
-                <WriteList>
-                  <Back src={back} alt="화살표" onClick={handleBack} />
-                  <ListWrapper ref={listWrapperRef}>
-                    {userBoards.map((board) => (
-                      <MyList key={board.id} title={board.title} />
-                    ))}
-                  </ListWrapper>
-                  <Next src={next} alt="화살표" onClick={handleNext} />
-                </WriteList>
-              </BBox>
-            </Left>
-            <Right>
-              <Title>INFO</Title>
-              <LBox>
-                <BoxList isEditing={isEditing} />
-              </LBox>
-            </Right>
-          </>
-        ) : (
-          <Wrapper>
-            <div>
-              <Title>개인정보</Title>
-              <TBox>
-                <Profile>
-                  <Img></Img>
-                  <Name>김희수</Name>
-                </Profile>
-                <Info>
-                  소속: 정보통신공학과 <br />
-                  구분: ICT학부
-                  <br />
-                  학년: 4
-                </Info>
-              </TBox>
-            </div>
-            <div>
-              <Title>INFO</Title>
-              <LBox>
-                <BoxList isEditing={isEditing} />
-              </LBox>
-            </div>
-            <div>
-              <Title>내가 쓴 글</Title>
-              <BBox>
-                <WriteList>
-                  <Back src={back} alt="화살표" onClick={handleBack} />
-                  <ListWrapper ref={listWrapperRef}>
-                    <MyList title="흡연" />
-                    <MyList title="나나나" />
-                  </ListWrapper>
-                  <Next src={next} alt="화살표" onClick={handleNext} />
-                </WriteList>
-              </BBox>
-            </div>
-          </Wrapper>
-        )}
+        <Left>
+          <Title>개인정보</Title>
+          <TBox>
+            <Profile>
+              <Img></Img>
+              <NameBox>
+                {nameEditMode ? (
+                  <Name>
+                    <FaCheck
+                      onClick={handleNameSubmit}
+                      style={{
+                        cursor: "pointer",
+                        width: "15px",
+                        marginRight: "5px",
+                      }}
+                    />
+                    <input
+                      type="text"
+                      value={newName}
+                      onChange={handleNameChange}
+                      onKeyPress={(e) => {
+                        if (e.key === "Enter") handleNameSubmit();
+                      }}
+                      autoFocus
+                    />
+                  </Name>
+                ) : (
+                  <Name>
+                    <FaPen
+                      onClick={handleNameEdit}
+                      style={{
+                        cursor: "pointer",
+                        width: "15px",
+                      }}
+                    />
+                    <span
+                      style={{
+                        color: userData?.name
+                          ? theme.colors.text
+                          : theme.colors.gray,
+                        fontStyle: userData?.name ? "normal" : "italic",
+                      }}
+                    >
+                      {userData?.name || <p>닉네임설정</p>}
+                    </span>
+                  </Name>
+                )}
+              </NameBox>
+            </Profile>
+            <Info>
+              학번: {userData.studentNumber}
+              <br />
+              구분: ICT학부
+              <br />
+              소속: {userData.major}
+            </Info>
+          </TBox>
+          <Title>내가 쓴 글</Title>
+          <BBox>
+            <WriteList>
+              <Back src={back} alt="화살표" onClick={handleBack} />
+              <ListWrapper ref={listWrapperRef}>
+                {userBoards.map((board) => (
+                  <MyList key={board.id} title={board.title} />
+                ))}
+              </ListWrapper>
+              <Next src={next} alt="화살표" onClick={handleNext} />
+            </WriteList>
+          </BBox>
+        </Left>
+        <Right>
+          <Title>INFO</Title>
+          <LBox>
+            <BoxList isEditing={isEditing} />
+          </LBox>
+        </Right>
       </LRBox>
       <BtnBox>
         <Button
@@ -256,7 +188,7 @@ const Container = styled.div`
   margin: auto;
   height: 95vh;
 
-  @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: 80%;
     display: flex;
     flex-direction: column;
@@ -274,6 +206,11 @@ const LRBox = styled.div`
   align-items: center;
   justify-content: center;
   gap: 3vw;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    flex-direction: column;
+    height: auto;
+  }
 `;
 
 const Left = styled.div`
@@ -282,6 +219,11 @@ const Left = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    width: 100%;
+    height: auto;
+  }
 `;
 
 const Right = styled.div`
@@ -290,6 +232,12 @@ const Right = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    width: 100%;
+    height: auto;
+    margin-top: 10px;
+  }
 `;
 
 const Title = styled.div`
@@ -297,7 +245,7 @@ const Title = styled.div`
   ${(props) => props.theme.fonts.text4}
   font-size: 27px;
 
-  @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     margin-bottom: 8px;
     font-size: 25px;
     margin-top: 3px;
@@ -318,7 +266,7 @@ const TBox = styled.div`
   width: 100%;
   padding: 30px;
 
-  @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     display: flex;
     justify-content: space-between;
     padding: 0 6vw;
@@ -335,7 +283,7 @@ const Profile = styled.div`
   justify-content: center;
   flex-direction: column;
 
-  @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: auto;
   }
 `;
@@ -375,7 +323,7 @@ const Info = styled.div`
   width: 60%;
   line-height: 1.5em;
 
-  @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: auto;
   }
 `;
@@ -390,7 +338,7 @@ const BBox = styled.div`
   justify-content: center;
   align-items: center;
 
-  @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: auto;
     border-radius: 20px;
   }
@@ -407,7 +355,7 @@ const LBox = styled.div`
   justify-content: space-between;
   padding: 30px;
 
-  @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     min-height: 40px;
     height: 80%;
     padding: 30px 0 0 20px;
@@ -422,7 +370,7 @@ const BtnBox = styled.div`
   gap: 10px;
   margin-top: -6vh;
 
-  @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     margin-top: 3vh;
   }
 `;
@@ -457,15 +405,6 @@ const Next = styled.img`
   left: 105%;
   cursor: pointer;
   z-index: 999;
-`;
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  gap: 1vh;
-  padding-top: 5%;
 `;
 
 export default MyPage;
