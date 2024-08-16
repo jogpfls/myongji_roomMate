@@ -9,6 +9,7 @@ import {
   updateUserName,
   getUserBoards,
   getUserCategories,
+  addUserCategory,
 } from "../api/MyApi";
 import { FaPen, FaCheck } from "react-icons/fa";
 
@@ -269,10 +270,15 @@ const BoxList = ({ isEditing }) => {
     fetchUserCategories();
   }, []);
 
-  const addItem = () => {
+  const addItem = async () => {
     if (newItem.trim()) {
-      setItems([...items, { label: newItem }]);
-      setNewItem("");
+      try {
+        await addUserCategory(newItem.trim());
+        setItems([...items, { label: newItem }]);
+        setNewItem("");
+      } catch (error) {
+        console.error("Info추가에 실패했습니다.", error);
+      }
     }
   };
 

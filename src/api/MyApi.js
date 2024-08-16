@@ -34,3 +34,12 @@ export const getUserCategories = async () => {
   const response = await Axios.get("/users/category");
   return response.data;
 };
+
+export const addUserCategory = async (category) => {
+  try {
+    const response = await Axios.post("/users/category", { category });
+    return response.data;
+  } catch (error) {
+    throw new Error("카테고리를 추가하는 데 실패했습니다.");
+  }
+};
