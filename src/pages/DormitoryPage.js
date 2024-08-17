@@ -95,6 +95,7 @@ const DormitoryPage = () => {
                 date={post.createdAt}
                 total={post.total}
                 category={post.categoryList}
+                current={post.current}
                 onClick={() => handleNavigate(post)}
               />
             ))}

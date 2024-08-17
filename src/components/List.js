@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
-const List = ({ search, title, status, onClick, contents, date, total, category }) => {
+const List = ({ search, title, status, onClick, contents, date, total, category, current }) => {
   const [maxLength, setMaxLength] = useState(12);
 
   useEffect(() => {
@@ -64,7 +64,7 @@ const List = ({ search, title, status, onClick, contents, date, total, category 
                 <ChatText>모집 완료</ChatText>
               ) : (
                 <>
-                  <Count>1/{total} 모집 중..</Count>
+                  <Count>{current}/{total} 모집 중..</Count>
                   <ChatText>채팅방 입장하기</ChatText>
                 </>
               )}
@@ -108,7 +108,6 @@ const LeftBox = styled.div`
   margin-left: 1vw;
 
   @media screen and (max-width: ${({theme})=>theme.breakpoints.mobile}){
-    //margin-left: 2vw;
     padding: 1.5vh 3vw;
     width: 100%;
   }
