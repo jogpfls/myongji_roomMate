@@ -51,3 +51,14 @@ export const deleteUserCategory = async (categoryId) => {
     throw new Error("카테고리를 삭제하는 데 실패했습니다.");
   }
 };
+
+export const nameGenderApi = async(name, gender) => {
+  try{
+    await Axios.post(`/users/info`, {
+      name,
+      gender,
+    })
+  }catch(error) {
+    console.error("이름과 성별 저장 실패: ", error);
+  }
+}

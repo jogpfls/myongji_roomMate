@@ -10,7 +10,7 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await login(id, passwrd);
+      const response = await login(id, passwrd, navigate);
       if (response.status === 201) {
         navigate("/");
       } else {
