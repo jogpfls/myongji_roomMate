@@ -42,14 +42,23 @@ const RoomPage = () => {
   };
 
   const handlePatch = async () => {
+    try {
       const result = await patchBoardDetail(id, name, editedContent);
-      if(result.errorCode === 403){
+      if (result.errorCode === 403) {
         alert("본인 게시글만 수정 가능합니다.");
         setPatchPost(false);
-      }else{
-        navigate(`/dormitory/${name}`)
+      } else {
+        setPost((prevPost) => ({
+          ...prevPost,
+          content: editedContent,
+        }));
+        setPatchPost(false);
       }
+    } catch (error) {
+      console.error("패치 실패:", error);
+    }
   };
+
 
   const handleDelete = async() => {
     const result = await deleteBoardDetail(id, name);
