@@ -85,7 +85,7 @@ const MainPage = () => {
           </Cir>
           <Cir
             backgroundColor="deepBlue2"
-            onClick={() => handleCirClick("/dormitory/ dormitory4")}
+            onClick={() => handleCirClick("/dormitory/dormitory4")}
           >
             4동
           </Cir>
