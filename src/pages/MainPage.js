@@ -5,11 +5,15 @@ import { useNavigate } from "react-router-dom";
 import Map from "../components/Map";
 import { scroller } from "react-scroll";
 import Cookies from "js-cookie";
+import { getUserData } from "../api/MyApi"
+import NameGender from "../components/NameGender";
 
 const MainPage = () => {
   const navigate = useNavigate();
   const [mapVisible, setMapVisible] = useState(false);
   const mapRef = useRef(null);
+  const [userData, setUserData] = useState([]);
+  const [modal, setModal] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -54,6 +58,24 @@ const MainPage = () => {
       navigate(path);
     }
   };
+
+  useEffect(()=>{
+    const fetchData = async() => {
+        const data = await getUserData();
+        setUserData(data);
+    }
+    fetchData();
+  },[])
+
+  useEffect(() => {
+    if (!userData.name || userData.gender) {
+      setModal(true);
+    }
+  }, [userData]);
+
+  const closeModal = () => {
+    setModal(false)
+  }
 
   return (
     <div>
@@ -105,6 +127,9 @@ const MainPage = () => {
       >
         <Map />
       </AnimatedMapContainer>
+      {modal && 
+        <NameGender closeModal={closeModal} />
+      }
     </div>
   );
 };
