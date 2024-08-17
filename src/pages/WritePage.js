@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Category from "../components/Category"
 import Button from "../components/Button";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { WriteApi } from "../api/WriteApi";
+import {CategoryApi} from "../api/CategoryApi";
 
 const dormitoryNames = {
   dormitory3: "3동",
@@ -18,6 +19,7 @@ const WritePage = () => {
   const [title, setTitle] = useState('');
   const [inputTitleCount, setInputTitleCount] = useState(0);
   const [inputCount, setInputCount] = useState(0);
+  const [categoryData, setCategoryData] = useState([]);
   const maxContentsLength = 500;
   const maxTitleLength = 20;
   const navigate = useNavigate();
@@ -58,6 +60,19 @@ const WritePage = () => {
     }
   };
 
+  useEffect(() => {
+    const fetchCategoryData = async () => {
+      try {
+        const data = await CategoryApi();
+        setCategoryData(data.data.categoryResponseDto);
+      } catch (error) {
+        console.error("카테고리 get 실패:", error);
+      }
+    };
+
+    fetchCategoryData();
+  }, []);
+
   return (
     <WrapperWrapper>
       <AllWrapper>
@@ -82,14 +97,9 @@ const WritePage = () => {
           <CategoryBox>
             <Title>카테고리</Title>
             <CategoryWrapper>
-              <Category>흡연 안함</Category>
-              <Category>4인실</Category>
-              <Category>2인실</Category>
-              <Category>여자</Category>
-              <Category>남자</Category>
-              <Category>청결</Category>
-              <Category>아침형 인간</Category>
-              <Category>저녁형 인간</Category>
+              {categoryData.map((data, index)=>(
+                <Category key={index}>{data.category}</Category>
+              ))}
             </CategoryWrapper>
           </CategoryBox>
           <ContentsBox>

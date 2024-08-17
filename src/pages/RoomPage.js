@@ -72,12 +72,9 @@ const RoomPage = () => {
       <Dormitory>{dormitoryNames[name]}</Dormitory>
       <Title>{post.title}</Title>
       <TagBox>
-        <Category disabled>여자</Category>
-        <Category disabled>2인실</Category>
-        <Category disabled>아침형</Category>
-        <Category disabled>아침형</Category>
-        <Category disabled>아침형</Category>
-        <Category disabled>아침형</Category>
+        {post.categoryList.map((data, index)=>(
+          <Category key={index}>{data}</Category>
+        ))}
       </TagBox>
       <Content>
         {patchPost ? (
