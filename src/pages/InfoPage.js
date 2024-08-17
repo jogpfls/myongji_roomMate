@@ -250,6 +250,10 @@ const Container = styled.div`
   border-radius: 8px;
   box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
   margin-top: 70px;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    max-width: 85%;
+  }
 `;
 
 const Title = styled.h1`
