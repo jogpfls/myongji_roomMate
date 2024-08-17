@@ -65,9 +65,8 @@ const WritePage = () => {
       try {
         const data = await CategoryApi();
         setCategoryData(data.data.categoryResponseDto);
-        console.log("dd: ", categoryData);
       } catch (error) {
-        console.error("Failed to fetch category data:", error);
+        console.error("카테고리 get 실패:", error);
       }
     };
 
@@ -98,8 +97,8 @@ const WritePage = () => {
           <CategoryBox>
             <Title>카테고리</Title>
             <CategoryWrapper>
-              {categoryData.map((data)=>(
-                <Category>{data.category}</Category>
+              {categoryData.map((data, index)=>(
+                <Category key={index}>{data.category}</Category>
               ))}
             </CategoryWrapper>
           </CategoryBox>

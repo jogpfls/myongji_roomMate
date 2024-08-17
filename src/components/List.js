@@ -4,7 +4,6 @@ import styled from "styled-components";
 const List = ({ search, title, status, onClick, contents, date, total, category }) => {
   const [maxLength, setMaxLength] = useState(12);
 
-  console.log("category: ", category)
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth <= 480) {
