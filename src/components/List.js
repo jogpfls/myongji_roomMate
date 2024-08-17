@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { getUserData } from "../api/MyApi";
 
 const List = ({ search, title, status, onClick, contents, date, total, category, current }) => {
   const [maxLength, setMaxLength] = useState(12);
   const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -49,6 +51,14 @@ const List = ({ search, title, status, onClick, contents, date, total, category,
     visibleCategoriesCount = 4;
   }
 
+  useEffect(()=>{
+    const fetchData = async() => {
+      const user = await getUserData();
+      setData(user);
+    }
+    fetchData();
+  }, [data])
+
   return (
     <div>
       {title.includes(search) && (
@@ -58,7 +68,8 @@ const List = ({ search, title, status, onClick, contents, date, total, category,
         >
           <LeftBox>
             <div>
-              <Title>{title}</Title>
+              {data.gender === "FEMALE" && <Title>♀ {title}</Title>}
+              {data.gender === "MALE" && <Title>♂ {title}</Title>}
             </div>
             <ContentsBox>
               <Contents>{truncateText(contents, maxLength)}</Contents>

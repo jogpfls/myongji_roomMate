@@ -150,6 +150,12 @@ const MyPage = () => {
                     >
                       {userData?.name || <p>닉네임설정</p>}
                     </span>
+                    {userData.gender === "FEMALE" && (
+                    <p> (여)</p>
+                    )}
+                    {userData.gender === "MALE" && (
+                    <p> (남)</p>
+                    )}
                   </Name>
                 )}
               </NameBox>
