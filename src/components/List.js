@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
-const List = ({ search, title, status, onClick, contents, date, total }) => {
+const List = ({ search, title, status, onClick, contents, date, total, category }) => {
   const [maxLength, setMaxLength] = useState(12);
 
+  console.log("category: ", category)
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth <= 480) {
@@ -51,8 +52,9 @@ const List = ({ search, title, status, onClick, contents, date, total }) => {
             </ContentsBox>
             <TextBox>
               <CategoryBox>
-                <Category>#흡연안함</Category>
-                <Category>#4인실</Category>
+                {category.map((data)=>(
+                  <Category>#{data}</Category>
+                ))}
               </CategoryBox>
               <Date>{formatDate(date)}</Date>
             </TextBox>
