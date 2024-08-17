@@ -18,7 +18,7 @@ const Login = () => {
       }
     } catch (error) {
       console.error("로그인 중 에러 발생:", error);
-      alert("로그인 중 오류가 발생했습니다.");
+      alert("통합로그인에 실패하였습니다.");
     }
   };
 
@@ -90,7 +90,12 @@ const TitleBox = styled.div`
   gap: 0.8vh;
   margin-top: 10vh;
 
-  @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    width: 85vw;
+    margin-top: 8vh;
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: 85vw;
     margin-top: 8vh;
   }
@@ -106,15 +111,20 @@ const LoginText = styled.p`
 const IntegrationText = styled.p`
   font-size: 17px;
 
-  @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    font-size: 20px;
+  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    font-size: 17px;
+    text-align: center;
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    font-size: 17px;
     text-align: center;
   }
 `;
 
 const LoginBox = styled.div`
   background-color: ${({ theme }) => theme.colors.white};
-  width: 45vw;
+  width: 648px;
   height: 55vh;
   border-radius: 15px;
   display: flex;
@@ -124,7 +134,13 @@ const LoginBox = styled.div`
   gap: 6vh;
   margin-top: 3vh;
 
-  @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    width: 60vw;
+    height: 50vh;
+    margin-top: 5vh;
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: 80vw;
     height: 50vh;
     margin-top: 5vh;
@@ -134,10 +150,16 @@ const LoginBox = styled.div`
 const AllFilledBox = styled.div`
   display: flex;
   flex-direction: column;
-  width: 30vw;
-  gap: 1.5vw;
+  align-items: center;
+  width: 500px;
+  gap: 20px;
 
-  @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    width: 45vw;
+    gap: 4vh;
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: 60vw;
     gap: 4vh;
   }
@@ -154,7 +176,7 @@ const InputFilledBox = styled.div`
 
 const InputFilled = styled.input`
   background-color: ${({ theme }) => theme.colors.white};
-  width: 30vw;
+  width: 350px;
   height: 7vh;
   border: solid ${({ theme }) => theme.colors.gray2} 1.5px;
   border-radius: 1vw;
@@ -167,7 +189,11 @@ const InputFilled = styled.input`
     font-size: 1.8vh;
   }
 
-  @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    width: 45vw;
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: 60vw;
   }
 `;
@@ -179,7 +205,11 @@ const Text = styled.div`
   padding-left: 0.5vw;
   margin-bottom: 0.5vh;
 
-  @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    width: auto;
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: auto;
   }
 `;
@@ -188,7 +218,7 @@ const LoginButton = styled.button`
   background-color: ${({ theme, status }) =>
     status === "none" ? theme.colors.blue3 : theme.colors.deepBlue2};
   color: ${({ theme }) => theme.colors.white};
-  width: 30vw;
+  width: 350px;
   height: 7vh;
   border-radius: 15px;
   ${({ theme }) => theme.fonts.text5};
@@ -201,7 +231,11 @@ const LoginButton = styled.button`
       status === "none" ? "none" : theme.colors.deepBlue};
   }
 
-  @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    width: 45vw;
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: 60vw;
   }
 `;
