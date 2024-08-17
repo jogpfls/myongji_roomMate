@@ -67,10 +67,15 @@ const MyPage = () => {
 
   const handleNext = () => {
     if (listWrapperRef.current) {
-      const scrollAmount =
-        window.innerWidth > 480
-          ? window.innerWidth * 0.26
-          : window.innerWidth * 0.58;
+      const width = window.innerWidth;
+      let scrollAmount = 0;
+      if (width > 850) {
+        scrollAmount = width * 0.26;
+      } else if (width > 480) {
+        scrollAmount = width * 0.29;
+      } else {
+        scrollAmount = width * 0.58;
+      }
       listWrapperRef.current.scrollBy({
         left: scrollAmount,
         behavior: "smooth",
@@ -78,12 +83,18 @@ const MyPage = () => {
     }
   };
 
+
   const handleBack = () => {
     if (listWrapperRef.current) {
-      const scrollAmount =
-        window.innerWidth > 480
-          ? window.innerWidth * 0.26
-          : window.innerWidth * 0.573;
+      const width = window.innerWidth;
+      let scrollAmount = 0;
+      if (width >= 480) {
+        scrollAmount = width * 0.26;
+      } else if (width > 480 && width <=850) {
+        scrollAmount = width * 0.28;
+      } else {
+        scrollAmount = width * 0.58;
+      }
       listWrapperRef.current.scrollBy({
         left: -scrollAmount,
         behavior: "smooth",
@@ -157,13 +168,15 @@ const MyPage = () => {
               <Back src={back} alt="화살표" onClick={handleBack} />
               <ListWrapper ref={listWrapperRef}>
                 {userBoards.map((board) => (
-                  <MyList
-                    key={board.id}
-                    id={board.id}
-                    dormitory={board.dormitory}
-                    title={board.title}
-                    date={board.createdAt}
-                  />
+                  <MyListBox>
+                    <MyList
+                      key={board.id}
+                      id={board.id}
+                      dormitory={board.dormitory}
+                      title={board.title}
+                      date={board.createdAt}
+                    />
+                  </MyListBox>
                 ))}
               </ListWrapper>
               <Next src={next} alt="화살표" onClick={handleNext} />
@@ -188,6 +201,18 @@ const MyPage = () => {
     </Container>
   );
 };
+
+const MyListBox = styled.div`
+  width: 25vw;
+
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    width: 28vw;
+  }
+
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    width: 57vw;
+  }
+`;
 
 const Container = styled.div`
   width: 70%;
@@ -397,8 +422,16 @@ const WriteList = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 72%;
+  width: 25vw;
   position: relative;
+
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    width: 28vw;
+  }
+
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    width: 57vw;
+  }
 `;
 
 const Back = styled.img`
