@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import Category from "../components/Category";
 import Button from "../components/Button";
 import { useNavigate, useParams } from "react-router-dom";
@@ -33,7 +33,12 @@ const RoomPage = () => {
   }, [id, name]);
 
   if (!post) {
-    return <div>로딩중...</div>;
+    return (
+      <LoadingContainer>
+        <Loading />
+        <LoadingText>loading</LoadingText>
+      </LoadingContainer>
+    );
   }
 
   const changeClick = () => {
@@ -42,25 +47,31 @@ const RoomPage = () => {
   };
 
   const handlePatch = async () => {
+    try {
       const result = await patchBoardDetail(id, name, editedContent);
-      if(result.errorCode === 403){
+      if (result.errorCode === 403) {
         alert("본인 게시글만 수정 가능합니다.");
         setPatchPost(false);
-      }else{
-        navigate(`/dormitory/${name}`)
+      } else {
+        setPost((prevPost) => ({
+          ...prevPost,
+          content: editedContent,
+        }));
+        setPatchPost(false);
       }
+    } catch (error) {
+      console.error("패치 실패:", error);
+    }
   };
 
-  const handleDelete = async() => {
+  const handleDelete = async () => {
     const result = await deleteBoardDetail(id, name);
-    if(result.errorCode === 403) {
+    if (result.errorCode === 403) {
       alert("본인 게시글만 삭제 가능합니다.");
       setPatchPost(false);
+    } else {
+      navigate(`/dormitory/${name}`);
     }
-    else{
-      navigate(`/dormitory/${name}`)
-    }
-    
   };
 
   const handleContentChange = (e) => {
@@ -72,45 +83,86 @@ const RoomPage = () => {
       <Dormitory>{dormitoryNames[name]}</Dormitory>
       <Title>{post.title}</Title>
       <TagBox>
-        {post.categoryList.map((data, index)=>(
+        {post.categoryList.map((data, index) => (
           <Category key={index}>{data}</Category>
         ))}
       </TagBox>
       <Content>
         {patchPost ? (
-          <Input
-            type="text"
-            value={editedContent}
-            onChange={handleContentChange}
-          />
+          <Input type="text" value={editedContent} onChange={handleContentChange} />
         ) : (
-          <ContentsText>
-            {post.content}
-          </ContentsText>
+          <ContentsText>{post.content}</ContentsText>
         )}
       </Content>
       <Box>
-      {!patchPost &&
-        <Text>※ 채팅 버튼을 누르면 작성자에게 개인정보가 공개됩니다.</Text>}
+        {!patchPost && <Text>※ 채팅 버튼을 누르면 작성자에게 개인정보가 공개됩니다.</Text>}
         <BtnBox>
-        {!patchPost ?
-        <>
-        <ButtonBox>
-          <Button onClick={changeClick}>수정하기</Button>
-        </ButtonBox>
-        <Button onClick={() => navigate("/chat")}>채팅하기</Button>
-        </>
-        : <>
-        <BoxBox>
-          <Button onClick={handleDelete}>삭제하기</Button>
-          <Button onClick={handlePatch}>수정완료</Button>
-        </BoxBox>
-        </>}
+          {!patchPost ? (
+            <>
+              <ButtonBox>
+                <Button onClick={changeClick}>수정하기</Button>
+              </ButtonBox>
+              <Button onClick={() => navigate("/chat")}>채팅하기</Button>
+            </>
+          ) : (
+            <BoxBox>
+              <Button onClick={handleDelete}>삭제하기</Button>
+              <Button onClick={handlePatch}>수정완료</Button>
+            </BoxBox>
+          )}
         </BtnBox>
       </Box>
     </Container>
   );
 };
+
+const rotate = keyframes`
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+`;
+
+const fadeInOut = keyframes`
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+`;
+
+const LoadingContainer = styled.div`
+  margin: 40px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 70vh;
+  justify-content: center;
+`;
+
+const Loading = styled.div`
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 2px solid ${({theme})=>theme.colors.lightBlue};
+  border-top: 2px solid ${({theme})=>theme.colors.deepBlue};
+  border-right: 2px solid ${({theme})=>theme.colors.deepBlue};
+  animation: ${rotate} 1.8s linear infinite;
+`;
+
+const LoadingText = styled.div`
+  margin-top: 10px;
+  font-size: 15px;
+  color: ${({theme})=>theme.colors.deepBlue};
+  text-transform: uppercase;
+  animation: ${fadeInOut} 2s linear infinite;
+`;
 
 const ContentsText = styled.p`
   width: 100%;
@@ -133,16 +185,18 @@ const Container = styled.div`
   flex-direction: column;
   gap: 20px;
 
-  @media screen and (max-width: ${({theme})=>theme.breakpoints.mobile}){
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: 80%;
   }
 `;
+
 const Dormitory = styled.div`
   ${(props) => props.theme.fonts.title}
   font-size: 40px;
   text-align: center;
   margin-bottom: 10px;
 `;
+
 const Title = styled.div`
   width: 100%;
   padding: 10px 20px;
@@ -150,12 +204,14 @@ const Title = styled.div`
   background-color: ${(props) => props.theme.colors.lightBlue};
   ${(props) => props.theme.fonts.text5}
 `;
+
 const TagBox = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
   gap: 1.85vw;
   width: 100%;
 `;
+
 const Content = styled.div`
   width: 100%;
   min-height: 300px;
@@ -172,7 +228,7 @@ const Input = styled.textarea`
   outline: none;
   resize: none;
 
-  &:hover{
+  &:hover {
     outline: none;
   }
 `;
@@ -181,7 +237,7 @@ const BtnBox = styled.div`
   display: flex;
   width: 100%;
   margin-top: 10px;
-  justify-content: ${({patchPost})=>!patchPost ? "end" : "space-between"};
+  justify-content: ${({ patchPost }) => (!patchPost ? "end" : "space-between")};
 `;
 
 const Text = styled.div`

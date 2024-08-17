@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import List from "../components/List";
 import Button from "../components/Button";
 import { useNavigate, useParams } from "react-router-dom";
@@ -54,6 +54,15 @@ const DormitoryPage = () => {
     navigate(path);
   };
 
+  if (!posts) {
+    return (
+      <LoadingContainer>
+        <Loading />
+        <LoadingText>loading</LoadingText>
+      </LoadingContainer>
+    );
+  }
+
   return (
     <Background>
       <Wrapper>
@@ -107,6 +116,54 @@ const DormitoryPage = () => {
     </Background>
   );
 };
+
+const rotate = keyframes`
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+`;
+
+const fadeInOut = keyframes`
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+`;
+
+const LoadingContainer = styled.div`
+  margin: 40px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 70vh;
+  justify-content: center;
+`;
+
+const Loading = styled.div`
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 2px solid ${({theme})=>theme.colors.lightBlue};
+  border-top: 2px solid ${({theme})=>theme.colors.deepBlue};
+  border-right: 2px solid ${({theme})=>theme.colors.deepBlue};
+  animation: ${rotate} 1.8s linear infinite;
+`;
+
+const LoadingText = styled.div`
+  margin-top: 10px;
+  font-size: 15px;
+  color: ${({theme})=>theme.colors.deepBlue};
+  text-transform: uppercase;
+  animation: ${fadeInOut} 2s linear infinite;
+`;
 
 const Background = styled.div`
   display: flex;
