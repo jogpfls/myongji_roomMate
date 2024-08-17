@@ -43,8 +43,12 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: space-between;
 
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    width: 28vw;
+  }
+
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    width: 57.3vw;
+    width: 57vw;
   }
 `;
 
@@ -68,6 +72,10 @@ const Date = styled.p`
   color: ${({ theme }) => theme.colors.gray};
   font-size: 15px;
   margin: 0;
+
+  @media (max-width: ${({theme})=>theme.breakpoints.tablet}){
+    display: none;
+  }
 `;
 
 export default MyList;

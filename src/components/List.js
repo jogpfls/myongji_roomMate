@@ -3,9 +3,11 @@ import styled from "styled-components";
 
 const List = ({ search, title, status, onClick, contents, date, total, category, current }) => {
   const [maxLength, setMaxLength] = useState(12);
+  const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
 
   useEffect(() => {
     const handleResize = () => {
+      setViewportWidth(window.innerWidth);
       if (window.innerWidth <= 480) {
         setMaxLength(50);
       } else {
@@ -34,7 +36,19 @@ const List = ({ search, title, status, onClick, contents, date, total, category,
     if (!dateString) return "";
     const [datePart] = dateString.split(" ");
     return datePart.replace(/-/g, ".");
+  };
+
+  let visibleCategoriesCount;
+  if (viewportWidth <=600){
+    visibleCategoriesCount=1;
+  } else if (viewportWidth <= 820) {
+    visibleCategoriesCount = 2;
+  } else if (viewportWidth <= 1150) {
+    visibleCategoriesCount = 3;
+  } else {
+    visibleCategoriesCount = 4;
   }
+
   return (
     <div>
       {title.includes(search) && (
@@ -51,9 +65,10 @@ const List = ({ search, title, status, onClick, contents, date, total, category,
             </ContentsBox>
             <TextBox>
               <CategoryBox>
-                {category.map((data)=>(
-                  <Category>#{data}</Category>
+                {category.slice(0, visibleCategoriesCount).map((data, index) => (
+                  <Category key={index}>#{data}</Category>
                 ))}
+                {category.length > visibleCategoriesCount && <Ellipsis>#···</Ellipsis>}
               </CategoryBox>
               <Date>{formatDate(date)}</Date>
             </TextBox>
@@ -94,7 +109,7 @@ const Wrapper = styled.div`
     border: ${({ status }) => (status === "모집완료" ? "" : "none")};
   }
 
-  @media screen and (max-width: ${({theme})=>theme.breakpoints.mobile}){
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     height: 18vh;
   }
 `;
@@ -102,12 +117,12 @@ const Wrapper = styled.div`
 const LeftBox = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-between;
   width: 75%;
   height: 100%;
-  margin-left: 1vw;
+  padding: 3vh 0 3vh 2vw;
 
-  @media screen and (max-width: ${({theme})=>theme.breakpoints.mobile}){
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     padding: 1.5vh 3vw;
     width: 100%;
   }
@@ -123,7 +138,7 @@ const TextBox = styled.div`
   display: flex;
   justify-content: space-between;
 
-  @media screen and (max-width: ${({theme})=>theme.breakpoints.mobile}){
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: 100%;
   }
 `;
@@ -134,7 +149,7 @@ const ContentsBox = styled.div`
   display: flex;
   align-items: center;
 
-  @media screen and (max-width:  ${({theme})=>theme.breakpoints.mobile}) {
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     height: 6vh;
     width: 60%;
   }
@@ -147,16 +162,23 @@ const Contents = styled.p`
 const CategoryBox = styled.div`
   display: flex;
   gap: 1vw;
+  width: 65%;
 `;
 
 const Category = styled.p`
   color: ${({ theme }) => theme.colors.gray};
   font-size: 15px;
+  margin-right: 2vh;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 `;
 
 const Date = styled.p`
   color: ${({ theme }) => theme.colors.gray};
   font-size: 15px;
+  width: 28%;
+  display: flex;
+  justify-content: end;
 `;
 
 const RightBox = styled.div`
@@ -166,7 +188,7 @@ const RightBox = styled.div`
   justify-content: center;
   align-items: center;
 
-  @media screen and (max-width: ${({theme})=>theme.breakpoints.mobile}){
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     display: none;
   }
 `;
@@ -182,8 +204,8 @@ const ChatTextBox = styled.div`
   justify-content: center;
   align-items: center;
 
-  @media screen and (max-width: ${({theme})=>theme.breakpoints.mobile}){
-    display: ${({status})=>!status && "none" };
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    display: ${({ status }) => !status && "none"};
   }
 `;
 
@@ -197,6 +219,11 @@ const ChatText = styled.p`
   ${({ theme }) => theme.fonts.text4};
   color: ${({ theme }) => theme.colors.gray};
   font-size: 25px;
+`;
+
+const Ellipsis = styled.p`
+  font-size: 15px;
+  color: ${({ theme }) => theme.colors.gray};
 `;
 
 export default List;
