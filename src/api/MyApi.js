@@ -12,7 +12,7 @@ export const getUserData = async () => {
 
 export const updateUserName = async (newName) => {
   try {
-    const response = await Axios.patch("/users/info/name", { name: newName });
+    const response = await Axios.patch("/users/info", { name: newName });
     return response.data;
   } catch (error) {
     console.error("이름 수정에 실패했습니다.", error);
