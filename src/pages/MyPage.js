@@ -194,8 +194,12 @@ const Container = styled.div`
   margin: auto;
   height: 95vh;
 
+  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    width: 90%;
+  }
+
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    width: 80%;
+    width: 85%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -272,13 +276,21 @@ const TBox = styled.div`
   width: 100%;
   padding: 30px;
 
+  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
     padding: 0 6vw;
     border-radius: 20px;
     min-height: 0px;
-    height: 22vh;
+    height: 200px;
+    flex-direction: row;
   }
 `;
 
