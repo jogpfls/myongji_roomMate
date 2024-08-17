@@ -11,8 +11,8 @@ export const deleteBoardDetail = async(id, name) => {
     return response;
   }catch (error) {
     console.error("삭제 실패:", error);
-    if (error.response && error.response.status === 404) {
-      return { errorCode: 404 };
+    if (error.response && error.response.status === 403) {
+      return { errorCode: 403 };
     }
     throw error;
   }
@@ -27,8 +27,8 @@ export const patchBoardDetail = async(id, name, editedContent) => {
     return response;
   }catch(error){
     console.error("실패: ", error);
-    if (error.response && error.response.status === 404) {
-      return { errorCode: 404 };
+    if (error.response && error.response.status === 403) {
+      return { errorCode: 403 };
     }
     throw error;
   }
