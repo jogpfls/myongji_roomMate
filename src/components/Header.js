@@ -13,7 +13,6 @@ const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const activePath = location.pathname.toLowerCase();
-  const token = Cookies.get("accessToken");
 
   const isActive = (path) => {
     return activePath.startsWith(path.toLowerCase());
@@ -61,7 +60,7 @@ const Header = () => {
 
   const handleLogout = async () => {
     try {
-      await logout();
+      await logout(navigate);
       navigate("/");
     } catch (error) {
       console.error("로그아웃 실패: ", error);
@@ -76,7 +75,7 @@ const Header = () => {
       navigate("/auth/login");
     } else {
       navigate(path);
-      setMenuOpen(false); // 메뉴를 닫음
+      setMenuOpen(false);
     }
   };
 
@@ -87,7 +86,7 @@ const Header = () => {
           <Title onClick={() => handleNavigation("/main")}>명지메이트</Title>
           {windowWidth <= 480 && (
             <LogoutContainer>
-              {!token ? (
+              {!Cookies.get("accessToken") ? (
                 <Logout onClick={() => navigate("/auth/login")}>로그인</Logout>
               ) : (
                 <Logout onClick={handleLogout}>로그아웃</Logout>
@@ -111,7 +110,7 @@ const Header = () => {
             onMouseLeave={handleMouseLeave}
           >
             {windowWidth > 480 ? (
-              !token ? (
+              !Cookies.get("accessToken") ? (
                 <Item onClick={() => handleCirClick("/main")}>매칭게시판</Item>
               ) : (
                 <Item
@@ -135,7 +134,7 @@ const Header = () => {
               </Item>
             )}
 
-            {isOpen && token && (
+            {isOpen && Cookies.get("accessToken") && (
               <DroppedBox>
                 <LinkWrapper
                   onClick={() => handleNavigation("/dormitory/myoungdeok")}
@@ -178,7 +177,7 @@ const Header = () => {
             마이페이지
           </Item>
           {windowWidth > 480 &&
-            (!token ? (
+            (!Cookies.get("accessToken") ? (
               <LogoutContainer>
                 <Logout onClick={() => navigate("/auth/login")}>로그인</Logout>
               </LogoutContainer>
