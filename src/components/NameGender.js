@@ -1,11 +1,33 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { nameGenderApi } from '../api/MyApi';
 
 const NameGender = ({closeModal}) => {
+  const [name, setName] = useState('');
+  const [gender, setGender] = useState('');
+  const [status, setStatus] = useState(false);
 
-  const handleSubmit = () => {
-    closeModal();
-  }
+  useEffect(() => {
+    if (name && gender) {
+      setStatus(true);
+    } else {
+      setStatus(false);
+    }
+  }, [name, gender]);
+
+  const handleGenderSelect = (selectedGender) => {
+    setGender(gender === selectedGender ? '' : selectedGender);
+  };
+
+  const handleSubmit = async() => {
+    if (name && gender) {
+      await nameGenderApi(name, gender);
+      closeModal();
+    } else {
+      alert("이름과 성별을 모두 입력해주세요.");
+    }
+  };
+
   return (
     <Background>
       <Wrapper>
@@ -13,22 +35,32 @@ const NameGender = ({closeModal}) => {
         <InputFilledBox>
         <TitleBox>
           <Title>이름</Title>
-          <InputFilled>
+          <InputFilled onChange={(e)=>setName(e.target.value)}>
           </InputFilled>
         </TitleBox>
         <div>
           <TitleBox>
             <Title>성별</Title>
             <BtnBox>
-              <BtnW>♀ 여성</BtnW>
-              <BtnM>♂ 남성</BtnM>
+              <Btn 
+                selected={gender === "female"}
+                onClick={() => handleGenderSelect("female")}
+              >
+                ♀ 여성
+              </Btn>
+              <Btn 
+                selected={gender === "male"}
+                onClick={() => handleGenderSelect("male")}
+              >
+                ♂ 남성
+              </Btn>
             </BtnBox>
           </TitleBox>
         </div>
         </InputFilledBox>
         <ButtonBox>
         <InfoText>성별은 한번 설정하고 난 뒤 수정할 수 없습니다.</InfoText>
-          <Submit onClick={handleSubmit}>제출</Submit>
+          <Submit onClick={handleSubmit} status={status}>제출</Submit>
         </ButtonBox>
         </Box>
       </Wrapper>
@@ -97,28 +129,14 @@ const BtnBox = styled.div`
   justify-content: space-between;
 `;
 
-const BtnW = styled.button`
-  ${({theme})=>theme.fonts.default};
+const Btn = styled.button`
+  ${({ theme }) => theme.fonts.default};
   width: 17vw;
   height: 6vh;
   border-radius: 7px;
-  background-color: ${({theme})=>theme.colors.lightBlue};
+  background-color: ${({ theme, selected }) =>
+    selected ? theme.colors.lightBlueC : theme.colors.lightBlue};
 
-  &:hover{
-    background-color: #FFEBEB;
-  }
-`;
-
-const BtnM = styled.button`
-  ${({theme})=>theme.fonts.default};
-  width: 17vw;
-  height: 6vh;
-  border-radius: 7px;
-  background-color: ${({theme})=>theme.colors.lightBlue};
-
-  &:hover{
-    background-color: ${({theme})=>theme.colors.lightBlueC};
-  }
 `;
 
 const TitleBox = styled.div`
@@ -155,10 +173,13 @@ const Submit = styled.button`
   width: 10vw;
   height: 5vh;
   border-radius: 7px;
-  background-color: ${({theme})=>theme.colors.gray2};
+  background-color: ${({theme, status}) =>
+    status ? theme.colors.lightBlueC : theme.colors.gray2};
+
 
   &:hover{
-    background-color: ${({theme})=>theme.colors.lightBlueC};
+    background-color: ${({theme, status})=>status ? theme.colors.deepBlue2 : "none"};
+    color: ${({theme, status})=>status ? theme.colors.white : "none"};
   }
 `;
 

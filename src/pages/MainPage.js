@@ -68,11 +68,12 @@ const MainPage = () => {
   },[])
 
   useEffect(() => {
-    if (!userData.name || userData.gender) {
+    if (userData.name === null || userData.gender === null) {
       setModal(true);
+    } else {
+      setModal(false);
     }
   }, [userData]);
-
   const closeModal = () => {
     setModal(false)
   }
