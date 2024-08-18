@@ -27,6 +27,12 @@ const Login = () => {
     }
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      handleLogin();
+    }
+  };
+
   const closeModal = () => {
     setModalOpen(false);
   };
@@ -54,6 +60,7 @@ const Login = () => {
                   placeholder="학번(601234)을 입력해주세요"
                   type="id"
                   onChange={(event) => setId(event.target.value)}
+                  onKeyDown={handleKeyDown} // Added event listener
                 />
               </InputFilledBox>
             </FilledBox>
@@ -64,6 +71,7 @@ const Login = () => {
                   placeholder="비밀번호를 입력해주세요"
                   type="password"
                   onChange={(event) => setPassword(event.target.value)}
+                  onKeyDown={handleKeyDown}
                 />
               </InputFilledBox>
             </FilledBox>
