@@ -146,10 +146,11 @@ const ItemsContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   overflow-y: auto;
-  gap: 10px 20px;
+  gap: 3% 6%;
   justify-content: flex-start;
   align-content: flex-start;
   margin-top: 1vh;
+  margin-left: 1px;
 
   @media (max-width: 1070px) {
     display: inline;
@@ -203,6 +204,7 @@ const Label = styled.div`
   font-size: 20px;
   display: flex;
   flex-wrap: wrap;
+  width: 90%;
 `;
 
 const PlaceholderLabel = styled(Label)`
