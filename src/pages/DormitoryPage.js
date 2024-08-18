@@ -37,6 +37,12 @@ const DormitoryPage = () => {
     setFilteredSearch(search);
   };
 
+    const handleSearchKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleSearchClick();
+    }
+  };
+
   const openModal = () => {
     setChoseModal(true);
   };
@@ -74,6 +80,7 @@ const DormitoryPage = () => {
                 onChange={handleSearchChange}
                 value={search}
                 placeholder="찾고 싶은 방을 검색해보세요!"
+                onKeyPress={handleSearchKeyPress}
               ></Search>
               <SearchButton
                 src={SearchImg}
