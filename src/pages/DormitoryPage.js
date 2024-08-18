@@ -22,14 +22,10 @@ const DormitoryPage = () => {
   const [posts, setPosts] = useState([]);
   const [choseModal, setChoseModal] = useState(false);
   const navigate = useNavigate();
-  const [gender, setGender] = useState("");
 
   useEffect(() => {
     fetchDormitoryPosts(name).then((boardDtoList) => {
       setPosts(boardDtoList);
-      if (boardDtoList.length > 0 && boardDtoList[0].gender) {
-        setGender(boardDtoList[0].gender);
-      }
     });
   }, [name]);
 
