@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import empty from "../images/emptyStar.svg";
+import full from "../images/fullStar.svg";
 
 const List = ({
   search,
@@ -13,10 +14,11 @@ const List = ({
   category,
   current,
   gender,
+  like,
 }) => {
   const [maxLength, setMaxLength] = useState(12);
   const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
-
+  
   useEffect(() => {
     const handleResize = () => {
       setViewportWidth(window.innerWidth);
@@ -93,7 +95,7 @@ const List = ({
               )}
             </ChatTextBox>
               </LeftBox>
-              <Star src={empty} ></Star>
+              {like ? <Star src={full} ></Star> : <Star src={empty} ></Star>}
             </TopBox>
             <ContentsBox>
               <Contents>{truncateText(contents, maxLength)}</Contents>

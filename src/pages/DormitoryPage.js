@@ -107,6 +107,7 @@ const DormitoryPage = () => {
                 category={post.categoryList}
                 current={post.current}
                 gender={post.gender}
+                like={post.like}
                 onClick={() => handleNavigate(post)}
               />
             ))}
