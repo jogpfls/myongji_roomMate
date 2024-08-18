@@ -104,25 +104,28 @@ const ChatPage = () => {
 
   const sendMessage = () => {
     if (inputMessage.trim() && stompClient && stompClient.active) {
-      console.log("Sending message function called.");
       const messagePayload = {
         roomId: activeRoomId,
         content: inputMessage,
         sender: userName,
       };
+      console.log("Sending message:", JSON.stringify(messagePayload));
       stompClient.publish({
         destination: "/pub/ws/chat/send",
         body: JSON.stringify(messagePayload),
       });
-      console.log("Sending message:", JSON.stringify(messagePayload));
 
-      setMessages((prevMessages) => ({
-        ...prevMessages,
-        [activeRoomId]: [
-          ...(prevMessages[activeRoomId] || []),
-          { content: inputMessage, sender: userName },
-        ],
-      }));
+      setMessages((prevMessages) => {
+        const updatedMessages = {
+          ...prevMessages,
+          [activeRoomId]: [
+            ...(prevMessages[activeRoomId] || []),
+            { content: inputMessage, sender: userName },
+          ],
+        };
+        console.log("Messages after send:", updatedMessages);
+        return updatedMessages;
+      });
       setInputMessage("");
     } else {
       console.error("STOMP client is not connected or input is empty.");
