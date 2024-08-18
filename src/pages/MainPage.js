@@ -63,12 +63,14 @@ const MainPage = () => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      const data = await getUserData();
-      setUserData(data);
-    };
-    fetchData();
-  }, []);
+    if(Cookies.get("accessToken")){
+      const fetchData = async () => {
+        const data = await getUserData();
+        setUserData(data);
+      };
+      fetchData();
+    }
+  }, [navigate]);
 
   useEffect(() => {
     if (userData.name === null || userData.gender === null) {
