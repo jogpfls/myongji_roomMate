@@ -59,6 +59,12 @@ const Info = ({ isEditing }) => {
     }
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      addItem();
+    }
+  };
+
   return (
     <BoxListContainer>
       <ItemsContainer>
@@ -79,6 +85,7 @@ const Info = ({ isEditing }) => {
             type="text"
             value={newItem}
             onChange={(e) => setNewItem(e.target.value)}
+            onKeyDown={handleKeyDown}
             placeholder="새 항목 추가"
           />
           <AddButton onClick={addItem}>추가</AddButton>
@@ -158,6 +165,7 @@ const Input = styled.input`
   border-radius: 5px;
   border: 1px solid ${(props) => props.theme.colors.deepBlue2};
   margin-right: 10px;
+  outline: none;
 
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: 75%;
