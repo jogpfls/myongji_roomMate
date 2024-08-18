@@ -63,11 +63,13 @@ const MainPage = () => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      const data = await getUserData(navigate, setModalOpen, setModalMessage);
-      setUserData(data);
-    };
-    fetchData();
+    if(Cookies.get("accessToken")){
+      const fetchData = async () => {
+        const data = await getUserData();
+        setUserData(data);
+      };
+      fetchData();
+    }
   }, [navigate]);
 
   useEffect(() => {
