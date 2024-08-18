@@ -3,7 +3,12 @@ import styled, { keyframes } from "styled-components";
 import Category from "../components/Category";
 import Button from "../components/Button";
 import { useNavigate, useParams } from "react-router-dom";
-import { getBoardDetail, deleteBoardDetail, patchBoardDetail } from "../api/RoomApi";
+import {
+  getBoardDetail,
+  deleteBoardDetail,
+  patchBoardDetail,
+} from "../api/RoomApi";
+import Modal from "../components/Modal";
 
 const dormitoryNames = {
   dormitory3: "3동",
@@ -19,6 +24,8 @@ const RoomPage = () => {
   const [post, setPost] = useState(null);
   const [patchPost, setPatchPost] = useState(false);
   const [editedContent, setEditedContent] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
 
   useEffect(() => {
     console.log(`Fetching data for dormitory: ${name}, room ID: ${id}`);
@@ -50,7 +57,8 @@ const RoomPage = () => {
     try {
       const result = await patchBoardDetail(id, name, editedContent);
       if (result.errorCode === 403) {
-        alert("본인 게시글만 수정 가능합니다.");
+        setModalMessage("본인 게시글만 수정 가능합니다.");
+        setModalOpen(true);
         setPatchPost(false);
       } else {
         setPost((prevPost) => ({
@@ -65,17 +73,26 @@ const RoomPage = () => {
   };
 
   const handleDelete = async () => {
-    const result = await deleteBoardDetail(id, name);
-    if (result.errorCode === 403) {
-      alert("본인 게시글만 삭제 가능합니다.");
-      setPatchPost(false);
-    } else {
-      navigate(`/dormitory/${name}`);
+    try {
+      const result = await deleteBoardDetail(id, name);
+      if (result.errorCode === 403) {
+        setModalMessage("본인 게시글만 삭제 가능합니다.");
+        setModalOpen(true);
+        setPatchPost(false);
+      } else {
+        navigate(`/dormitory/${name}`);
+      }
+    } catch (error) {
+      console.error("삭제 실패:", error);
     }
   };
 
   const handleContentChange = (e) => {
     setEditedContent(e.target.value);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
   };
 
   return (
@@ -89,14 +106,20 @@ const RoomPage = () => {
       </TagBox>
       <Content>
         {patchPost ? (
-          <Input type="text" value={editedContent} onChange={handleContentChange} />
+          <Input
+            type="text"
+            value={editedContent}
+            onChange={handleContentChange}
+          />
         ) : (
           <ContentsText>{post.content}</ContentsText>
         )}
       </Content>
       <Box>
-        {!patchPost && <Text>※ 채팅 버튼을 누르면 작성자에게 개인정보가 공개됩니다.</Text>}
-        <BtnBox>
+        {!patchPost && (
+          <Text>※ 채팅 버튼을 누르면 작성자에게 개인정보가 공개됩니다.</Text>
+        )}
+        <BtnBox patchPost={patchPost}>
           {!patchPost ? (
             <>
               <ButtonBox>
@@ -112,6 +135,13 @@ const RoomPage = () => {
           )}
         </BtnBox>
       </Box>
+
+      <Modal
+        isOpen={modalOpen}
+        onClose={closeModal}
+        title="알림"
+        message={modalMessage}
+      />
     </Container>
   );
 };
@@ -150,16 +180,16 @@ const Loading = styled.div`
   width: 100px;
   height: 100px;
   border-radius: 50%;
-  border: 2px solid ${({theme})=>theme.colors.lightBlue};
-  border-top: 2px solid ${({theme})=>theme.colors.deepBlue};
-  border-right: 2px solid ${({theme})=>theme.colors.deepBlue};
+  border: 2px solid ${({ theme }) => theme.colors.lightBlue};
+  border-top: 2px solid ${({ theme }) => theme.colors.deepBlue};
+  border-right: 2px solid ${({ theme }) => theme.colors.deepBlue};
   animation: ${rotate} 1.8s linear infinite;
 `;
 
 const LoadingText = styled.div`
   margin-top: 10px;
   font-size: 15px;
-  color: ${({theme})=>theme.colors.deepBlue};
+  color: ${({ theme }) => theme.colors.deepBlue};
   text-transform: uppercase;
   animation: ${fadeInOut} 2s linear infinite;
 `;
