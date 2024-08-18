@@ -10,6 +10,7 @@ const Info = ({ isEditing }) => {
   const [items, setItems] = useState([]);
   const [newItem, setNewItem] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
     const fetchUserCategories = async () => {
@@ -71,6 +72,14 @@ const Info = ({ isEditing }) => {
     }
   };
 
+  const handleInputChange = (e) => {
+    const inputText = e.target.value;
+    if (inputText.length <= 10) {
+      setNewItem(inputText);
+      setCount(inputText.length);
+    }
+  };
+
   return (
     <BoxListContainer>
       <ItemsContainer>
@@ -106,13 +115,16 @@ const Info = ({ isEditing }) => {
       </ItemsContainer>
       {isEditing && (
         <AddItemContainer>
-          <Input
-            type="text"
-            value={newItem}
-            onChange={(e) => setNewItem(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder="새 항목 추가"
-          />
+          <InputBox>
+            <Input
+              type="text"
+              value={newItem}
+              onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
+              placeholder="새 항목 추가"
+            />
+            <Count>{count}/10</Count>
+          </InputBox>
           <AddButton onClick={addItem}>추가</AddButton>
         </AddItemContainer>
       )}
@@ -188,19 +200,35 @@ const AddItemContainer = styled.div`
   }
 `;
 
-const Input = styled.input`
-  width: 100%;
-  padding: 8px;
-  font-size: 16px;
+const InputBox = styled.div`
+  width: 19.3vw;
+  padding:8px 0;
   border-radius: 5px;
   border: 1px solid ${(props) => props.theme.colors.deepBlue2};
   margin-right: 10px;
   outline: none;
-
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: 75%;
     border-radius: 10px;
   }
+`;
+
+const Input = styled.input`
+  font-size: 16px;
+  outline: none;
+  padding-left: 8px;
+
+  &:hover{
+    outline: none;
+  }
+`;
+
+const Count = styled.p`
+  font-size: 13px;
+  margin-right: 8px;
 `;
 
 const AddButton = styled.button`
