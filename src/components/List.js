@@ -47,10 +47,10 @@ const List = ({
 
   const formatDate = (dateString) => {
     if (!dateString) return "";
-    const [datePart] = dateString.split(" ");
-    return datePart.replace(/-/g, ".");
+    const [datePart] = dateString.split("T");
+    return datePart ? datePart.replace(/-/g, ".") : "";
   };
-
+  
   let visibleCategoriesCount;
   if (viewportWidth <= 600) {
     visibleCategoriesCount = 2;
