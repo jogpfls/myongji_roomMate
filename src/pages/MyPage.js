@@ -426,7 +426,7 @@ const TBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 3vw;
+  gap: 5vw;
   width: 100%;
   padding: 30px;
 
@@ -435,6 +435,7 @@ const TBox = styled.div`
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    gap: 3vh;
   }
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
@@ -470,12 +471,13 @@ const NameBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100px;
+  width: auto;
   margin-top: 10px;
   flex-wrap: wrap;
 `;
 const Name = styled.div`
   display: flex;
+  white-space: nowrap;
   span {
     margin-left: 10px;
     word-break: break-word;
@@ -485,15 +487,17 @@ const Name = styled.div`
     background-color: ${(props) => props.theme.colors.lightBlue};
     border-radius: 5px;
     outline: none;
-    width: 100px;
     display: flex;
     text-align: center;
+    width: 100px;
   }
 `;
 
 const Info = styled.div`
-  width: 60%;
+  width: auto;
   line-height: 1.5em;
+  display: flex;
+  white-space: nowrap;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: auto;
