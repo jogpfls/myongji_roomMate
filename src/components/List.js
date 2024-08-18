@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import empty from "../images/emptyStar.svg";
 import full from "../images/fullStar.svg";
 
 const List = ({
@@ -95,7 +94,7 @@ const List = ({
               )}
             </ChatTextBox>
               </LeftBox>
-              {like ? <Star src={full} ></Star> : <Star src={empty} ></Star>}
+              {like && <Star src={full} ></Star>}
             </TopBox>
             <ContentsBox>
               <Contents>{truncateText(contents, maxLength)}</Contents>
