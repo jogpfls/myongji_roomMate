@@ -25,8 +25,8 @@ const ChatRoomList = ({ activeRoom, onRoomClick }) => {
         {rooms.map((room) => (
           <RoomItem
             key={room.id}
-            active={room.title === activeRoom}
-            onClick={() => onRoomClick(room.title)}
+            active={room.id === activeRoom}
+            onClick={() => onRoomClick(room.id, room.title)}
           >
             {room.title} ({room.memberCount})
           </RoomItem>

@@ -1,43 +1,131 @@
 import React, { useEffect, useState, useRef, useLayoutEffect } from "react";
 import styled from "styled-components";
-import io from "socket.io-client";
+import SockJS from "sockjs-client";
+import { Client } from "@stomp/stompjs";
 import ChatOut from "../images/ChatOut.svg";
 import ChatRoomList from "../components/ChatRoomList";
-
-const socket = io("");
+import { getUserData } from "../api/MyApi";
 
 const ChatPage = () => {
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState({});
   const [inputMessage, setInputMessage] = useState("");
-  const [activeRoom, setActiveRoom] = useState("");
+  const [activeRoomId, setActiveRoomId] = useState(null);
+  const [activeRoomTitle, setActiveRoomTitle] = useState("");
+  const [stompClient, setStompClient] = useState(null);
+  const [userName, setUserName] = useState("");
   const chatMessagesRef = useRef(null);
 
   useEffect(() => {
-    socket.on("message", (message) => {
-      setMessages((prevMessages) => [...prevMessages, message]);
+    const fetchUserName = async () => {
+      try {
+        const userData = await getUserData();
+        setUserName(userData.name);
+      } catch (error) {
+        console.error("Failed to fetch user name:", error);
+      }
+    };
+
+    fetchUserName();
+  }, []);
+
+  useEffect(() => {
+    if (!activeRoomId || !userName) return;
+
+    const client = new Client({
+      webSocketFactory: () => new SockJS("https://api.mju-mate.com/ws/chat"),
+      debug: function (str) {
+        console.log(str);
+      },
+      reconnectDelay: 5000,
+      heartbeatIncoming: 4000,
+      heartbeatOutgoing: 4000,
     });
 
-    return () => {
-      socket.off("message");
+    client.onConnect = function (frame) {
+      console.log("Connected: " + frame);
+      setStompClient(client);
+
+      client.subscribe(`/sub/ws/chat/room/${activeRoomId}`, function (message) {
+        console.log("Received raw message:", message.body);
+        try {
+          const receivedMessage = JSON.parse(message.body);
+          console.log("Received message:", receivedMessage);
+          setMessages((prevMessages) => {
+            const roomMessages = prevMessages[activeRoomId] || [];
+            if (
+              roomMessages.some(
+                (msg) =>
+                  msg.content === receivedMessage.content &&
+                  msg.sender === receivedMessage.sender
+              )
+            ) {
+              return prevMessages;
+            }
+            return {
+              ...prevMessages,
+              [activeRoomId]: [
+                ...roomMessages,
+                {
+                  content: receivedMessage.content,
+                  sender: receivedMessage.sender,
+                },
+              ],
+            };
+          });
+        } catch (error) {
+          console.error("Failed to parse message:", error);
+        }
+      });
+
+      client.publish({
+        destination: `/pub/ws/chat/${activeRoomId}/enter`,
+        body: JSON.stringify({
+          roomId: activeRoomId,
+          // sender: userName,
+        }),
+      });
     };
-  }, []);
+
+    client.activate();
+
+    return () => {
+      if (client.active) {
+        client.deactivate();
+      }
+    };
+  }, [activeRoomId, userName]);
 
   useLayoutEffect(() => {
     const chatMessagesElement = chatMessagesRef.current;
-
     if (chatMessagesElement) {
       chatMessagesElement.scrollTop = chatMessagesElement.scrollHeight;
     }
-  }, [messages]);
+  }, [messages, activeRoomId]);
 
   const sendMessage = () => {
-    if (inputMessage.trim()) {
-      socket.emit("sendMessage", inputMessage);
-      setMessages((prevMessages) => [
+    if (inputMessage.trim() && stompClient && stompClient.active) {
+      console.log("Sending message function called.");
+      const messagePayload = {
+        roomId: activeRoomId,
+        content: inputMessage,
+        sender: userName,
+      };
+      stompClient.publish({
+        destination: "/pub/ws/chat/send",
+        body: JSON.stringify(messagePayload),
+      });
+      console.log("Sending message:", JSON.stringify(messagePayload));
+
+      setMessages((prevMessages) => ({
         ...prevMessages,
-        { text: inputMessage, sender: "나" },
-      ]);
+        [activeRoomId]: [
+          ...(prevMessages[activeRoomId] || []),
+          { content: inputMessage, sender: userName },
+        ],
+      }));
       setInputMessage("");
+    } else {
+      console.error("STOMP client is not connected or input is empty.");
     }
   };
 
@@ -47,17 +135,18 @@ const ChatPage = () => {
     }
   };
 
-  const handleRoomClick = (roomName) => {
-    setActiveRoom(roomName);
+  const handleRoomClick = (roomId, roomTitle) => {
+    setActiveRoomId(roomId);
+    setActiveRoomTitle(roomTitle);
   };
 
   return (
     <ChatContainer>
-      <ChatRoomList activeRoom={activeRoom} onRoomClick={handleRoomClick} />
+      <ChatRoomList activeRoom={activeRoomId} onRoomClick={handleRoomClick} />
       <ChatRoom>
         <ChatRoomHeader>
           <RoomInfo>
-            <RoomTitle>{activeRoom}</RoomTitle>
+            <RoomTitle>{activeRoomTitle}</RoomTitle>
             <RoomStatus>3/4 모집 중...</RoomStatus>
           </RoomInfo>
           <HeaderRight>
@@ -67,11 +156,11 @@ const ChatPage = () => {
           </HeaderRight>
         </ChatRoomHeader>
         <ChatMessages ref={chatMessagesRef}>
-          {messages.map((message, index) => (
-            <Message key={index} sent={message.sender === "나"}>
-              <Timestamp sent={message.sender === "나"}>12:13</Timestamp>
-              <MessageText sent={message.sender === "나"}>
-                {message.text}
+          {(messages[activeRoomId] || []).map((message, index) => (
+            <Message key={index} sent={message.sender === userName}>
+              <Timestamp sent={message.sender === userName}>12:13</Timestamp>
+              <MessageText sent={message.sender === userName}>
+                {message.content}
               </MessageText>
             </Message>
           ))}
