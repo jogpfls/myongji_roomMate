@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { FaHome, FaBuilding, FaBars, FaTimes } from "react-icons/fa";
 import { logout } from "../api/LoginApi";
 import Cookies from "js-cookie";
+import Modal from "../components/Modal";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -13,6 +14,8 @@ const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const activePath = location.pathname.toLowerCase();
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
 
   const isActive = (path) => {
     return activePath.startsWith(path.toLowerCase());
@@ -60,8 +63,7 @@ const Header = () => {
 
   const handleLogout = async () => {
     try {
-      await logout(navigate);
-      navigate("/");
+      await logout(navigate, setModalOpen, setModalMessage);
     } catch (error) {
       console.error("로그아웃 실패: ", error);
     }
@@ -71,7 +73,8 @@ const Header = () => {
     const token = Cookies.get("accessToken");
 
     if (!token) {
-      alert("로그인이 필요합니다.");
+      setModalMessage("로그인이 필요합니다.");
+      setModalOpen(true);
       navigate("/auth/login");
     } else {
       navigate(path);
@@ -188,6 +191,13 @@ const Header = () => {
             ))}
         </Menu>
       </Box>
+
+      <Modal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        title="알림"
+        message={modalMessage}
+      />
     </Container>
   );
 };
