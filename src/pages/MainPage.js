@@ -64,11 +64,11 @@ const MainPage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getUserData();
+      const data = await getUserData(navigate, setModalOpen, setModalMessage);
       setUserData(data);
     };
     fetchData();
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
     if (userData.name === null || userData.gender === null) {
