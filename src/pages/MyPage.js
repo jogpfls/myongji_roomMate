@@ -7,11 +7,13 @@ import next from "../images/next.svg";
 import back from "../images/back.svg";
 import { getUserData, updateUserName, getUserBoards } from "../api/MyApi";
 import { FaPen, FaCheck } from "react-icons/fa";
+import { getLikeApi } from "../api/MyApi";
 
 const MyPage = () => {
   const [isEditing, setIsEditing] = useState(false);
   const theme = useTheme();
   const listWrapperRef = useRef(null);
+  const likeWrapperRef = useRef(null);
   const [userData, setUserData] = useState({
     name: "",
     major: "",
@@ -20,6 +22,7 @@ const MyPage = () => {
   const [nameEditMode, setNameEditMode] = useState(false);
   const [newName, setNewName] = useState("");
   const [userBoards, setUserBoards] = useState([]);
+  const [like, setLike] = useState([]);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -65,7 +68,7 @@ const MyPage = () => {
     fetchUserBoards();
   }, []);
 
-  const handleNext = () => {
+  const handleWriteNext = () => {
     if (listWrapperRef.current) {
       const width = window.innerWidth;
       let scrollAmount = 0;
@@ -83,8 +86,25 @@ const MyPage = () => {
     }
   };
 
+  const handleLikeNext = () => {
+    if (likeWrapperRef.current) {
+      const width = window.innerWidth;
+      let scrollAmount = 0;
+      if (width > 850) {
+        scrollAmount = width * 0.26;
+      } else if (width > 480) {
+        scrollAmount = width * 0.29;
+      } else {
+        scrollAmount = width * 0.58;
+      }
+      likeWrapperRef.current.scrollBy({
+        left: scrollAmount,
+        behavior: "smooth",
+      });
+    }
+  };
 
-  const handleBack = () => {
+  const handleWriteBack = () => {
     if (listWrapperRef.current) {
       const width = window.innerWidth;
       let scrollAmount = 0;
@@ -99,8 +119,38 @@ const MyPage = () => {
         left: -scrollAmount,
         behavior: "smooth",
       });
-    }
+  }
   };
+
+  const handleLikeBack = () => {
+    if (likeWrapperRef.current) {
+      const width = window.innerWidth;
+      let scrollAmount = 0;
+      if (width >= 480) {
+        scrollAmount = width * 0.26;
+      } else if (width > 480 && width <=850) {
+        scrollAmount = width * 0.28;
+      } else {
+        scrollAmount = width * 0.58;
+      }
+      likeWrapperRef.current.scrollBy({
+        left: -scrollAmount,
+        behavior: "smooth",
+      });
+    }
+    }
+
+  useEffect(()=>{
+    const fetchLike = async() => {
+      try{
+        const response = await getLikeApi();
+        setLike(response)
+      }catch(error){
+        console.error(error);
+      }
+    }
+    fetchLike();
+  }, [])
   
   if(!userData || !userBoards){
     return (
@@ -180,7 +230,7 @@ const MyPage = () => {
           <Title>내가 쓴 글</Title>
           <BBox>
             <WriteList>
-              <Back src={back} alt="화살표" onClick={handleBack} />
+              <Back1 src={back} alt="화살표" onClick={handleWriteBack} />
               <ListWrapper ref={listWrapperRef}>
                 {userBoards.map((board) => (
                   <MyListBox>
@@ -194,7 +244,7 @@ const MyPage = () => {
                   </MyListBox>
                 ))}
               </ListWrapper>
-              <Next src={next} alt="화살표" onClick={handleNext} />
+              <Next1 src={next} alt="화살표" onClick={handleWriteNext} />
             </WriteList>
           </BBox>
         </Left>
@@ -205,6 +255,19 @@ const MyPage = () => {
             </LBox>
               <Title>Like</Title>
                 <LikeBox>
+                  <Back2 src={back} alt="화살표" onClick={handleLikeBack} />
+                  <LikeScrollBox ref={likeWrapperRef}>
+                    {like.map((likes, index)=>(
+                      <MyList 
+                      key={index.id}
+                      id={likes.id}
+                      dormitory={likes.dormitory}
+                      title={likes.title}
+                      date={likes.createdAt}
+                      />
+                    ))}
+                  </LikeScrollBox>
+                  <Next2 src={next} alt="화살표" onClick={handleLikeNext} />
                 </LikeBox>
         </Right>
       </LRBox>
@@ -446,6 +509,7 @@ const BBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: auto;
@@ -490,7 +554,6 @@ const WriteList = styled.div`
   justify-content: center;
   align-items: center;
   width: 25vw;
-  position: relative;
 
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
     width: 28vw;
@@ -501,12 +564,12 @@ const WriteList = styled.div`
   }
 `;
 
-const Back = styled.img`
+const Back1 = styled.img`
   width: 30px;
   position: absolute;
   cursor: pointer;
   z-index: 999;
-  left: -14%;
+  left:  0.4vw;
 `;
 
 const ListWrapper = styled.div`
@@ -517,10 +580,10 @@ const ListWrapper = styled.div`
   scroll-behavior: smooth;
 `;
 
-const Next = styled.img`
+const Next1 = styled.img`
   width: 30px;
   position: absolute;
-  left: 105%;
+  right: 0.3vw;
   cursor: pointer;
   z-index: 999;
 `;
@@ -531,11 +594,45 @@ const LikeBox = styled.div`
   height: 30%;
   min-height: 100px;
   background-color: ${(props) => props.theme.colors.white};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: auto;
     border-radius: 20px;
   }
+`;
+
+const Back2 = styled.img`
+  left: 0.3vw;
+  width: 30px;
+  position: absolute;
+  cursor: pointer;
+`;
+
+const LikeScrollBox = styled.div`
+  width: 25vw;
+  height: auto;
+  display: flex;
+  overflow-x: hidden;
+  gap: 1vw;
+
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    width: 28vw;
+  }
+
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    width: 57vw;
+  }
+`;
+
+const Next2 = styled.img`
+  width: 30px;
+  position: absolute;
+  right: 0.3vw;
+  cursor: pointer;
 `;
 
 export default MyPage;

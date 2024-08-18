@@ -62,3 +62,12 @@ export const nameGenderApi = async(name, gender) => {
     console.error("이름과 성별 저장 실패: ", error);
   }
 }
+
+export const getLikeApi = async() => {
+  try{
+    const response = await Axios.get(`/boards/likes`);
+    return response.data.data.boardDtoList;
+  }catch(error){
+    console.error("좋아요 가져오기 실패: ", error);
+  }
+}

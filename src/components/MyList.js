@@ -58,6 +58,7 @@ const TitleWrapper = styled.div`
 
 const Title = styled.p`
   margin: 0;
+  white-space: nowrap;
 `;
 
 const DateBox = styled.div`
