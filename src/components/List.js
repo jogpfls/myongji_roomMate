@@ -164,7 +164,7 @@ const TopBox = styled.div`
 const LeftBox = styled.div`
   width: 90%;
   display: flex;
-  gap: 1vw;
+  gap: 1.5vw;
   align-items: center;
 `;
 
@@ -197,11 +197,15 @@ const MaleTitle = styled.p`
 `;
 
 const ChatTextBox = styled.div`
-  height: 100%;
+  height: 2.3vh;
   width: auto;
   display: flex;
-  align-items: end;
-  margin-bottom: 1.3vh;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  margin-top: 1.3vh;
+  padding: 0 0.5vw;
+  background-color: ${({theme, status})=>status ==="모집완료" ? theme.colors.gray : theme.colors.lightBlue};
 `;
 
 const Count = styled.p`
@@ -265,8 +269,7 @@ const Ellipsis = styled.p`
 `;
 
 const Star = styled.img`
-  cursor: pointer;
-  width: 33px;
+  width: 31px;
 `;
 
 export default List;

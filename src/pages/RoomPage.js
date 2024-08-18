@@ -10,6 +10,8 @@ import {
   postChat,
 } from "../api/RoomApi";
 import Modal from "../components/Modal";
+import full from "../images/fullStar.svg";
+import empty from "../images/emptyStar.svg";
 
 const dormitoryNames = {
   dormitory3: "3동",
@@ -28,6 +30,7 @@ const RoomPage = () => {
   const [roomId, setRoomId] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
+  const [star, setStar] = useState(false);
 
   useEffect(() => {
     console.log(`Fetching data for dormitory: ${name}, board ID: ${id}`);
@@ -118,10 +121,22 @@ const RoomPage = () => {
     setModalOpen(false);
   };
 
+  const handleStarClick = () => {
+    setStar(!star);
+  }
+
   return (
     <Container>
-      <Dormitory>{dormitoryNames[name]}</Dormitory>
-      <Title>{post.title}</Title>
+      <BestTopBox>
+          <Dormitory>{dormitoryNames[name]}</Dormitory>
+        <TopBox>
+          {!star ? 
+          <Star src={empty} onClick={handleStarClick}></Star> :
+          <Star src={full} onClick={handleStarClick}></Star>}
+            
+        </TopBox>
+        <Title>{post.title}</Title>
+      </BestTopBox>
       <TagBox>
         {post.categoryList.map((data, index) => (
           <Category key={index}>{data}</Category>
@@ -243,11 +258,29 @@ const Container = styled.div`
   }
 `;
 
+const BestTopBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const TopBox = styled.div`
+  display: flex;
+  justify-content: end;
+  margin-bottom: 1vh;
+  width: 100%;
+`;
+
 const Dormitory = styled.div`
   ${(props) => props.theme.fonts.title}
   font-size: 40px;
-  text-align: center;
-  margin-bottom: 10px;
+  text-align: start;
+  margin-left: 1vw;
+`;
+
+const Star = styled.img`
+  width: 35px;
+  cursor: pointer;
 `;
 
 const Title = styled.div`
@@ -256,6 +289,7 @@ const Title = styled.div`
   border-radius: 10px;
   background-color: ${(props) => props.theme.colors.lightBlue};
   ${(props) => props.theme.fonts.text5}
+  font-size: 25px;
 `;
 
 const TagBox = styled.div`
