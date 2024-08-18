@@ -27,6 +27,7 @@ const List = ({
     };
 
     window.addEventListener("resize", handleResize);
+
     handleResize();
 
     return () => {
@@ -61,15 +62,23 @@ const List = ({
 
   return (
     <div>
-      {title.toLowerCase().includes(search.toLowerCase()) && (
+      {title.includes(search) && (
         <Wrapper
           status={status}
           onClick={status !== "모집완료" ? onClick : null}
         >
           <LeftBox>
             <div>
-              {gender === "FEMALE" && <Title>♀ {title}</Title>}
-              {gender === "MALE" && <Title>♂ {title}</Title>}
+              {gender === "FEMALE" && (
+                <FemaleTitle>
+                  <span>♀</span> {title}
+                </FemaleTitle>
+              )}
+              {gender === "MALE" && (
+                <MaleTitle>
+                  <span>♂</span> {title}
+                </MaleTitle>
+              )}
             </div>
             <ContentsBox>
               <Contents>{truncateText(contents, maxLength)}</Contents>
@@ -145,9 +154,25 @@ const LeftBox = styled.div`
   }
 `;
 
-const Title = styled.p`
+const FemaleTitle = styled.p`
   ${({ theme }) => theme.fonts.text4}
   font-size: 25px;
+  span {
+    font-size: 30px;
+    color: red;
+    margin-right: 5px;
+    padding-top: 10px;
+  }
+`;
+
+const MaleTitle = styled.p`
+  ${({ theme }) => theme.fonts.text4}
+  font-size: 25px;
+  span {
+    font-size: 30px;
+    color: blue;
+    margin-right: 5px;
+  }
 `;
 
 const TextBox = styled.div`
