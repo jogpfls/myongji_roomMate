@@ -5,11 +5,15 @@ import { Client } from "@stomp/stompjs";
 import ChatOut from "../images/ChatOut.svg";
 import ChatRoomList from "../components/ChatRoomList";
 import { getUserData } from "../api/MyApi";
+import { useLocation } from "react-router-dom";
 
 const ChatPage = () => {
+  const location = useLocation();
   const [messages, setMessages] = useState({});
   const [inputMessage, setInputMessage] = useState("");
-  const [activeRoomId, setActiveRoomId] = useState(null);
+  const [activeRoomId, setActiveRoomId] = useState(
+    location.state?.roomId || null
+  );
   const [activeRoomTitle, setActiveRoomTitle] = useState("");
   const [stompClient, setStompClient] = useState(null);
   const [userName, setUserName] = useState("");
@@ -31,6 +35,22 @@ const ChatPage = () => {
 
     fetchUserName();
   }, []);
+
+  useEffect(() => {
+    if (location.state?.roomTitle) {
+      setActiveRoomTitle(location.state.roomTitle);
+    }
+
+    if (
+      location.state?.currentParticipants !== undefined &&
+      location.state?.totalParticipants !== undefined
+    ) {
+      setRoomParticipants({
+        current: location.state.currentParticipants,
+        total: location.state.totalParticipants,
+      });
+    }
+  }, [location.state]);
 
   useEffect(() => {
     if (!activeRoomId || !userName) return;
@@ -87,7 +107,7 @@ const ChatPage = () => {
         destination: `/pub/ws/chat/${activeRoomId}/enter`,
         body: JSON.stringify({
           roomId: activeRoomId,
-          // sender: userName,
+          sender: userName,
         }),
       });
     };
@@ -139,6 +159,27 @@ const ChatPage = () => {
     setRoomParticipants({ current, total });
   };
 
+  const handleExitRoom = () => {
+    if (stompClient && stompClient.active && activeRoomId) {
+      // 서버에 퇴장 메시지 발행 -> 아직 하는중
+      stompClient.publish({
+        destination: `/pub/ws/chat/${activeRoomId}/quit`,
+        body: JSON.stringify({
+          roomId: activeRoomId,
+          sender: userName,
+        }),
+      });
+
+      // UI 업데이트 및 채팅방 나가기 로직
+      setActiveRoomId(null);
+      setActiveRoomTitle("");
+      setRoomParticipants({ current: 0, total: 0 });
+      setMessages({});
+    } else {
+      console.error("STOMP client is not connected or room is not selected.");
+    }
+  };
+
   const formatTimestamp = (timestamp) => {
     const date = new Date(timestamp);
     return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
@@ -156,7 +197,7 @@ const ChatPage = () => {
             </RoomStatus>
           </RoomInfo>
           <HeaderRight>
-            <ExitButton>
+            <ExitButton onClick={handleExitRoom}>
               <img src={ChatOut} alt="나가기" />
             </ExitButton>
           </HeaderRight>
