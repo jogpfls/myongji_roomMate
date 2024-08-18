@@ -84,9 +84,10 @@ const DormitoryPage = () => {
             {name === "dormitory3" || name === "myounghyun" ? (
               <Button onClick={openModal}>글쓰기</Button>
             ) : (
-              <Button 
-              name={name}
-              onClick={() => navigate(`/dormitory/${name}/write`)}>
+              <Button
+                name={name}
+                onClick={() => navigate(`/dormitory/${name}/write`)}
+              >
                 글쓰기
               </Button>
             )}
@@ -105,14 +106,14 @@ const DormitoryPage = () => {
                 total={post.total}
                 category={post.categoryList}
                 current={post.current}
+                gender={post.gender}
                 onClick={() => handleNavigate(post)}
               />
             ))}
           </ListWrapper>
         </BottomWrapper>
       </Wrapper>
-      {choseModal && <CountChoseBox name = {name}
-      closeModal={closeModal} />}
+      {choseModal && <CountChoseBox name={name} closeModal={closeModal} />}
     </Background>
   );
 };
@@ -151,16 +152,16 @@ const Loading = styled.div`
   width: 100px;
   height: 100px;
   border-radius: 50%;
-  border: 2px solid ${({theme})=>theme.colors.lightBlue};
-  border-top: 2px solid ${({theme})=>theme.colors.deepBlue};
-  border-right: 2px solid ${({theme})=>theme.colors.deepBlue};
+  border: 2px solid ${({ theme }) => theme.colors.lightBlue};
+  border-top: 2px solid ${({ theme }) => theme.colors.deepBlue};
+  border-right: 2px solid ${({ theme }) => theme.colors.deepBlue};
   animation: ${rotate} 1.8s linear infinite;
 `;
 
 const LoadingText = styled.div`
   margin-top: 10px;
   font-size: 15px;
-  color: ${({theme})=>theme.colors.deepBlue};
+  color: ${({ theme }) => theme.colors.deepBlue};
   text-transform: uppercase;
   animation: ${fadeInOut} 2s linear infinite;
 `;
@@ -175,7 +176,7 @@ const Wrapper = styled.div`
   width: 70%;
   margin: 4.5vh 0;
 
-  @media screen and (max-width: ${({theme})=>theme.breakpoints.mobile}){
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: 80%;
   }
 `;
@@ -226,7 +227,7 @@ const Search = styled.input`
     outline: none;
   }
 
-  @media screen and (max-width: ${({theme})=>theme.breakpoints.mobile}){
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     font-size: 15px;
   }
 `;
