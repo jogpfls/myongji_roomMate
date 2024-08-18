@@ -108,10 +108,10 @@ const MyPage = () => {
     if (listWrapperRef.current) {
       const width = window.innerWidth;
       let scrollAmount = 0;
-      if (width >= 480) {
+      if (width > 850) {
         scrollAmount = width * 0.26;
-      } else if (width > 480 && width <=850) {
-        scrollAmount = width * 0.28;
+      } else if (width > 480) {
+        scrollAmount = width * 0.29;
       } else {
         scrollAmount = width * 0.58;
       }
@@ -126,10 +126,10 @@ const MyPage = () => {
     if (likeWrapperRef.current) {
       const width = window.innerWidth;
       let scrollAmount = 0;
-      if (width >= 480) {
+      if (width > 850) {
         scrollAmount = width * 0.26;
-      } else if (width > 480 && width <=850) {
-        scrollAmount = width * 0.28;
+      } else if (width > 480) {
+        scrollAmount = width * 0.29;
       } else {
         scrollAmount = width * 0.58;
       }
