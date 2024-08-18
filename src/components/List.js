@@ -58,15 +58,24 @@ const List = ({
   };
 
   let visibleCategoriesCount;
-  if (viewportWidth <= 600) {
+  if(viewportWidth <=480){
+    visibleCategoriesCount = 1;
+  }else if (viewportWidth <= 630) {
     visibleCategoriesCount = 2;
-  } else if (viewportWidth <= 820) {
+  } else if (viewportWidth <= 850) {
     visibleCategoriesCount = 3;
   } else if (viewportWidth <= 1150) {
-    visibleCategoriesCount = 6;
+    visibleCategoriesCount = 4;
   } else {
-    visibleCategoriesCount = 7;
+    visibleCategoriesCount = 6;
   }
+
+  const truncateCategory = (category) => {
+    if (category.length > 5) {
+      return category.slice(0, 5) + "...";
+    }
+    return category;
+  };
 
   return (
     <div>
@@ -110,7 +119,7 @@ const List = ({
                 {category
                   .slice(0, visibleCategoriesCount)
                   .map((data, index) => (
-                    <Category key={index}>#{data}</Category>
+                    <Category key={index}>#{truncateCategory(data)}</Category>
                   ))}
                 {category.length > visibleCategoriesCount && (
                   <Ellipsis>#···</Ellipsis>
@@ -178,6 +187,7 @@ const LeftBox = styled.div`
 const FemaleTitle = styled.p`
   ${({ theme }) => theme.fonts.text4}
   font-size: 25px;
+  white-space: nowrap;
   span {
     font-size: 30px;
     margin-right: 5px;
@@ -218,6 +228,7 @@ const ChatTextBox = styled.div`
 const Count = styled.p`
   color: ${({ theme, status }) =>status ? "black" :  theme.colors.gray};
   font-size: 13px;
+  white-space: nowrap;
 `;
 
 const TextBox = styled.div`
