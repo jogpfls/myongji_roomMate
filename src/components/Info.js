@@ -9,6 +9,7 @@ import {
 const Info = ({ isEditing }) => {
   const [items, setItems] = useState([]);
   const [newItem, setNewItem] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const fetchUserCategories = async () => {
@@ -30,7 +31,9 @@ const Info = ({ isEditing }) => {
   }, []);
 
   const addItem = async () => {
+    if (isSubmitting) return;
     if (newItem.trim()) {
+      setIsSubmitting(true);
       try {
         await addUserCategory(newItem.trim());
         const response = await getUserCategories();
@@ -43,7 +46,9 @@ const Info = ({ isEditing }) => {
         setItems(categories);
         setNewItem("");
       } catch (error) {
-        console.error("Info추가에 실패했습니다.", error);
+        console.error("Info 추가에 실패했습니다.", error);
+      } finally {
+        setIsSubmitting(false);
       }
     }
   };
@@ -61,6 +66,7 @@ const Info = ({ isEditing }) => {
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
+      e.preventDefault();
       addItem();
     }
   };
