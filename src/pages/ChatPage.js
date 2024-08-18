@@ -167,12 +167,14 @@ const ChatPage = () => {
               <SenderName sent={message.sender === userName}>
                 {message.sender}
               </SenderName>
-              <MessageText sent={message.sender === userName}>
-                {message.content}
-              </MessageText>
-              <Timestamp sent={message.sender === userName}>
-                {formatTimestamp(message.timestamp)}{" "}
-              </Timestamp>
+              <MessageContainer sent={message.sender === userName}>
+                <MessageText sent={message.sender === userName}>
+                  {message.content}
+                </MessageText>
+                <Timestamp sent={message.sender === userName}>
+                  {formatTimestamp(message.timestamp)}
+                </Timestamp>
+              </MessageContainer>
             </Message>
           ))}
         </ChatMessages>
@@ -266,6 +268,12 @@ const Message = styled.div`
   margin-bottom: 10px;
 `;
 
+const MessageContainer = styled.div`
+  display: flex;
+  flex-direction: ${({ sent }) => (sent ? "row-reverse" : "row")};
+  align-items: center;
+`;
+
 const SenderName = styled.span`
   ${(props) => props.theme.fonts.text4};
   font-size: 15px;
@@ -288,7 +296,9 @@ const MessageText = styled.p`
 const Timestamp = styled.span`
   font-size: 12px;
   color: #888;
-  margin-top: 5px;
+  margin: 0 8px;
+  order: ${({ sent }) => (sent ? "1" : "2")};
+  margin-top: 20px;
 `;
 
 const ChatInputContainer = styled.footer`
