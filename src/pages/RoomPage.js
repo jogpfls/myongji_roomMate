@@ -7,6 +7,7 @@ import {
   getBoardDetail,
   deleteBoardDetail,
   patchBoardDetail,
+  postChat,
 } from "../api/RoomApi";
 import Modal from "../components/Modal";
 
@@ -24,15 +25,17 @@ const RoomPage = () => {
   const [post, setPost] = useState(null);
   const [patchPost, setPatchPost] = useState(false);
   const [editedContent, setEditedContent] = useState("");
+  const [roomId, setRoomId] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
 
   useEffect(() => {
-    console.log(`Fetching data for dormitory: ${name}, room ID: ${id}`);
+    console.log(`Fetching data for dormitory: ${name}, board ID: ${id}`);
     getBoardDetail(id, name)
       .then((response) => {
         console.log("게시글 조회 성공", response.data);
-        setPost(response.data.data);
+        setPost(response.data);
+        setRoomId(response.roomId);
       })
       .catch((error) => {
         console.error("게시글 조회 실패:", error);
@@ -91,6 +94,26 @@ const RoomPage = () => {
     setEditedContent(e.target.value);
   };
 
+  const handleChat = async () => {
+    try {
+      const response = await postChat(roomId);
+      if (response.statusCode === "200 OK") {
+        console.log("해당 채팅방 불러오기 성공:", response.data);
+        navigate("/chat");
+      } else {
+        setModalMessage(response.message);
+        setModalOpen(true);
+      }
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message ||
+        "해당 채팅방 불러오기 중 오류가 발생했습니다.";
+
+      console.error("해당 채팅방 불러오기 실패:", error);
+      setModalMessage(`${errorMessage}`);
+      setModalOpen(true);
+    }
+  };
   const closeModal = () => {
     setModalOpen(false);
   };
@@ -125,7 +148,7 @@ const RoomPage = () => {
               <ButtonBox>
                 <Button onClick={changeClick}>수정하기</Button>
               </ButtonBox>
-              <Button onClick={() => navigate("/chat")}>채팅하기</Button>
+              <Button onClick={handleChat}>채팅하기</Button>
             </>
           ) : (
             <BoxBox>
