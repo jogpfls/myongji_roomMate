@@ -101,7 +101,6 @@ const DormitoryPage = () => {
                 title={post.title}
                 contents={post.content}
                 search={filteredSearch}
-                status={post.status}
                 date={post.createdAt}
                 total={post.total}
                 category={post.categoryList}

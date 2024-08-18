@@ -5,7 +5,6 @@ import full from "../images/fullStar.svg";
 const List = ({
   search,
   title,
-  status,
   onClick,
   contents,
   date,
@@ -17,6 +16,7 @@ const List = ({
 }) => {
   const [maxLength, setMaxLength] = useState(12);
   const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
+  const [status, setStatus] = useState(false);
   
   useEffect(() => {
     const handleResize = () => {
@@ -45,12 +45,18 @@ const List = ({
     return text;
   };
 
+  useEffect(()=>{
+    if(total === current){
+      setStatus(true);
+    }
+  },[total, current])
+
   const formatDate = (dateString) => {
     if (!dateString) return "";
     const [datePart] = dateString.split("T");
     return datePart ? datePart.replace(/-/g, ".") : "";
   };
-  
+
   let visibleCategoriesCount;
   if (viewportWidth <= 600) {
     visibleCategoriesCount = 2;
@@ -67,28 +73,28 @@ const List = ({
       {title.includes(search) && (
         <Wrapper
           status={status}
-          onClick={status !== "모집완료" ? onClick : null}
+          onClick={!status ? onClick : null}
         >
           <AllBox>
             <TopBox>
               <LeftBox>
               {gender === "FEMALE" && (
-                <FemaleTitle>
+                <FemaleTitle status={status}>
                   <span>♀</span> {title}
                 </FemaleTitle>
               )}
               {gender === "MALE" && (
-                <MaleTitle>
+                <MaleTitle status={status}>
                   <span>♂</span> {title}
                 </MaleTitle>
               )}
               <ChatTextBox status={status}>
-              {status === "모집완료" ? (
-                <ChatText>모집 완료</ChatText>
+              {status ? (
+                <Count status={status}>({current}/{total}) 채팅 인원이 가득 찼습니다.</Count>
               ) : (
                 <>
                   <Count>
-                    {current}/{total} 모집 중..
+                    {current}/{total} 채팅 중..
                   </Count>
                 </>
               )}
@@ -121,20 +127,20 @@ const List = ({
 
 const Wrapper = styled.div`
   background-color: ${({ theme, status }) =>
-    status === "모집완료" ? theme.colors.gray3 : theme.colors.white};
+    status ? theme.colors.gray3 : theme.colors.white};
   width: 100%;
   height: 25vh;
   border-radius: 10px;
   display: flex;
-  cursor: ${({ status }) => (status === "모집완료" ? "" : "pointer")};
+  cursor: ${({ status }) => (status ? "" : "pointer")};
   transition: background-color 0.2s;
   margin-bottom: 2.3vh;
   border: solid 1px ${({ theme }) => theme.colors.gray2};
 
   &:hover {
     background-color: ${({ theme, status }) =>
-      status === "모집완료" ? "none" : theme.colors.lightBlue};
-    border: ${({ status }) => (status === "모집완료" ? "" : "none")};
+      status ? "none" : theme.colors.lightBlue};
+    border: ${({ status }) => (status ? "" : "none")};
   }
 
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
@@ -174,8 +180,8 @@ const FemaleTitle = styled.p`
   font-size: 25px;
   span {
     font-size: 30px;
-    color: red;
     margin-right: 5px;
+    color : ${({theme, status})=> status ? theme.colors.gray : "red"};
   }
 
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
@@ -188,7 +194,7 @@ const MaleTitle = styled.p`
   font-size: 25px;
   span {
     font-size: 30px;
-    color: blue;
+    color: ${({theme, status})=> status ? theme.colors.gray : "blue"};
     margin-right: 5px;
   }
 
@@ -206,11 +212,11 @@ const ChatTextBox = styled.div`
   border-radius: 3px;
   margin-top: 1.3vh;
   padding: 0 0.5vw;
-  background-color: ${({theme, status})=>status ==="모집완료" ? theme.colors.gray : theme.colors.lightBlue};
+  background-color: ${({theme, status})=>status ? theme.colors.gray2 : theme.colors.lightBlue};
 `;
 
 const Count = styled.p`
-  color: ${({ theme }) => theme.colors.gray};
+  color: ${({ theme, status }) =>status ? "black" :  theme.colors.gray};
   font-size: 13px;
 `;
 
@@ -256,12 +262,6 @@ const Category = styled.p`
 const Date = styled.p`
   color: ${({ theme }) => theme.colors.gray};
   font-size: 15px;
-`;
-
-const ChatText = styled.p`
-  ${({ theme }) => theme.fonts.text4};
-  color: ${({ theme }) => theme.colors.gray};
-  font-size: 25px;
 `;
 
 const Ellipsis = styled.p`
