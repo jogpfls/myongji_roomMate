@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { FaHome, FaBuilding, FaBars, FaTimes } from "react-icons/fa";
 import { logout } from "../api/LoginApi";
 import Cookies from "js-cookie";
-import Modal from "../components/Modal";
+import Modal from "./Modal";
 
 const Header = () => {
   const navigate = useNavigate();
