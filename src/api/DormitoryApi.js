@@ -1,4 +1,5 @@
 import { Axios } from "./Axios";
+import Cookies from "js-cookie";
 
 export const fetchDormitoryPosts = async (name) => {
   try {
@@ -10,6 +11,9 @@ export const fetchDormitoryPosts = async (name) => {
       return [];
     }
   } catch (error) {
+    if (error.response && error.response.status === 401) {
+      Cookies.remove("accessToken");
+    }
     console.error("기숙사 조회 실패: ", error);
     return [];
   }

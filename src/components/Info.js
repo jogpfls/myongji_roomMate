@@ -85,7 +85,7 @@ const Info = ({ isEditing }) => {
       <ItemsContainer>
         {items.length === 0 ? (
           <>
-            <BoxItem>
+            <BoxItem status="보기" >
               <SquareBox isPlaceholder />
               <PlaceholderLabel>ex. 비흡연자 선호</PlaceholderLabel>
             </BoxItem>
@@ -143,11 +143,13 @@ const BoxListContainer = styled.div`
 
 const ItemsContainer = styled.div`
   flex-grow: 1;
-  overflow-y: auto;
-  margin-bottom: 10px;
   display: flex;
   flex-wrap: wrap;
-  gap: 0 5%;
+  overflow-y: auto;
+  gap: 10px 20px;
+  justify-content: flex-start;
+  align-content: flex-start;
+  margin-top: 1vh;
 
   @media (max-width: 1070px) {
     display: inline;
@@ -160,7 +162,8 @@ const BoxItem = styled.div`
   margin-bottom: 20px;
   display: flex;
   align-items: center;
-  flex-basis: calc(50% - 1vw);
+  flex-basis: ${({status})=>status !== "보기" && "calc(50% - 1.1vw)"};
+  
 
   @media (max-width: ${({theme})=>theme.breakpoints.tablet}) {
     flex-basis: none;
