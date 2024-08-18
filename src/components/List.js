@@ -1,11 +1,20 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { getUserData } from "../api/MyApi";
 
-const List = ({ search, title, status, onClick, contents, date, total, category, current }) => {
+const List = ({
+  search,
+  title,
+  status,
+  onClick,
+  contents,
+  date,
+  total,
+  category,
+  current,
+  gender,
+}) => {
   const [maxLength, setMaxLength] = useState(12);
   const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
-  const [data, setData] = useState([]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -18,7 +27,6 @@ const List = ({ search, title, status, onClick, contents, date, total, category,
     };
 
     window.addEventListener("resize", handleResize);
-
     handleResize();
 
     return () => {
@@ -41,8 +49,8 @@ const List = ({ search, title, status, onClick, contents, date, total, category,
   };
 
   let visibleCategoriesCount;
-  if (viewportWidth <=600){
-    visibleCategoriesCount=1;
+  if (viewportWidth <= 600) {
+    visibleCategoriesCount = 1;
   } else if (viewportWidth <= 820) {
     visibleCategoriesCount = 2;
   } else if (viewportWidth <= 1150) {
@@ -51,35 +59,31 @@ const List = ({ search, title, status, onClick, contents, date, total, category,
     visibleCategoriesCount = 4;
   }
 
-  useEffect(()=>{
-    const fetchData = async() => {
-      const user = await getUserData();
-      setData(user);
-    }
-    fetchData();
-  }, [data])
-
   return (
     <div>
-      {title.includes(search) && (
+      {title.toLowerCase().includes(search.toLowerCase()) && (
         <Wrapper
           status={status}
           onClick={status !== "모집완료" ? onClick : null}
         >
           <LeftBox>
             <div>
-              {data.gender === "FEMALE" && <Title>♀ {title}</Title>}
-              {data.gender === "MALE" && <Title>♂ {title}</Title>}
+              {gender === "FEMALE" && <Title>♀ {title}</Title>}
+              {gender === "MALE" && <Title>♂ {title}</Title>}
             </div>
             <ContentsBox>
               <Contents>{truncateText(contents, maxLength)}</Contents>
             </ContentsBox>
             <TextBox>
               <CategoryBox>
-                {category.slice(0, visibleCategoriesCount).map((data, index) => (
-                  <Category key={index}>#{data}</Category>
-                ))}
-                {category.length > visibleCategoriesCount && <Ellipsis>#···</Ellipsis>}
+                {category
+                  .slice(0, visibleCategoriesCount)
+                  .map((data, index) => (
+                    <Category key={index}>#{data}</Category>
+                  ))}
+                {category.length > visibleCategoriesCount && (
+                  <Ellipsis>#···</Ellipsis>
+                )}
               </CategoryBox>
               <Date>{formatDate(date)}</Date>
             </TextBox>
@@ -90,7 +94,9 @@ const List = ({ search, title, status, onClick, contents, date, total, category,
                 <ChatText>모집 완료</ChatText>
               ) : (
                 <>
-                  <Count>{current}/{total} 모집 중..</Count>
+                  <Count>
+                    {current}/{total} 모집 중..
+                  </Count>
                   <ChatText>채팅방 입장하기</ChatText>
                 </>
               )}
