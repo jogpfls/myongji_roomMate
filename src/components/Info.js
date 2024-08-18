@@ -144,13 +144,27 @@ const BoxListContainer = styled.div`
 const ItemsContainer = styled.div`
   flex-grow: 1;
   overflow-y: auto;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 5%;
+
+  @media (max-width: 1070px) {
+    display: inline;
+    flex-wrap: none;
+    gap: none;
+  }
 `;
 
 const BoxItem = styled.div`
   margin-bottom: 20px;
   display: flex;
   align-items: center;
+  flex-basis: calc(50% - 1vw);
+
+  @media (max-width: ${({theme})=>theme.breakpoints.tablet}) {
+    flex-basis: none;
+  }
 `;
 
 const SquareBox = styled.div`
@@ -184,6 +198,8 @@ const RemoveButton = styled.button`
 const Label = styled.div`
   margin-left: 10px;
   font-size: 20px;
+  display: flex;
+  flex-wrap: wrap;
 `;
 
 const PlaceholderLabel = styled(Label)`
@@ -193,6 +209,7 @@ const PlaceholderLabel = styled(Label)`
 const AddItemContainer = styled.div`
   display: flex;
   align-items: center;
+  justify-content: space-between;
 
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: 73vw;
@@ -203,13 +220,20 @@ const AddItemContainer = styled.div`
 const InputBox = styled.div`
   width: 19.3vw;
   padding:8px 0;
-  border-radius: 5px;
+  border-radius: 10px;
   border: 1px solid ${(props) => props.theme.colors.deepBlue2};
   margin-right: 10px;
   outline: none;
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    width: 75%;
+    border-radius: 10px;
+    margin-right: 0;
+  }
+
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: 75%;
     border-radius: 10px;
@@ -220,6 +244,7 @@ const Input = styled.input`
   font-size: 16px;
   outline: none;
   padding-left: 8px;
+  width: 15vw;
 
   &:hover{
     outline: none;
@@ -239,6 +264,7 @@ const AddButton = styled.button`
   font-size: 14px;
   border-radius: 5px;
   cursor: pointer;
+  white-space: nowrap;
 
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: 12vw;

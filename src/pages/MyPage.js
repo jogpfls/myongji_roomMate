@@ -517,7 +517,6 @@ const Info = styled.div`
   line-height: 1.5em;
   display: flex;
   white-space: nowrap;
-  //background-color: red;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: auto;
@@ -553,14 +552,15 @@ const LBox = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 30px;
+  padding: 20px;
   margin-bottom: 10px;
 
+
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    min-height: 40px;
-    height: 80%;
-    padding: 30px 0 0 20px;
+    padding: 2vh 6vw;
     border-radius: 20px;
+    min-height: 0px;
+    height: 200px;
   }
 `;
 
