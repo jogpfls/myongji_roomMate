@@ -5,14 +5,22 @@ import { Client } from "@stomp/stompjs";
 import ChatOut from "../images/ChatOut.svg";
 import ChatRoomList from "../components/ChatRoomList";
 import { getUserData } from "../api/MyApi";
+import { useLocation } from "react-router-dom";
 
 const ChatPage = () => {
+  const location = useLocation();
   const [messages, setMessages] = useState({});
   const [inputMessage, setInputMessage] = useState("");
-  const [activeRoomId, setActiveRoomId] = useState(null);
+  const [activeRoomId, setActiveRoomId] = useState(
+    location.state?.roomId || null
+  );
   const [activeRoomTitle, setActiveRoomTitle] = useState("");
   const [stompClient, setStompClient] = useState(null);
   const [userName, setUserName] = useState("");
+  const [roomParticipants, setRoomParticipants] = useState({
+    current: 0,
+    total: 0,
+  });
   const chatMessagesRef = useRef(null);
 
   useEffect(() => {
@@ -27,6 +35,22 @@ const ChatPage = () => {
 
     fetchUserName();
   }, []);
+
+  useEffect(() => {
+    if (location.state?.roomTitle) {
+      setActiveRoomTitle(location.state.roomTitle);
+    }
+
+    if (
+      location.state?.currentParticipants !== undefined &&
+      location.state?.totalParticipants !== undefined
+    ) {
+      setRoomParticipants({
+        current: location.state.currentParticipants,
+        total: location.state.totalParticipants,
+      });
+    }
+  }, [location.state]);
 
   useEffect(() => {
     if (!activeRoomId || !userName) return;
@@ -56,7 +80,8 @@ const ChatPage = () => {
               roomMessages.some(
                 (msg) =>
                   msg.content === receivedMessage.content &&
-                  msg.sender === receivedMessage.sender
+                  msg.sender === receivedMessage.sender &&
+                  msg.timestamp === receivedMessage.timestamp
               )
             ) {
               return prevMessages;
@@ -68,6 +93,7 @@ const ChatPage = () => {
                 {
                   content: receivedMessage.content,
                   sender: receivedMessage.sender,
+                  timestamp: receivedMessage.timestamp,
                 },
               ],
             };
@@ -81,7 +107,7 @@ const ChatPage = () => {
         destination: `/pub/ws/chat/${activeRoomId}/enter`,
         body: JSON.stringify({
           roomId: activeRoomId,
-          // sender: userName,
+          sender: userName,
         }),
       });
     };
@@ -115,17 +141,6 @@ const ChatPage = () => {
         body: JSON.stringify(messagePayload),
       });
 
-      setMessages((prevMessages) => {
-        const updatedMessages = {
-          ...prevMessages,
-          [activeRoomId]: [
-            ...(prevMessages[activeRoomId] || []),
-            { content: inputMessage, sender: userName },
-          ],
-        };
-        console.log("Messages after send:", updatedMessages);
-        return updatedMessages;
-      });
       setInputMessage("");
     } else {
       console.error("STOMP client is not connected or input is empty.");
@@ -138,9 +153,36 @@ const ChatPage = () => {
     }
   };
 
-  const handleRoomClick = (roomId, roomTitle) => {
+  const handleRoomClick = (roomId, roomTitle, current, total) => {
     setActiveRoomId(roomId);
     setActiveRoomTitle(roomTitle);
+    setRoomParticipants({ current, total });
+  };
+
+  const handleExitRoom = () => {
+    if (stompClient && stompClient.active && activeRoomId) {
+      // 서버에 퇴장 메시지 발행 -> 아직 하는중
+      stompClient.publish({
+        destination: `/pub/ws/chat/${activeRoomId}/quit`,
+        body: JSON.stringify({
+          roomId: activeRoomId,
+          sender: userName,
+        }),
+      });
+
+      // UI 업데이트 및 채팅방 나가기 로직
+      setActiveRoomId(null);
+      setActiveRoomTitle("");
+      setRoomParticipants({ current: 0, total: 0 });
+      setMessages({});
+    } else {
+      console.error("STOMP client is not connected or room is not selected.");
+    }
+  };
+
+  const formatTimestamp = (timestamp) => {
+    const date = new Date(timestamp);
+    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   };
 
   return (
@@ -150,10 +192,12 @@ const ChatPage = () => {
         <ChatRoomHeader>
           <RoomInfo>
             <RoomTitle>{activeRoomTitle}</RoomTitle>
-            <RoomStatus>3/4 모집 중...</RoomStatus>
+            <RoomStatus>
+              ( {roomParticipants.current} / {roomParticipants.total} )
+            </RoomStatus>
           </RoomInfo>
           <HeaderRight>
-            <ExitButton>
+            <ExitButton onClick={handleExitRoom}>
               <img src={ChatOut} alt="나가기" />
             </ExitButton>
           </HeaderRight>
@@ -161,10 +205,17 @@ const ChatPage = () => {
         <ChatMessages ref={chatMessagesRef}>
           {(messages[activeRoomId] || []).map((message, index) => (
             <Message key={index} sent={message.sender === userName}>
-              <Timestamp sent={message.sender === userName}>12:13</Timestamp>
-              <MessageText sent={message.sender === userName}>
-                {message.content}
-              </MessageText>
+              <SenderName sent={message.sender === userName}>
+                {message.sender}
+              </SenderName>
+              <MessageContainer sent={message.sender === userName}>
+                <MessageText sent={message.sender === userName}>
+                  {message.content}
+                </MessageText>
+                <Timestamp sent={message.sender === userName}>
+                  {formatTimestamp(message.timestamp)}
+                </Timestamp>
+              </MessageContainer>
             </Message>
           ))}
         </ChatMessages>
@@ -207,6 +258,7 @@ const ChatRoomHeader = styled.header`
   padding: 20px;
   border-bottom: 2px solid ${(props) => props.theme.colors.gray2};
 `;
+
 const RoomInfo = styled.div``;
 
 const RoomTitle = styled.h3`
@@ -252,9 +304,23 @@ const ChatMessages = styled.div`
 
 const Message = styled.div`
   display: flex;
-  justify-content: ${({ sent }) => (sent ? "flex-end" : "flex-start")};
+  flex-direction: column;
+  align-items: ${({ sent }) => (sent ? "flex-end" : "flex-start")};
   margin-bottom: 10px;
+`;
+
+const MessageContainer = styled.div`
+  display: flex;
+  flex-direction: ${({ sent }) => (sent ? "row-reverse" : "row")};
   align-items: center;
+`;
+
+const SenderName = styled.span`
+  ${(props) => props.theme.fonts.text4};
+  font-size: 15px;
+  margin-bottom: 5px;
+  color: ${({ sent, theme }) =>
+    sent ? theme.colors.deepBlue2 : theme.colors.black};
 `;
 
 const MessageText = styled.p`
@@ -271,8 +337,8 @@ const MessageText = styled.p`
 const Timestamp = styled.span`
   font-size: 12px;
   color: #888;
-  margin: ${({ sent }) => (sent ? "0 10px 0 0" : "0 0 0 10px")};
-  order: ${({ sent }) => (sent ? "0" : "1")};
+  margin: 0 8px;
+  order: ${({ sent }) => (sent ? "1" : "2")};
   margin-top: 20px;
 `;
 

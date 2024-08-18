@@ -101,9 +101,16 @@ const RoomPage = () => {
   const handleChat = async () => {
     try {
       const response = await postChat(roomId);
-      if (response.statusCode === "200 OK") {
+      if (response.statusCode === "201 CREATED") {
         console.log("해당 채팅방 불러오기 성공:", response.data);
-        navigate("/chat");
+        navigate("/chat", {
+          state: {
+            roomId: roomId,
+            roomTitle: post.title,
+            currentParticipants: post.current,
+            totalParticipants: post.total,
+          },
+        });
       } else {
         setModalMessage(response.message);
         setModalOpen(true);
@@ -122,13 +129,12 @@ const RoomPage = () => {
     setModalOpen(false);
   };
 
-
   const handleStarClick = async () => {
     setPost((prevPost) => ({
       ...prevPost,
       like: !prevPost.like,
     }));
-  
+
     try {
       if (!post.like) {
         await postLikeApi(id);
@@ -146,11 +152,13 @@ const RoomPage = () => {
   return (
     <Container>
       <BestTopBox>
-          <Dormitory>{dormitoryNames[name]}</Dormitory>
+        <Dormitory>{dormitoryNames[name]}</Dormitory>
         <TopBox>
-          {post.like ? <Star src={full} onClick={handleStarClick}></Star> :
-          <Star src={empty} onClick={handleStarClick}></Star>}
-            
+          {post.like ? (
+            <Star src={full} onClick={handleStarClick}></Star>
+          ) : (
+            <Star src={empty} onClick={handleStarClick}></Star>
+          )}
         </TopBox>
         <Title>{post.title}</Title>
       </BestTopBox>

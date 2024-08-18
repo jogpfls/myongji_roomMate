@@ -4,14 +4,16 @@ import { getChatRooms } from "../api/ChatApi";
 
 const ChatRoomList = ({ activeRoom, onRoomClick }) => {
   const [rooms, setRooms] = useState([]);
+  const [roomCount, setRoomCount] = useState(0);
 
   useEffect(() => {
     const fetchChatRooms = async () => {
       try {
         const chatRooms = await getChatRooms();
         setRooms(chatRooms);
+        setRoomCount(chatRooms.length);
       } catch (error) {
-        console.error("채팅방목록조회실패:", error);
+        console.error("채팅방 목록 조회 실패:", error);
       }
     };
 
@@ -20,15 +22,22 @@ const ChatRoomList = ({ activeRoom, onRoomClick }) => {
 
   return (
     <Container>
-      <Title>채팅방</Title>
+      <Title>
+        채팅방 <span>({roomCount})</span>
+      </Title>
       <RoomList>
         {rooms.map((room) => (
           <RoomItem
             key={room.id}
             active={room.id === activeRoom}
-            onClick={() => onRoomClick(room.id, room.title)}
+            onClick={() =>
+              onRoomClick(room.id, room.title, room.current, room.total)
+            }
           >
-            {room.title} ({room.memberCount})
+            {room.title}
+            <span>
+              ({room.current} / {room.total} 명)
+            </span>
           </RoomItem>
         ))}
       </RoomList>
@@ -46,10 +55,13 @@ const Container = styled.aside`
 
 const Title = styled.h2`
   padding: 25px 0;
-  ${(props) => props.theme.fonts.text7};
+  ${(props) => props.theme.fonts.text5};
   font-size: 30px;
   padding-left: 20px;
   border-bottom: 2px solid ${(props) => props.theme.colors.gray2};
+  span {
+    font-size: 20px;
+  }
 `;
 
 const RoomList = styled.ul`
@@ -64,4 +76,9 @@ const RoomItem = styled.li`
   border-bottom: 1px solid ${(props) => props.theme.colors.gray2};
   ${(props) => props.theme.fonts.text4};
   font-size: 20px;
+  span {
+    font-size: 15px;
+    color: ${(props) => props.theme.colors.gray};
+    margin-left: 5px;
+  }
 `;
