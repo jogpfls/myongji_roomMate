@@ -2,10 +2,13 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { login } from "../api/LoginApi";
+import Modal from "../components/Modal";
 
 const Login = () => {
   const [id, setId] = useState("");
   const [passwrd, setPassword] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = async () => {
@@ -14,12 +17,24 @@ const Login = () => {
       if (response.status === 201) {
         navigate("/");
       } else {
-        alert("로그인에 실패했습니다.");
+        setModalMessage("로그인에 실패했습니다.");
+        setModalOpen(true);
       }
     } catch (error) {
       console.error("로그인 중 에러 발생:", error);
-      alert("통합로그인에 실패하였습니다.");
+      setModalMessage("통합로그인에 실패하였습니다.");
+      setModalOpen(true);
     }
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      handleLogin();
+    }
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
   };
 
   return (
@@ -45,6 +60,7 @@ const Login = () => {
                   placeholder="학번(601234)을 입력해주세요"
                   type="id"
                   onChange={(event) => setId(event.target.value)}
+                  onKeyDown={handleKeyDown} // Added event listener
                 />
               </InputFilledBox>
             </FilledBox>
@@ -55,6 +71,7 @@ const Login = () => {
                   placeholder="비밀번호를 입력해주세요"
                   type="password"
                   onChange={(event) => setPassword(event.target.value)}
+                  onKeyDown={handleKeyDown}
                 />
               </InputFilledBox>
             </FilledBox>
@@ -66,6 +83,13 @@ const Login = () => {
           )}
         </LoginBox>
       </Wrapper>
+
+      <Modal
+        isOpen={modalOpen}
+        onClose={closeModal}
+        title="알림"
+        message={modalMessage}
+      />
     </AllWrapper>
   );
 };

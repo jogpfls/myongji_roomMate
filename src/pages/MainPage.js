@@ -5,8 +5,9 @@ import { useNavigate } from "react-router-dom";
 import Map from "../components/Map";
 import { scroller } from "react-scroll";
 import Cookies from "js-cookie";
-import { getUserData } from "../api/MyApi"
+import { getUserData } from "../api/MyApi";
 import NameGender from "../components/NameGender";
+import Modal from "../components/Modal";
 
 const MainPage = () => {
   const navigate = useNavigate();
@@ -14,6 +15,8 @@ const MainPage = () => {
   const mapRef = useRef(null);
   const [userData, setUserData] = useState([]);
   const [modal, setModal] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -52,20 +55,20 @@ const MainPage = () => {
     const token = Cookies.get("accessToken");
 
     if (!token) {
-      alert("로그인이 필요합니다.");
-      navigate("/auth/login");
+      setModalMessage("로그인이 필요합니다.");
+      setModalOpen(true);
     } else {
       navigate(path);
     }
   };
 
-  useEffect(()=>{
-    const fetchData = async() => {
-        const data = await getUserData();
-        setUserData(data);
-    }
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getUserData();
+      setUserData(data);
+    };
     fetchData();
-  },[])
+  }, []);
 
   useEffect(() => {
     if (userData.name === null || userData.gender === null) {
@@ -74,9 +77,11 @@ const MainPage = () => {
       setModal(false);
     }
   }, [userData]);
+
   const closeModal = () => {
-    setModal(false)
-  }
+    setModal(false);
+    setModalOpen(false);
+  };
 
   return (
     <div>
@@ -128,9 +133,14 @@ const MainPage = () => {
       >
         <Map />
       </AnimatedMapContainer>
-      {modal && 
-        <NameGender closeModal={closeModal} />
-      }
+      {modal && <NameGender closeModal={closeModal} />}
+
+      <Modal
+        isOpen={modalOpen}
+        onClose={closeModal}
+        title="알림"
+        message={modalMessage}
+      />
     </div>
   );
 };
