@@ -17,7 +17,7 @@ export const login = async (
       setModalMessage("세션이 만료되었습니다. 다시 로그인해주세요.");
       setModalOpen(true);
       navigate("/auth/login");
-    }, 3600 * 1000);
+    }, 1800000 * 2);
 
     return response;
   } catch (error) {
