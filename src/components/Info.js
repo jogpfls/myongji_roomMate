@@ -59,19 +59,44 @@ const Info = ({ isEditing }) => {
     }
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      addItem();
+    }
+  };
+
   return (
     <BoxListContainer>
       <ItemsContainer>
-        {items.map((item, index) => (
-          <BoxItem key={index}>
-            <SquareBox>
-              {isEditing && (
-                <RemoveButton onClick={() => removeItem(index)}>X</RemoveButton>
-              )}
-            </SquareBox>
-            <Label>{item.label}</Label>
-          </BoxItem>
-        ))}
+        {items.length === 0 ? (
+          <>
+            <BoxItem>
+              <SquareBox isPlaceholder />
+              <PlaceholderLabel>ex. 비흡연자 선호</PlaceholderLabel>
+            </BoxItem>
+            <BoxItem>
+              <SquareBox isPlaceholder />
+              <PlaceholderLabel>ex. 청결중요</PlaceholderLabel>
+            </BoxItem>
+            <BoxItem>
+              <SquareBox isPlaceholder />
+              <PlaceholderLabel>ex. 아침형인간</PlaceholderLabel>
+            </BoxItem>
+          </>
+        ) : (
+          items.map((item, index) => (
+            <BoxItem key={index}>
+              <SquareBox>
+                {isEditing && (
+                  <RemoveButton onClick={() => removeItem(index)}>
+                    X
+                  </RemoveButton>
+                )}
+              </SquareBox>
+              <Label>{item.label}</Label>
+            </BoxItem>
+          ))
+        )}
       </ItemsContainer>
       {isEditing && (
         <AddItemContainer>
@@ -79,6 +104,7 @@ const Info = ({ isEditing }) => {
             type="text"
             value={newItem}
             onChange={(e) => setNewItem(e.target.value)}
+            onKeyDown={handleKeyDown}
             placeholder="새 항목 추가"
           />
           <AddButton onClick={addItem}>추가</AddButton>
@@ -112,7 +138,8 @@ const BoxItem = styled.div`
 const SquareBox = styled.div`
   width: 23px;
   height: 23px;
-  background-color: ${(props) => props.theme.colors.blue2};
+  background-color: ${(props) =>
+    props.isPlaceholder ? props.theme.colors.gray2 : props.theme.colors.blue2};
   border-radius: 5px;
   position: relative;
   display: flex;
@@ -141,6 +168,10 @@ const Label = styled.div`
   font-size: 20px;
 `;
 
+const PlaceholderLabel = styled(Label)`
+  color: ${(props) => props.theme.colors.gray};
+`;
+
 const AddItemContainer = styled.div`
   display: flex;
   align-items: center;
@@ -158,6 +189,7 @@ const Input = styled.input`
   border-radius: 5px;
   border: 1px solid ${(props) => props.theme.colors.deepBlue2};
   margin-right: 10px;
+  outline: none;
 
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: 75%;
