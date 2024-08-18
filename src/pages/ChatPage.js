@@ -161,10 +161,13 @@ const ChatPage = () => {
         <ChatMessages ref={chatMessagesRef}>
           {(messages[activeRoomId] || []).map((message, index) => (
             <Message key={index} sent={message.sender === userName}>
-              <Timestamp sent={message.sender === userName}>12:13</Timestamp>
+              <SenderName sent={message.sender === userName}>
+                {message.sender}
+              </SenderName>
               <MessageText sent={message.sender === userName}>
                 {message.content}
               </MessageText>
+              <Timestamp sent={message.sender === userName}>12:13</Timestamp>
             </Message>
           ))}
         </ChatMessages>
@@ -207,6 +210,7 @@ const ChatRoomHeader = styled.header`
   padding: 20px;
   border-bottom: 2px solid ${(props) => props.theme.colors.gray2};
 `;
+
 const RoomInfo = styled.div``;
 
 const RoomTitle = styled.h3`
@@ -252,9 +256,17 @@ const ChatMessages = styled.div`
 
 const Message = styled.div`
   display: flex;
-  justify-content: ${({ sent }) => (sent ? "flex-end" : "flex-start")};
+  flex-direction: column;
+  align-items: ${({ sent }) => (sent ? "flex-end" : "flex-start")};
   margin-bottom: 10px;
-  align-items: center;
+`;
+
+const SenderName = styled.span`
+  ${(props) => props.theme.fonts.text4};
+  font-size: 15px;
+  margin-bottom: 5px;
+  color: ${({ sent, theme }) =>
+    sent ? theme.colors.deepBlue2 : theme.colors.black};
 `;
 
 const MessageText = styled.p`
@@ -271,9 +283,7 @@ const MessageText = styled.p`
 const Timestamp = styled.span`
   font-size: 12px;
   color: #888;
-  margin: ${({ sent }) => (sent ? "0 10px 0 0" : "0 0 0 10px")};
-  order: ${({ sent }) => (sent ? "0" : "1")};
-  margin-top: 20px;
+  margin-top: 5px;
 `;
 
 const ChatInputContainer = styled.footer`
