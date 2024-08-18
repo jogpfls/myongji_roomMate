@@ -26,9 +26,14 @@ const ChatRoomList = ({ activeRoom, onRoomClick }) => {
           <RoomItem
             key={room.id}
             active={room.id === activeRoom}
-            onClick={() => onRoomClick(room.id, room.title)}
+            onClick={() =>
+              onRoomClick(room.id, room.title, room.current, room.total)
+            }
           >
-            {room.title} ({room.memberCount})
+            {room.title}
+            <span>
+              ({room.current} / {room.total} 명)
+            </span>
           </RoomItem>
         ))}
       </RoomList>
@@ -64,4 +69,9 @@ const RoomItem = styled.li`
   border-bottom: 1px solid ${(props) => props.theme.colors.gray2};
   ${(props) => props.theme.fonts.text4};
   font-size: 20px;
+  span {
+    font-size: 15px;
+    color: ${(props) => props.theme.colors.gray};
+    margin-left: 5px;
+  }
 `;

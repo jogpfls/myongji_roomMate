@@ -13,6 +13,10 @@ const ChatPage = () => {
   const [activeRoomTitle, setActiveRoomTitle] = useState("");
   const [stompClient, setStompClient] = useState(null);
   const [userName, setUserName] = useState("");
+  const [roomParticipants, setRoomParticipants] = useState({
+    current: 0,
+    total: 0,
+  });
   const chatMessagesRef = useRef(null);
 
   useEffect(() => {
@@ -138,9 +142,10 @@ const ChatPage = () => {
     }
   };
 
-  const handleRoomClick = (roomId, roomTitle) => {
+  const handleRoomClick = (roomId, roomTitle, current, total) => {
     setActiveRoomId(roomId);
     setActiveRoomTitle(roomTitle);
+    setRoomParticipants({ current, total });
   };
 
   return (
@@ -150,7 +155,9 @@ const ChatPage = () => {
         <ChatRoomHeader>
           <RoomInfo>
             <RoomTitle>{activeRoomTitle}</RoomTitle>
-            <RoomStatus>3/4 모집 중...</RoomStatus>
+            <RoomStatus>
+              ( {roomParticipants.current} / {roomParticipants.total} )
+            </RoomStatus>
           </RoomInfo>
           <HeaderRight>
             <ExitButton>
