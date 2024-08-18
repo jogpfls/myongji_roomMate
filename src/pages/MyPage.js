@@ -199,10 +199,13 @@ const MyPage = () => {
           </BBox>
         </Left>
         <Right>
-          <Title>INFO</Title>
-          <LBox>
-            <BoxList isEditing={isEditing} />
-          </LBox>
+            <Title>INFO</Title>
+            <LBox>
+              <BoxList isEditing={isEditing} />
+            </LBox>
+              <Title>Like</Title>
+                <LikeBox>
+                </LikeBox>
         </Right>
       </LRBox>
       <BtnBox>
@@ -453,13 +456,14 @@ const BBox = styled.div`
 const LBox = styled.div`
   border: 1.5px solid ${(props) => props.theme.colors.deepBlue2};
   border-radius: 30px;
-  height: 100%;
-  min-height: 450px;
+  height: 70%;
+  min-height: 300px;
   background-color: ${(props) => props.theme.colors.white};
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: 30px;
+  margin-bottom: 10px;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     min-height: 40px;
@@ -519,6 +523,19 @@ const Next = styled.img`
   left: 105%;
   cursor: pointer;
   z-index: 999;
+`;
+
+const LikeBox = styled.div`
+  border: 1.5px solid ${(props) => props.theme.colors.deepBlue2};
+  border-radius: 30px;
+  height: 30%;
+  min-height: 100px;
+  background-color: ${(props) => props.theme.colors.white};
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    width: auto;
+    border-radius: 20px;
+  }
 `;
 
 export default MyPage;
