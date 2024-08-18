@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import full from "../images/fullStar.svg";
 import empty from "../images/emptyStar.svg";
 
 const List = ({
