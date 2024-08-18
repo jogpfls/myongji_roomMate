@@ -53,3 +53,21 @@ export const postChat = async (roomId) => {
     throw error;
   }
 };
+
+export const postLikeApi = async (id) => {
+  try {
+    const response = await Axios.post(`/boards/${id}/like`);
+    console.log("좋아요 성공: ", response);
+  }catch(error){
+    console.error("좋아요 보내기 실패: ", error);
+  }
+}
+
+export const deleteLikeApi = async(id) => {
+  try{
+    const response = await Axios.delete(`/boards/${id}/like`);
+    console.log("좋아요 삭제 성공: ",response.data);
+  }catch(error){
+    console.error("좋아요 삭제 실패: ", error);
+  }
+}
