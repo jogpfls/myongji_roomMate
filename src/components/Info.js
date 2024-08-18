@@ -9,6 +9,8 @@ import {
 const Info = ({ isEditing }) => {
   const [items, setItems] = useState([]);
   const [newItem, setNewItem] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
     const fetchUserCategories = async () => {
@@ -30,7 +32,9 @@ const Info = ({ isEditing }) => {
   }, []);
 
   const addItem = async () => {
+    if (isSubmitting) return;
     if (newItem.trim()) {
+      setIsSubmitting(true);
       try {
         await addUserCategory(newItem.trim());
         const response = await getUserCategories();
@@ -43,7 +47,9 @@ const Info = ({ isEditing }) => {
         setItems(categories);
         setNewItem("");
       } catch (error) {
-        console.error("Info추가에 실패했습니다.", error);
+        console.error("Info 추가에 실패했습니다.", error);
+      } finally {
+        setIsSubmitting(false);
       }
     }
   };
@@ -61,7 +67,16 @@ const Info = ({ isEditing }) => {
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
+      e.preventDefault();
       addItem();
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const inputText = e.target.value;
+    if (inputText.length <= 10) {
+      setNewItem(inputText);
+      setCount(inputText.length);
     }
   };
 
@@ -70,7 +85,7 @@ const Info = ({ isEditing }) => {
       <ItemsContainer>
         {items.length === 0 ? (
           <>
-            <BoxItem>
+            <BoxItem status="보기" >
               <SquareBox isPlaceholder />
               <PlaceholderLabel>ex. 비흡연자 선호</PlaceholderLabel>
             </BoxItem>
@@ -100,13 +115,16 @@ const Info = ({ isEditing }) => {
       </ItemsContainer>
       {isEditing && (
         <AddItemContainer>
-          <Input
-            type="text"
-            value={newItem}
-            onChange={(e) => setNewItem(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder="새 항목 추가"
-          />
+          <InputBox>
+            <Input
+              type="text"
+              value={newItem}
+              onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
+              placeholder="새 항목 추가"
+            />
+            <Count>{count}/10</Count>
+          </InputBox>
           <AddButton onClick={addItem}>추가</AddButton>
         </AddItemContainer>
       )}
@@ -125,14 +143,32 @@ const BoxListContainer = styled.div`
 
 const ItemsContainer = styled.div`
   flex-grow: 1;
+  display: flex;
+  flex-wrap: wrap;
   overflow-y: auto;
-  margin-bottom: 20px;
+  gap: 3% 6%;
+  justify-content: flex-start;
+  align-content: flex-start;
+  margin-top: 1vh;
+  margin-left: 1px;
+
+  @media (max-width: 1070px) {
+    display: inline;
+    flex-wrap: none;
+    gap: none;
+  }
 `;
 
 const BoxItem = styled.div`
   margin-bottom: 20px;
   display: flex;
   align-items: center;
+  flex-basis: ${({status})=>status !== "보기" && "calc(50% - 1.1vw)"};
+  
+
+  @media (max-width: ${({theme})=>theme.breakpoints.tablet}) {
+    flex-basis: none;
+  }
 `;
 
 const SquareBox = styled.div`
@@ -166,6 +202,9 @@ const RemoveButton = styled.button`
 const Label = styled.div`
   margin-left: 10px;
   font-size: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  width: 90%;
 `;
 
 const PlaceholderLabel = styled(Label)`
@@ -175,6 +214,7 @@ const PlaceholderLabel = styled(Label)`
 const AddItemContainer = styled.div`
   display: flex;
   align-items: center;
+  justify-content: space-between;
 
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: 73vw;
@@ -182,19 +222,43 @@ const AddItemContainer = styled.div`
   }
 `;
 
-const Input = styled.input`
-  width: 100%;
-  padding: 8px;
-  font-size: 16px;
-  border-radius: 5px;
+const InputBox = styled.div`
+  width: 19.3vw;
+  padding:8px 0;
+  border-radius: 10px;
   border: 1px solid ${(props) => props.theme.colors.deepBlue2};
   margin-right: 10px;
   outline: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    width: 75%;
+    border-radius: 10px;
+    margin-right: 0;
+  }
 
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: 75%;
     border-radius: 10px;
   }
+`;
+
+const Input = styled.input`
+  font-size: 16px;
+  outline: none;
+  padding-left: 8px;
+  width: 15vw;
+
+  &:hover{
+    outline: none;
+  }
+`;
+
+const Count = styled.p`
+  font-size: 13px;
+  margin-right: 8px;
 `;
 
 const AddButton = styled.button`
@@ -205,6 +269,7 @@ const AddButton = styled.button`
   font-size: 14px;
   border-radius: 5px;
   cursor: pointer;
+  white-space: nowrap;
 
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: 12vw;

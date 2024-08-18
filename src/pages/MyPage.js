@@ -426,9 +426,9 @@ const TBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 5vw;
+  gap: 4vw;
   width: 100%;
-  padding: 30px;
+  padding: 30px 30px 30px 40px;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
     display: flex;
@@ -446,6 +446,8 @@ const TBox = styled.div`
     min-height: 0px;
     height: 200px;
     flex-direction: row;
+    gap: 0;
+    position: relative;
   }
 `;
 
@@ -465,6 +467,12 @@ const Img = styled.div`
   height: 100px;
   border-radius: 50%;
   background-color: ${(props) => props.theme.colors.lightBlue};
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}){
+    position: absolute;
+    left: 10%;
+    top: 15%;
+  }
 `;
 
 const NameBox = styled.div`
@@ -489,7 +497,18 @@ const Name = styled.div`
     outline: none;
     display: flex;
     text-align: center;
-    width: 100px;
+    max-width: 150px;
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}){
+    position: absolute;
+    bottom: 15%;
+    left: 10%;
+    input{
+      width: 65px;
+      text-align: start;
+      padding:0 10px;
+    }
   }
 `;
 
@@ -501,6 +520,9 @@ const Info = styled.div`
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: auto;
+    top: 25%;
+    position: absolute;
+    left: 55%;
   }
 `;
 
@@ -530,14 +552,15 @@ const LBox = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 30px;
+  padding: 20px;
   margin-bottom: 10px;
 
+
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    min-height: 40px;
-    height: 80%;
-    padding: 30px 0 0 20px;
+    padding: 2vh 6vw;
     border-radius: 20px;
+    min-height: 0px;
+    height: 200px;
   }
 `;
 
