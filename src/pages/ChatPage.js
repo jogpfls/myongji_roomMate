@@ -60,7 +60,8 @@ const ChatPage = () => {
               roomMessages.some(
                 (msg) =>
                   msg.content === receivedMessage.content &&
-                  msg.sender === receivedMessage.sender
+                  msg.sender === receivedMessage.sender &&
+                  msg.timestamp === receivedMessage.timestamp
               )
             ) {
               return prevMessages;
@@ -72,6 +73,7 @@ const ChatPage = () => {
                 {
                   content: receivedMessage.content,
                   sender: receivedMessage.sender,
+                  timestamp: receivedMessage.timestamp,
                 },
               ],
             };
@@ -119,17 +121,6 @@ const ChatPage = () => {
         body: JSON.stringify(messagePayload),
       });
 
-      setMessages((prevMessages) => {
-        const updatedMessages = {
-          ...prevMessages,
-          [activeRoomId]: [
-            ...(prevMessages[activeRoomId] || []),
-            { content: inputMessage, sender: userName },
-          ],
-        };
-        console.log("Messages after send:", updatedMessages);
-        return updatedMessages;
-      });
       setInputMessage("");
     } else {
       console.error("STOMP client is not connected or input is empty.");
@@ -146,6 +137,11 @@ const ChatPage = () => {
     setActiveRoomId(roomId);
     setActiveRoomTitle(roomTitle);
     setRoomParticipants({ current, total });
+  };
+
+  const formatTimestamp = (timestamp) => {
+    const date = new Date(timestamp);
+    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   };
 
   return (
@@ -174,7 +170,9 @@ const ChatPage = () => {
               <MessageText sent={message.sender === userName}>
                 {message.content}
               </MessageText>
-              <Timestamp sent={message.sender === userName}>12:13</Timestamp>
+              <Timestamp sent={message.sender === userName}>
+                {formatTimestamp(message.timestamp)}{" "}
+              </Timestamp>
             </Message>
           ))}
         </ChatMessages>
