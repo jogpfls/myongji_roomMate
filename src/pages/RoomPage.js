@@ -8,6 +8,8 @@ import {
   deleteBoardDetail,
   patchBoardDetail,
   postChat,
+  postLikeApi,
+  deleteLikeApi,
 } from "../api/RoomApi";
 import Modal from "../components/Modal";
 import full from "../images/fullStar.svg";
@@ -30,7 +32,6 @@ const RoomPage = () => {
   const [roomId, setRoomId] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
-  const [star, setStar] = useState(false);
 
   useEffect(() => {
     console.log(`Fetching data for dormitory: ${name}, board ID: ${id}`);
@@ -121,18 +122,34 @@ const RoomPage = () => {
     setModalOpen(false);
   };
 
-  const handleStarClick = () => {
-    setStar(!star);
-  }
+
+  const handleStarClick = async () => {
+    setPost((prevPost) => ({
+      ...prevPost,
+      like: !prevPost.like,
+    }));
+  
+    try {
+      if (!post.like) {
+        await postLikeApi(id);
+      } else {
+        await deleteLikeApi(id);
+      }
+    } catch (error) {
+      setPost((prevPost) => ({
+        ...prevPost,
+        like: !prevPost.like,
+      }));
+    }
+  };
 
   return (
     <Container>
       <BestTopBox>
           <Dormitory>{dormitoryNames[name]}</Dormitory>
         <TopBox>
-          {!star ? 
-          <Star src={empty} onClick={handleStarClick}></Star> :
-          <Star src={full} onClick={handleStarClick}></Star>}
+          {post.like ? <Star src={full} onClick={handleStarClick}></Star> :
+          <Star src={empty} onClick={handleStarClick}></Star>}
             
         </TopBox>
         <Title>{post.title}</Title>
