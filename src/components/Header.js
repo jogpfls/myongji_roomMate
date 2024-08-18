@@ -409,6 +409,7 @@ const Logout = styled.button`
   color: ${(props) => props.theme.colors.white};
   cursor: pointer;
   transition: background-color 0.3s ease;
+  font-size: 15px;
 
   &:hover {
     background-color: ${(props) => props.theme.colors.blueBlack};
@@ -417,6 +418,7 @@ const Logout = styled.button`
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: 100%;
     white-space: nowrap;
+    padding: 0 2vw;
   }
 `;
 
