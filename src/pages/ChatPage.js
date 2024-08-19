@@ -39,6 +39,11 @@ const ChatPage = () => {
     title: "",
     message: "",
   });
+  const [exitModal, setExitModal] = useState({
+    isOpen: false,
+    title: "",
+    message: "",
+  });
 
   const handleNameClick = async (name) => {
     try {
@@ -263,7 +268,12 @@ const ChatPage = () => {
       setActiveRoomTitle("");
       setRoomParticipants({ current: 0, total: 0 });
       setMessages({});
-      navigate("/main");
+
+      setExitModal({
+        isOpen: true,
+        title: "알림",
+        message: "채팅방을 나갔습니다.",
+      });
     } else {
       console.error("STOMP client 연결되지않음 또는 선택되지않음");
     }
@@ -359,6 +369,15 @@ const ChatPage = () => {
         onClose={() => setErrorModal({ ...errorModal, isOpen: false })}
         title={errorModal.title}
         message={errorModal.message}
+      />
+      <Modal
+        isOpen={exitModal.isOpen}
+        onClose={() => {
+          setExitModal({ ...exitModal, isOpen: false });
+          navigate("/main");
+        }}
+        title={exitModal.title}
+        message={exitModal.message}
       />
     </ChatContainer>
   );
