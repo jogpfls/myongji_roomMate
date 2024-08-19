@@ -271,6 +271,7 @@ const ChatRoomHeader = styled.header`
   align-items: center;
   padding: 20px;
   border-bottom: 2px solid ${(props) => props.theme.colors.gray2};
+  padding-bottom: 17px;
 `;
 
 const RoomInfo = styled.div``;
@@ -351,7 +352,7 @@ const MessageText = styled.p`
   padding: ${({ type }) => (type === "message" ? "10px" : "5px 10px")};
   border-radius: 10px;
   margin: 0;
-  max-width: ${({ type }) => (type === "message" ? "70%" : "100%")};
+  max-width: ${({ type }) => (type === "message" ? "80%" : "100%")};
   word-break: break-word;
   display: inline-block;
   text-align: ${({ type }) => (type === "message" ? "left" : "center")};
