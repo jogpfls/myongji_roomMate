@@ -255,7 +255,7 @@ export default ChatPage;
 
 const ChatContainer = styled.div`
   display: flex;
-  height: 94vh;
+  height: 92vh;
 `;
 
 const ChatRoom = styled.section`
