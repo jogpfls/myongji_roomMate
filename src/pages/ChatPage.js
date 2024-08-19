@@ -1,4 +1,10 @@
-import React, { useEffect, useState, useRef, useLayoutEffect } from "react";
+import React, {
+  useEffect,
+  useState,
+  useRef,
+  useLayoutEffect,
+  useCallback,
+} from "react";
 import styled from "styled-components";
 import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
@@ -111,6 +117,22 @@ const ChatPage = () => {
     }
   }, [location.state]);
 
+  const isJoinOrLeaveMessage = useCallback((messageContent) => {
+    return (
+      messageContent.includes("님이 채팅방을 퇴장했습니다.") ||
+      messageContent.includes("님이 채팅방에 입장했습니다.")
+    );
+  }, []);
+
+  const getModifiedContent = useCallback(
+    (messageContent) => {
+      return isJoinOrLeaveMessage(messageContent)
+        ? `--------------${messageContent}--------------`
+        : messageContent;
+    },
+    [isJoinOrLeaveMessage]
+  );
+
   useEffect(() => {
     if (!activeRoomId || !userName) return;
 
@@ -135,23 +157,20 @@ const ChatPage = () => {
           console.log("Received message:", receivedMessage);
           setMessages((prevMessages) => {
             const roomMessages = prevMessages[activeRoomId] || [];
-            const isJoinOrLeaveMessage =
-              receivedMessage.content.includes("님이 채팅방을 퇴장했습니다.") ||
-              receivedMessage.content.includes("님이 채팅방에 입장했습니다.");
 
-            const modifiedContent = isJoinOrLeaveMessage
-              ? `--------------${receivedMessage.content}--------------`
-              : receivedMessage.content;
+            const modifiedContent = getModifiedContent(receivedMessage.content);
+
             if (
               roomMessages.some(
                 (msg) =>
-                  msg.content === receivedMessage.content &&
+                  msg.content === modifiedContent &&
                   msg.sender === receivedMessage.sender &&
                   msg.timestamp === receivedMessage.timestamp
               )
             ) {
               return prevMessages;
             }
+
             return {
               ...prevMessages,
               [activeRoomId]: [
@@ -160,13 +179,15 @@ const ChatPage = () => {
                   content: modifiedContent,
                   sender: receivedMessage.sender,
                   timestamp: receivedMessage.timestamp,
-                  type: isJoinOrLeaveMessage ? "notification" : "message",
+                  type: isJoinOrLeaveMessage(receivedMessage.content)
+                    ? "notification"
+                    : "message",
                 },
               ],
             };
           });
         } catch (error) {
-          console.error("메시지 실패: ", error);
+          console.error("메시지 처리 실패: ", error);
         }
       });
 
@@ -186,7 +207,7 @@ const ChatPage = () => {
         client.deactivate();
       }
     };
-  }, [activeRoomId, userName]);
+  }, [activeRoomId, userName, getModifiedContent, isJoinOrLeaveMessage]);
 
   useLayoutEffect(() => {
     const chatMessagesElement = chatMessagesRef.current;
