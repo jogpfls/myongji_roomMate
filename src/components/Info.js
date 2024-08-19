@@ -214,10 +214,10 @@ const AddItemContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 1vh;
 
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: 73vw;
-    margin-bottom: 1vh;
   }
 `;
 
