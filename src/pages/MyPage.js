@@ -256,7 +256,7 @@ const MyPage = () => {
               <Next1 src={next} alt="화살표" onClick={handleWriteNext} />
             </WriteList>
           </BBox>
-              <Title>Like</Title>
+              <Title>관심글</Title>
                 <LikeBox>
                   <Back2 src={back} alt="화살표" onClick={handleLikeBack} />
                   <LikeScrollBox ref={likeWrapperRef}>
