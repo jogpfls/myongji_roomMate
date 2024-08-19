@@ -5,6 +5,7 @@ import { Client } from "@stomp/stompjs";
 import ChatOut from "../images/ChatOut.svg";
 import ChatRoomList from "../components/ChatRoomList";
 import { getUserData } from "../api/MyApi";
+import { getChatRooms } from "../api/ChatApi";
 import { useLocation } from "react-router-dom";
 
 const ChatPage = () => {
@@ -33,6 +34,38 @@ const ChatPage = () => {
 
     fetchUserName();
   }, []);
+
+  useEffect(() => {
+    const fetchRecentChatRoom = async () => {
+      try {
+        const chatRooms = await getChatRooms();
+        if (chatRooms.length > 0) {
+          const recentRoom = chatRooms.sort(
+            (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+          )[0];
+          setActiveRoomId(recentRoom.id);
+          setActiveRoomTitle(recentRoom.title);
+          setRoomParticipants({
+            current: recentRoom.current,
+            total: recentRoom.total,
+          });
+        }
+      } catch (error) {
+        console.error("Failed to fetch recent chat room:", error);
+      }
+    };
+
+    if (!location.state?.roomId) {
+      fetchRecentChatRoom();
+    } else {
+      setActiveRoomId(location.state.roomId);
+      setActiveRoomTitle(location.state.roomTitle);
+      setRoomParticipants({
+        current: location.state.currentParticipants,
+        total: location.state.totalParticipants,
+      });
+    }
+  }, [location.state]);
 
   useEffect(() => {
     if (location.state?.roomTitle) {
