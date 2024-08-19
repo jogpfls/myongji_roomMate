@@ -244,12 +244,16 @@ export default InfoPage;
 
 const Container = styled.div`
   padding: 40px;
-  max-width: 70%;
+  max-width: 60%;
   margin: auto;
   background-color: #f9f9f9;
   border-radius: 8px;
   box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
   margin-top: 70px;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    max-width: 70%;
+  }
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     max-width: 85%;
