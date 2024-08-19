@@ -5,9 +5,11 @@ import MyList from "../components/MyList";
 import BoxList from "../components/Info";
 import next from "../images/next.svg";
 import back from "../images/back.svg";
-import { getUserData, updateUserName, getUserBoards } from "../api/MyApi";
+import { getUserData, updateUserName, getUserBoards, getLikeApi } from "../api/MyApi";
 import { FaPen, FaCheck } from "react-icons/fa";
-import { getLikeApi } from "../api/MyApi";
+import { useNavigate } from "react-router-dom";
+import Modal from "../components/Modal";
+import Cookies from "js-cookie";
 
 const MyPage = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -23,6 +25,9 @@ const MyPage = () => {
   const [newName, setNewName] = useState("");
   const [userBoards, setUserBoards] = useState([]);
   const [like, setLike] = useState([]);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -58,7 +63,7 @@ const MyPage = () => {
   useEffect(() => {
     const fetchUserBoards = async () => {
       try {
-        const boards = await getUserBoards();
+        const boards = await getUserBoards(setModalMessage, setModalOpen);
         setUserBoards(boards);
       } catch (error) {
         console.error("게시글을 가져오는데 실패했습니다.", error);
@@ -161,6 +166,11 @@ const MyPage = () => {
     );
   }
 
+  const handleModalClose = () => {
+    setModalOpen(false);
+    navigate("/auth/login");
+  };
+
   return (
     <Container>
       <LRBox>
@@ -232,7 +242,8 @@ const MyPage = () => {
             <WriteList>
               <Back1 src={back} alt="화살표" onClick={handleWriteBack} />
               <ListWrapper ref={listWrapperRef}>
-                {userBoards.map((board) => (
+              {Cookies.get("accessToken") && (
+                userBoards.map((board) => (
                   <MyListBox>
                     <MyList
                       key={board.id}
@@ -242,7 +253,7 @@ const MyPage = () => {
                       date={board.createdAt}
                     />
                   </MyListBox>
-                ))}
+                )))}
               </ListWrapper>
               <Next1 src={next} alt="화살표" onClick={handleWriteNext} />
             </WriteList>
@@ -257,7 +268,8 @@ const MyPage = () => {
                 <LikeBox>
                   <Back2 src={back} alt="화살표" onClick={handleLikeBack} />
                   <LikeScrollBox ref={likeWrapperRef}>
-                    {like.map((likes, index)=>(
+                  {Cookies.get("accessToken") && (
+                    like.map((likes, index)=>(
                       <MyList 
                       key={index.id}
                       id={likes.id}
@@ -265,7 +277,7 @@ const MyPage = () => {
                       title={likes.title}
                       date={likes.createdAt}
                       />
-                    ))}
+                    )))}
                   </LikeScrollBox>
                   <Next2 src={next} alt="화살표" onClick={handleLikeNext} />
                 </LikeBox>
@@ -279,6 +291,12 @@ const MyPage = () => {
           {isEditing ? "저장하기" : "수정하기"}
         </Button>
       </BtnBox>
+      <Modal
+        isOpen={modalOpen}
+        onClose={handleModalClose}
+        title="알림"
+        message={modalMessage}
+      />
     </Container>
   );
 };

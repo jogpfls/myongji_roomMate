@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import SearchImg from "../images/search.svg";
 import { fetchDormitoryPosts } from "../api/DormitoryApi";
 import CountChoseBox from "../components/CountChoseBox";
+import Modal from "../components/Modal";
 
 const dormitoryNames = {
   dormitory3: "3동",
@@ -21,10 +22,12 @@ const DormitoryPage = () => {
   const [filteredSearch, setFilteredSearch] = useState("");
   const [posts, setPosts] = useState([]);
   const [choseModal, setChoseModal] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchDormitoryPosts(name).then((boardDtoList) => {
+    fetchDormitoryPosts(name, setModalMessage, setModalOpen).then((boardDtoList) => {
       setPosts(boardDtoList);
     });
   }, [name]);
@@ -57,7 +60,6 @@ const DormitoryPage = () => {
     const lowerCaseContent = post.content.toLowerCase();
     const lowerCaseCategories = post.categoryList.map(cat => cat.toLowerCase());
 
-    // Check if search term matches title, content, or any category
     return lowerCaseTitle.includes(lowerCaseSearch) ||
       lowerCaseContent.includes(lowerCaseSearch) ||
       lowerCaseCategories.some(cat => cat.includes(lowerCaseSearch));
@@ -76,6 +78,11 @@ const DormitoryPage = () => {
       </LoadingContainer>
     );
   }
+
+  const handleModalClose = () => {
+    setModalOpen(false);
+    navigate("/auth/login");
+  };
 
   return (
     <Background>
@@ -135,6 +142,12 @@ const DormitoryPage = () => {
         </BottomWrapper>
       </Wrapper>
       {choseModal && <CountChoseBox name={name} closeModal={closeModal} />}
+      <Modal
+        isOpen={modalOpen}
+        onClose={handleModalClose}
+        title="알림"
+        message={modalMessage}
+      />
     </Background>
   );
 };

@@ -75,11 +75,15 @@ const Header = () => {
     if (!token) {
       setModalMessage("로그인이 필요합니다.");
       setModalOpen(true);
-      navigate("/auth/login");
     } else {
       navigate(path);
       setMenuOpen(false);
     }
+  };
+
+  const handleModalClose = () => {
+    setModalOpen(false);
+    navigate("/auth/login");
   };
 
   return (
@@ -191,10 +195,9 @@ const Header = () => {
             ))}
         </Menu>
       </Box>
-
       <Modal
         isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
+        onClose={handleModalClose}
         title="알림"
         message={modalMessage}
       />

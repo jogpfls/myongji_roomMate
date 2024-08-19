@@ -1,7 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 
 const Modal = ({ isOpen, onClose, title, message }) => {
+
+  useEffect(() => {
+    const handleKeyPress = (event) => {
+      if (event.key === 'Enter') {
+        event.preventDefault(); // 기본 동작을 막아 handleLogin 함수 실행 방지
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      window.addEventListener('keydown', handleKeyPress);
+    }
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   return (

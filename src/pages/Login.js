@@ -12,6 +12,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const handleLogin = async () => {
+    //if (modalOpen) return;
     try {
       const response = await login(id, passwrd, navigate);
       if (response.status === 201) {
@@ -28,7 +29,7 @@ const Login = () => {
   };
 
   const handleKeyDown = (event) => {
-    if (event.key === "Enter") {
+    if (event.key === "Enter" && !modalOpen) {
       handleLogin();
     }
   };

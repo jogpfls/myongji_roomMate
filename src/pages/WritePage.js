@@ -5,6 +5,7 @@ import Button from "../components/Button";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { WriteApi } from "../api/WriteApi";
 import {CategoryApi} from "../api/CategoryApi";
+import Modal from "../components/Modal";
 
 const dormitoryNames = {
   dormitory3: "3동",
@@ -20,6 +21,8 @@ const WritePage = () => {
   const [inputTitleCount, setInputTitleCount] = useState(0);
   const [inputCount, setInputCount] = useState(0);
   const [categoryData, setCategoryData] = useState([]);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
   const maxContentsLength = 500;
   const maxTitleLength = 20;
   const navigate = useNavigate();
@@ -63,7 +66,7 @@ const WritePage = () => {
   useEffect(() => {
     const fetchCategoryData = async () => {
       try {
-        const data = await CategoryApi();
+        const data = await CategoryApi(setModalMessage, setModalOpen);
         setCategoryData(data.data.categoryResponseDto);
       } catch (error) {
         console.error("카테고리 get 실패:", error);
@@ -72,6 +75,11 @@ const WritePage = () => {
 
     fetchCategoryData();
   }, []);
+
+  const handleModalClose = () => {
+    setModalOpen(false);
+    navigate("/auth/login");
+  };
 
   return (
     <WrapperWrapper>
@@ -128,6 +136,12 @@ const WritePage = () => {
           </ButtonBox>
         </Wrapper>
       </AllWrapper> 
+      <Modal
+        isOpen={modalOpen}
+        onClose={handleModalClose}
+        title="알림"
+        message={modalMessage}
+      />
     </WrapperWrapper>
   );
 };
