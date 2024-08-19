@@ -13,12 +13,10 @@ const Footer = () => {
         </p>
         <Text>
           📍 자연캠퍼스 : (17058) 경기도 용인시 처인구 명지로 116 ( TEL :
-          <a href="mailto:031-330-6082">031-330-6082</a> )
+          <a href="tel:031-330-6082">031-330-6082</a> )
           <br />
-          📍 자연생활관 관리팀 카카오톡 채널:{" "}
-          <a href="mailto:http://pf.kakao.com/_xgSZyK/chat">
-            명지대학교 자연생활관
-          </a>
+          📍 자연생활관 관리팀 카카오톡 채널:
+          <a href="http://pf.kakao.com/_xgSZyK/chat">명지대학교 자연생활관</a>
           <br />
           📍 자연생활관 관리팀 이메일:
           <a href="mailto:dormyongin@mju.ac.kr">dormyongin@mju.ac.kr</a>
