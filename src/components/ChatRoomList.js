@@ -66,6 +66,8 @@ const Title = styled.h2`
 
 const RoomList = styled.ul`
   list-style: none;
+  height: 90%;
+  overflow: scroll;
 `;
 
 const RoomItem = styled.li`

@@ -17,10 +17,7 @@ const ChatPage = () => {
   const [activeRoomTitle, setActiveRoomTitle] = useState("");
   const [stompClient, setStompClient] = useState(null);
   const [userName, setUserName] = useState("");
-  const [roomParticipants, setRoomParticipants] = useState({
-    current: 0,
-    total: 0,
-  });
+  const [roomParticipants, setRoomParticipants] = useState({});
   const chatMessagesRef = useRef(null);
 
   useEffect(() => {
