@@ -29,6 +29,7 @@ const MyPage = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const [changeName, setChangeName] = useState(false);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,12 +37,39 @@ const MyPage = () => {
       try {
         const data = await getUserData();
         setUserData(data);
+        setLoading(false);
       } catch (error) {
         console.error("유저 정보를 가져오는데 실패했습니다.", error);
+        setLoading(false);
       }
     };
 
     fetchUserData();
+  }, []);
+
+  useEffect(() => {
+    const fetchUserBoards = async () => {
+      try {
+        const boards = await getUserBoards(setModalMessage, setModalOpen);
+        setUserBoards(boards);
+      } catch (error) {
+        console.error("게시글을 가져오는데 실패했습니다.", error);
+      }
+    };
+
+    fetchUserBoards();
+  }, []);
+
+  useEffect(() => {
+    const fetchLike = async () => {
+      try {
+        const response = await getLikeApi();
+        setLike(response);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchLike();
   }, []);
 
   const handleNameEdit = () => {
@@ -64,24 +92,10 @@ const MyPage = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchUserBoards = async () => {
-      try {
-        const boards = await getUserBoards(setModalMessage, setModalOpen);
-        setUserBoards(boards);
-      } catch (error) {
-        console.error("게시글을 가져오는데 실패했습니다.", error);
-      }
-    };
-
-    fetchUserBoards();
-  }, []);
-
   const handleWriteNext = () => {
     if (listWrapperRef.current) {
       const width = window.innerWidth;
-      let scrollAmount = 0;
-        scrollAmount = width * 0.58;
+      const scrollAmount = width * 0.58;
       listWrapperRef.current.scrollBy({
         left: scrollAmount,
         behavior: "smooth",
@@ -92,8 +106,7 @@ const MyPage = () => {
   const handleLikeNext = () => {
     if (likeWrapperRef.current) {
       const width = window.innerWidth;
-      let scrollAmount = 0;
-        scrollAmount = width * 0.58;
+      const scrollAmount = width * 0.58;
       likeWrapperRef.current.scrollBy({
         left: scrollAmount,
         behavior: "smooth",
@@ -104,52 +117,36 @@ const MyPage = () => {
   const handleWriteBack = () => {
     if (listWrapperRef.current) {
       const width = window.innerWidth;
-      let scrollAmount = 0;
-        scrollAmount = width * 0.58;
+      const scrollAmount = width * 0.58;
       listWrapperRef.current.scrollBy({
         left: -scrollAmount,
         behavior: "smooth",
       });
-  }
+    }
   };
 
   const handleLikeBack = () => {
     if (likeWrapperRef.current) {
       const width = window.innerWidth;
-      let scrollAmount = 0;
-        scrollAmount = width * 0.58;
+      const scrollAmount = width * 0.58;
       likeWrapperRef.current.scrollBy({
         left: -scrollAmount,
         behavior: "smooth",
       });
     }
-    }
-
-  useEffect(()=>{
-    const fetchLike = async() => {
-      try{
-        const response = await getLikeApi();
-        setLike(response)
-      }catch(error){
-        console.error(error);
-      }
-    }
-    fetchLike();
-  }, [])
+  };
 
   const handleModalClose = () => {
     setModalOpen(false);
-    if(changeName){
-      setModalOpen(false);
+    if (changeName) {
       setChangeName(false);
       navigate("/mypage");
-    }
-    else{
+    } else {
       navigate('/auth/login');
     }
   };
-    
-  if(!userData.length && !userBoards.length && userData.length !== 0 && userBoards.length !== 0){
+
+  if (loading) {
     return (
       <LoadingContainer>
         <Loading />
@@ -231,7 +228,7 @@ const MyPage = () => {
                   onClick={() => setIsEditing(!isEditing)}
                   bgc={isEditing ? theme.colors.deepBlue2 : theme.colors.blue2}
                 >
-                  {isEditing ? "저장하기" : "수정하기"}
+                  {isEditing ? "완료" : "수정하기"}
               </Button>
             </BtnBox>
             </BottomBox>
