@@ -63,6 +63,10 @@ const Title = styled.h2`
   span {
     font-size: 20px;
   }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    text-align: center;
+  }
 `;
 
 const RoomList = styled.ul`
