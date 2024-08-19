@@ -152,27 +152,27 @@ const RoomPage = () => {
     <Container>
       <BestTopBox>
         <Dormitory>{dormitoryNames[name]}</Dormitory>
+      </BestTopBox>
+      <AllBox>
         <TopBox>
+          <Title>{post.title}</Title>
           {post.like ? (
             <Star src={full} onClick={handleStarClick}></Star>
           ) : (
             <Star src={empty} onClick={handleStarClick}></Star>
           )}
         </TopBox>
-      </BestTopBox>
-      <AllBox>
-        <Title>{post.title}</Title>
-      <Content>
-        {patchPost ? (
-          <Input
-            type="text"
-            value={editedContent}
-            onChange={handleContentChange}
-          />
-        ) : (
-          <ContentsText>{post.content}</ContentsText>
-        )}
-      </Content>
+        <Content>
+          {patchPost ? (
+            <Input
+              type="text"
+              value={editedContent}
+              onChange={handleContentChange}
+            />
+          ) : (
+            <ContentsText>{post.content}</ContentsText>
+          )}
+        </Content>
       </AllBox>
       <TagBox>
         {post.categoryList.map((data, index) => (
@@ -266,6 +266,7 @@ const ContentsText = styled.p`
 `;
 
 const Box = styled.div`
+  margin-top: 10px;
   display: flex;
   flex-direction: column;
 `;
@@ -299,6 +300,7 @@ const BestTopBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 10px;
 `;
 
 const TopBox = styled.div`
@@ -306,6 +308,7 @@ const TopBox = styled.div`
   justify-content: end;
   margin-bottom: 1vh;
   width: 100%;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.gray2};
 `;
 
 const Dormitory = styled.div`
@@ -318,22 +321,21 @@ const Dormitory = styled.div`
 const Star = styled.img`
   width: 35px;
   cursor: pointer;
+  padding-right: 15px;
 `;
 
 const AllBox = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2vh;
-  //border: 1px solid ${({theme})=>theme.colors.gray2};
+  //border: 1px solid ${({ theme }) => theme.colors.gray2};
   border-radius: 5px;
-
 `;
 
 const Title = styled.div`
   width: 100%;
   padding: 20px 20px;
   //border-radius: 10px;
-  border-bottom: 1px solid ${({theme})=>theme.colors.gray2};
   ${(props) => props.theme.fonts.text5}
   font-size: 25px;
 `;
@@ -349,7 +351,7 @@ const Content = styled.div`
   min-height: 300px;
   height: auto;
   padding: 10px 20px;
-  border-bottom: 1px solid ${({theme})=>theme.colors.gray2};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.gray2};
 `;
 
 const Input = styled.textarea`
