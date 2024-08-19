@@ -27,6 +27,7 @@ const MyPage = () => {
   const [like, setLike] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
+  const [changeName, setChangeName] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -52,10 +53,12 @@ const MyPage = () => {
 
   const handleNameSubmit = async () => {
     try {
-      await updateUserName(newName);
+      await updateUserName(newName, setModalMessage, setModalOpen, navigate);
       setUserData({ ...userData, name: newName });
       setNameEditMode(false);
     } catch (error) {
+      setModalOpen(true);
+      setChangeName(true);
       console.error("이름 수정에 실패했습니다.", error);
     }
   };
@@ -156,7 +159,19 @@ const MyPage = () => {
     }
     fetchLike();
   }, [])
-  
+
+  const handleModalClose = () => {
+    setModalOpen(false);
+    if(changeName){
+      setModalOpen(false);
+      setChangeName(false);
+      navigate("/mypage");
+    }
+    else{
+      navigate('/auth/login');
+    }
+  };
+    
   if(!userData || !userBoards){
     return (
       <LoadingContainer>
@@ -165,11 +180,6 @@ const MyPage = () => {
       </LoadingContainer>
     );
   }
-
-  const handleModalClose = () => {
-    setModalOpen(false);
-    navigate("/auth/login");
-  };
 
   return (
     <Container>
@@ -296,6 +306,7 @@ const MyPage = () => {
         onClose={handleModalClose}
         title="알림"
         message={modalMessage}
+        changeName={changeName}
       />
     </Container>
   );
