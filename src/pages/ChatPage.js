@@ -12,12 +12,13 @@ import ChatOut from "../images/ChatOut.svg";
 import ChatRoomList from "../components/ChatRoomList";
 import { getUserData } from "../api/MyApi";
 import { getChatRooms } from "../api/ChatApi";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Axios } from "../api/Axios";
 import OtherInfo from "../components/OtherInfo";
 import Modal from "../components/Modal";
 
 const ChatPage = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const [messages, setMessages] = useState({});
   const [inputMessage, setInputMessage] = useState("");
@@ -262,6 +263,7 @@ const ChatPage = () => {
       setActiveRoomTitle("");
       setRoomParticipants({ current: 0, total: 0 });
       setMessages({});
+      navigate("/main");
     } else {
       console.error("STOMP client 연결되지않음 또는 선택되지않음");
     }
