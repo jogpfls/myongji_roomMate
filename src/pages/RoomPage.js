@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
-import Category from "../components/Category";
+import Category from "../components/DormitoryCategory";
 import Button from "../components/Button";
 import { useNavigate, useParams } from "react-router-dom";
 import {
@@ -34,7 +34,6 @@ const RoomPage = () => {
   const [modalMessage, setModalMessage] = useState("");
 
   useEffect(() => {
-    console.log(`Fetching data for dormitory: ${name}, board ID: ${id}`);
     getBoardDetail(id, name)
       .then((response) => {
         console.log("게시글 조회 성공", response.data);
@@ -160,13 +159,9 @@ const RoomPage = () => {
             <Star src={empty} onClick={handleStarClick}></Star>
           )}
         </TopBox>
-        <Title>{post.title}</Title>
       </BestTopBox>
-      <TagBox>
-        {post.categoryList.map((data, index) => (
-          <Category key={index}>{data}</Category>
-        ))}
-      </TagBox>
+      <AllBox>
+        <Title>{post.title}</Title>
       <Content>
         {patchPost ? (
           <Input
@@ -178,6 +173,12 @@ const RoomPage = () => {
           <ContentsText>{post.content}</ContentsText>
         )}
       </Content>
+      </AllBox>
+      <TagBox>
+        {post.categoryList.map((data, index) => (
+          <Category key={index}>{data}</Category>
+        ))}
+      </TagBox>
       <Box>
         {!patchPost && (
           <Text>※ 채팅 버튼을 누르면 작성자에게 개인정보가 공개됩니다.</Text>
@@ -198,7 +199,6 @@ const RoomPage = () => {
           )}
         </BtnBox>
       </Box>
-
       <Modal
         isOpen={modalOpen}
         onClose={closeModal}
@@ -271,16 +271,27 @@ const Box = styled.div`
 `;
 
 const Container = styled.div`
-  width: 70%;
+  width: 65%;
   margin: auto;
   height: 95vh;
   display: flex;
   justify-content: center;
   flex-direction: column;
-  gap: 20px;
+  gap: 10px;
+
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    width: 70%;
+    margin-top: 2vh;
+  }
 
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: 80%;
+    margin-top: 0;
+  }
+
+  @media screen and (max-width: 380px) {
+    width: 80%;
+    margin-top: 8vh;
   }
 `;
 
@@ -309,29 +320,36 @@ const Star = styled.img`
   cursor: pointer;
 `;
 
+const AllBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2vh;
+  //border: 1px solid ${({theme})=>theme.colors.gray2};
+  border-radius: 5px;
+
+`;
+
 const Title = styled.div`
   width: 100%;
-  padding: 10px 20px;
-  border-radius: 10px;
-  background-color: ${(props) => props.theme.colors.lightBlue};
+  padding: 20px 20px;
+  //border-radius: 10px;
+  border-bottom: 1px solid ${({theme})=>theme.colors.gray2};
   ${(props) => props.theme.fonts.text5}
   font-size: 25px;
 `;
 
 const TagBox = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-  gap: 1.85vw;
+  display: flex;
   width: 100%;
+  flex-wrap: wrap;
 `;
 
 const Content = styled.div`
   width: 100%;
   min-height: 300px;
   height: auto;
-  padding: 20px;
-  border-radius: 10px;
-  background-color: ${(props) => props.theme.colors.lightBlue};
+  padding: 10px 20px;
+  border-bottom: 1px solid ${({theme})=>theme.colors.gray2};
 `;
 
 const Input = styled.textarea`

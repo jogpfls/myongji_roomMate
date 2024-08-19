@@ -258,6 +258,7 @@ const Contents = styled.p`
   display: -webkit-box;
   -webkit-line-clamp: 5;
   -webkit-box-orient: vertical;
+  line-height: 1.2em;
 `;
 
 const CategoryBox = styled.div`

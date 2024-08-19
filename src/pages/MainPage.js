@@ -17,7 +17,7 @@ const MainPage = () => {
   const [modal, setModal] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
-
+  
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -63,13 +63,15 @@ const MainPage = () => {
   };
 
   useEffect(() => {
-    if (Cookies.get("accessToken")) {
-      const fetchData = async () => {
-        const data = await getUserData();
+    const fetchData = async () => {
+      try {
+        const data = await getUserData(setModalOpen, setModalMessage);
         setUserData(data);
-      };
-      fetchData();
-    }
+      } catch (error) {
+        // Error handling is done in getUserData
+      }
+    };
+    fetchData();
   }, [navigate]);
 
   useEffect(() => {
@@ -83,6 +85,7 @@ const MainPage = () => {
   const closeModal = () => {
     setModal(false);
     setModalOpen(false);
+    localStorage.setItem('modalShown', 'true'); // 모달이 한 번 표시되었음을 기록
   };
 
   return (
@@ -137,7 +140,6 @@ const MainPage = () => {
         <Map />
       </AnimatedMapContainer>
       {modal && <NameGender closeModal={closeModal} />}
-
       <Modal
         isOpen={modalOpen}
         onClose={closeModal}

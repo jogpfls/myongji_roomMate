@@ -1,11 +1,18 @@
 import { Axios } from "./Axios";
 import Cookies from "js-cookie";
 
-export const getUserData = async () => {
+export const getUserData = async (setModalOpen, setModalMessage) => {
   try {
     const response = await Axios.get("/users/info");
     return response.data.data;
   } catch (error) {
+    if (error.response && error.response.status === 401) {
+      if (!localStorage.getItem('modalShown')) {
+        setModalMessage("세션이 만료되었습니다. 다시 로그인해주세요.");
+        setModalOpen(true);
+        Cookies.remove("accessToken");
+      }
+    }
     console.error("유저 정보를 가져오는데 실패했습니다.", error);
     throw error;
   }

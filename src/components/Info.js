@@ -74,7 +74,7 @@ const Info = ({ isEditing }) => {
 
   const handleInputChange = (e) => {
     const inputText = e.target.value;
-    if (inputText.length <= 10) {
+    if (inputText.length <= 7) {
       setNewItem(inputText);
       setCount(inputText.length);
     }
@@ -123,7 +123,7 @@ const Info = ({ isEditing }) => {
               onKeyDown={handleKeyDown}
               placeholder="새 항목 추가"
             />
-            <Count>{count}/10</Count>
+            <Count>{count}/7</Count>
           </InputBox>
           <AddButton onClick={addItem}>추가</AddButton>
         </AddItemContainer>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import Category from "../components/Category"
+import Category from "../components/DormitoryCategory"
 import Button from "../components/Button";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { WriteApi } from "../api/WriteApi";
@@ -102,14 +102,6 @@ const WritePage = () => {
               </CountBox>
             </TitleTitle>
           </TitleBox>
-          <CategoryBox>
-            <Title>카테고리</Title>
-            <CategoryWrapper>
-              {categoryData.map((data, index)=>(
-                <Category key={index}>{data.category}</Category>
-              ))}
-            </CategoryWrapper>
-          </CategoryBox>
           <ContentsBox>
             <Title>내용</Title>
             <Box>
@@ -125,6 +117,13 @@ const WritePage = () => {
               </CountBox>
             </Box>
           </ContentsBox>
+          <CategoryBox>
+            <CategoryWrapper>
+              {categoryData.map((data, index)=>(
+                <Category key={index}>{data.category}</Category>
+              ))}
+            </CategoryWrapper>
+          </CategoryBox>
           <ButtonBox>
             <Button onClick={()=>navigate(`/dormitory/${name}`)}>취소</Button>
             {title === '' || contents === ''? 
@@ -153,7 +152,7 @@ const WrapperWrapper = styled.div`
 `;
 
 const AllWrapper = styled.div`
-  width: 70%;
+  width: 65%;
   height: 100vh;
   display: flex;
   align-items: center;
@@ -197,13 +196,13 @@ const Title = styled.p`
 `;
 
 const TitleTitle = styled.div`
-  background-color: ${({theme})=>theme.colors.lightBlue};
   padding-left:10px;
   height: 6vh;
-  border-radius: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-bottom: 1px solid ${({theme})=>theme.colors.gray2};
+  margin-bottom: 2vh;
 `;
 
 const TitleWrite = styled.input`
@@ -223,14 +222,11 @@ const TitleWrite = styled.input`
 `;
 
 const CategoryBox = styled.div`
-
 `;
 
 const CategoryWrapper = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-  gap: 1.85vw;
-  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
 `;
 
 const ContentsBox = styled.div`
@@ -239,13 +235,13 @@ const ContentsBox = styled.div`
 `;
 
 const Box = styled.div`
-  background-color: ${({theme})=>theme.colors.lightBlue};
   height: 40vh;
-  border-radius: 10px;
   display: flex;
   flex-direction: column;
   align-items: end;
-  padding-bottom: 1vh;
+  padding-bottom: 2vh;
+  border-top: 1px solid ${({theme})=>theme.colors.gray2};
+  border-bottom: 1px solid ${({theme})=>theme.colors.gray2};
 `;
 
 const Contents = styled.textarea`

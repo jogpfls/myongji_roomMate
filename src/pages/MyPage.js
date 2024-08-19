@@ -598,7 +598,10 @@ const ListWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.5vh;
-  padding: 0 2vw;
+
+  &::-webkit-scrollbar{
+    display: none;
+  }
 
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
   width: 100%;
@@ -656,11 +659,14 @@ const Back2 = styled.img`
 
 const LikeScrollBox = styled.div`
   height: 100%;
-  padding: 0 2vw;
   overflow-y: scroll;
   display: flex;
   flex-direction: column;
   gap: 1.5vw;
+
+  &::-webkit-scrollbar{
+    display: none;
+  }
 
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: 57vw;
