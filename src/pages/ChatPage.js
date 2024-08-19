@@ -1,4 +1,10 @@
-import React, { useEffect, useState, useRef, useLayoutEffect } from "react";
+import React, {
+  useEffect,
+  useState,
+  useRef,
+  useLayoutEffect,
+  useCallback,
+} from "react";
 import styled from "styled-components";
 import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
@@ -111,18 +117,21 @@ const ChatPage = () => {
     }
   }, [location.state]);
 
-  const isJoinOrLeaveMessage = (messageContent) => {
+  const isJoinOrLeaveMessage = useCallback((messageContent) => {
     return (
       messageContent.includes("님이 채팅방을 퇴장했습니다.") ||
       messageContent.includes("님이 채팅방에 입장했습니다.")
     );
-  };
+  }, []);
 
-  const getModifiedContent = (messageContent) => {
-    return isJoinOrLeaveMessage(messageContent)
-      ? `--------------${messageContent}--------------`
-      : messageContent;
-  };
+  const getModifiedContent = useCallback(
+    (messageContent) => {
+      return isJoinOrLeaveMessage(messageContent)
+        ? `--------------${messageContent}--------------`
+        : messageContent;
+    },
+    [isJoinOrLeaveMessage]
+  );
 
   useEffect(() => {
     if (!activeRoomId || !userName) return;
@@ -151,7 +160,6 @@ const ChatPage = () => {
 
             const modifiedContent = getModifiedContent(receivedMessage.content);
 
-            // 메시지 중복 여부를 체크하고 추가
             if (
               roomMessages.some(
                 (msg) =>
@@ -199,7 +207,7 @@ const ChatPage = () => {
         client.deactivate();
       }
     };
-  }, [activeRoomId, userName]);
+  }, [activeRoomId, userName, getModifiedContent, isJoinOrLeaveMessage]);
 
   useLayoutEffect(() => {
     const chatMessagesElement = chatMessagesRef.current;
