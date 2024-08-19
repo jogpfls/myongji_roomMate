@@ -4,20 +4,12 @@ import Cookies from "js-cookie";
 export const login = async (
   id,
   passwrd,
-  navigate,
   setModalOpen,
   setModalMessage
 ) => {
   try {
     const response = await Axios.post(`/auth/login`, { id, passwrd });
     Cookies.set("accessToken", response.data.accessToken);
-
-    setTimeout(() => {
-      Cookies.remove("accessToken");
-      setModalMessage("세션이 만료되었습니다. 다시 로그인해주세요.");
-      setModalOpen(true);
-      navigate("/auth/login");
-    }, 1800000 * 2);
 
     return response;
   } catch (error) {

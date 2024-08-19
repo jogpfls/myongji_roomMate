@@ -25,6 +25,7 @@ const DormitoryPage = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,6 +33,8 @@ const DormitoryPage = () => {
         const boardDtoList = await fetchDormitoryPosts(name, setModalMessage, setModalOpen, navigate);
         setPosts(boardDtoList);
       } catch (error) {
+      } finally {
+        setLoading(false);
       }
     };
   
@@ -76,7 +79,7 @@ const DormitoryPage = () => {
     navigate(path);
   };
 
-  if (!posts.length && posts.length !== 0) {
+  if (loading) {
     return (
       <LoadingContainer>
         <Loading />
