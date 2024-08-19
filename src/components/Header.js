@@ -83,7 +83,7 @@ const Header = () => {
     } else {
       navigate("/auth/login");
     }
-    setIsLogout(false); // 초기화
+    setIsLogout(false);
   };
 
   return (
