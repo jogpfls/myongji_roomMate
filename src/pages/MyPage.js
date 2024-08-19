@@ -10,6 +10,7 @@ import { FaPen, FaCheck } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import Modal from "../components/Modal";
 import Cookies from "js-cookie";
+import profile from "../images/profile.png";
 
 const MyPage = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -165,7 +166,7 @@ const MyPage = () => {
           <InfoAllBox>
             <InfoBox>
             <Profile>
-              <Img></Img>
+              <Img src={profile} alt="프로필사진"></Img>
               <NameBox>
                 {nameEditMode ? (
                   <Name>
@@ -464,11 +465,11 @@ const Profile = styled.div`
     width: auto;
   }
 `;
-const Img = styled.div`
+const Img = styled.img`
   width: 100px;
   height: 100px;
   border-radius: 50%;
-  background-color: ${(props) => props.theme.colors.lightBlue};
+  //background-color: ${(props) => props.theme.colors.lightBlue};
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}){
   }
