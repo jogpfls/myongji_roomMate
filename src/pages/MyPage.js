@@ -149,7 +149,7 @@ const MyPage = () => {
     }
   };
     
-  if(!userData.length && !userBoards.length){
+  if(!userData.length && !userBoards.length && userData.length !== 0 && userBoards.length !== 0){
     return (
       <LoadingContainer>
         <Loading />
