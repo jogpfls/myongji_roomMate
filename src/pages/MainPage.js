@@ -63,7 +63,7 @@ const MainPage = () => {
   };
 
   useEffect(() => {
-    if(Cookies.get("accessToken")){
+    if (Cookies.get("accessToken")) {
       const fetchData = async () => {
         const data = await getUserData();
         setUserData(data);
@@ -133,6 +133,7 @@ const MainPage = () => {
         className={mapVisible ? "visible" : ""}
         name="map-section"
       >
+        <span>룸메를 구하는 기숙사 게시글의 수를 확인하세요</span>
         <Map />
       </AnimatedMapContainer>
       {modal && <NameGender closeModal={closeModal} />}
@@ -162,6 +163,7 @@ const AnimatedMapContainer = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
+  flex-direction: column;
   opacity: 0;
   transform: translateY(20px);
   transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out;
@@ -170,6 +172,21 @@ const AnimatedMapContainer = styled.div`
     opacity: 1;
     transform: translateY(0);
     animation: ${fadeInUp} 0.8s ease-in-out;
+  }
+
+  span {
+    text-align: center;
+    margin-bottom: 60px;
+    ${(props) => props.theme.fonts.logo}
+    color: ${(props) => props.theme.colors.gray};
+    opacity: 0.8;
+  }
+
+  p {
+    text-align: center;
+    margin-bottom: 60px;
+    ${(props) => props.theme.fonts.logo}
+    color: red;
   }
 `;
 
