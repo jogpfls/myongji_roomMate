@@ -76,7 +76,7 @@ const DormitoryPage = () => {
     navigate(path);
   };
 
-  if (!posts) {
+  if (!posts.length) {
     return (
       <LoadingContainer>
         <Loading />

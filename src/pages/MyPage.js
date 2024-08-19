@@ -149,7 +149,7 @@ const MyPage = () => {
     }
   };
     
-  if(!userData || !userBoards){
+  if(!userData.length && !userBoards.length){
     return (
       <LoadingContainer>
         <Loading />
@@ -469,7 +469,6 @@ const Img = styled.img`
   width: 100px;
   height: 100px;
   border-radius: 50%;
-  //background-color: ${(props) => props.theme.colors.lightBlue};
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}){
   }
@@ -511,7 +510,6 @@ const Name = styled.div`
 
 const Info = styled.div`
   width: auto;
-  line-height: 1.5em;
   display: flex;
   white-space: nowrap;
 
