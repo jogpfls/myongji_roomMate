@@ -48,9 +48,10 @@ const ChatRoomList = ({ activeRoom, onRoomClick }) => {
 export default ChatRoomList;
 
 const Container = styled.aside`
-  width: 30%;
-  background-color: ${(props) => props.theme.colors.white};
-  border-right: 1px solid ${(props) => props.theme.colors.gray};
+  height: 100%;
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    width: 100%;
+  }
 `;
 
 const Title = styled.h2`

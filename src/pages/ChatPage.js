@@ -19,6 +19,7 @@ const ChatPage = () => {
   const [userName, setUserName] = useState("");
   const [roomParticipants, setRoomParticipants] = useState({});
   const chatMessagesRef = useRef(null);
+  const [isRoomListOpen, setIsRoomListOpen] = useState(false);
 
   useEffect(() => {
     const fetchUserName = async () => {
@@ -162,6 +163,7 @@ const ChatPage = () => {
     setActiveRoomId(roomId);
     setActiveRoomTitle(roomTitle);
     setRoomParticipants({ current, total });
+    setIsRoomListOpen(false);
   };
 
   const handleExitRoom = () => {
@@ -188,11 +190,24 @@ const ChatPage = () => {
     return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   };
 
+  const toggleRoomList = () => {
+    setIsRoomListOpen(!isRoomListOpen);
+  };
+
   return (
     <ChatContainer>
-      <ChatRoomList activeRoom={activeRoomId} onRoomClick={handleRoomClick} />
-      <ChatRoom>
+      <ListContainer isOpen={isRoomListOpen}>
+        <ChatRoomList
+          isOpen={isRoomListOpen}
+          activeRoom={activeRoomId}
+          onRoomClick={handleRoomClick}
+        />
+      </ListContainer>
+      <ChatRoom isOpen={isRoomListOpen}>
         <ChatRoomHeader>
+          <ToggleRoomListButton onClick={toggleRoomList}>
+            <Icon isOpen={isRoomListOpen}>{isRoomListOpen ? "×" : "<"}</Icon>
+          </ToggleRoomListButton>
           <RoomInfo>
             <RoomTitle>{activeRoomTitle}</RoomTitle>
             <RoomStatus>
@@ -233,7 +248,6 @@ const ChatPage = () => {
             </Message>
           ))}
         </ChatMessages>
-
         <ChatInputContainer>
           <ChatInput
             type="text"
@@ -256,12 +270,53 @@ export default ChatPage;
 const ChatContainer = styled.div`
   display: flex;
   height: 92vh;
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    flex-direction: column;
+    height: 92vh;
+  }
+`;
+
+const ListContainer = styled.aside`
+  width: 30%;
+  background-color: ${(props) => props.theme.colors.white};
+  border-right: 1px solid ${(props) => props.theme.colors.gray};
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    width: 100%;
+    height: 92vh;
+    display: ${(props) => (props.isOpen ? "block" : "none")};
+  }
 `;
 
 const ChatRoom = styled.section`
   width: 70%;
   display: flex;
   flex-direction: column;
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    width: 100%;
+    height: 100%;
+    display: ${(props) => (props.isOpen ? "none" : "flex")};
+  }
+`;
+
+const ToggleRoomListButton = styled.button`
+  display: none;
+  padding: 0px;
+  color: black;
+  border: none;
+  background-color: #fff;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+`;
+
+const Icon = styled.span`
+  font-size: 30px;
+  ${(props) => props.theme.fonts.other};
+  color: ${(props) => props.theme.colors.deepBlue};
 `;
 
 const ChatRoomHeader = styled.header`
@@ -279,6 +334,12 @@ const RoomInfo = styled.div``;
 const RoomTitle = styled.h3`
   ${(props) => props.theme.fonts.text5};
   font-size: 23px;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 `;
 
 const HeaderRight = styled.div`
@@ -291,6 +352,14 @@ const RoomStatus = styled.span`
   ${(props) => props.theme.fonts.text2};
   font-size: 15px;
   margin-right: 20px;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0;
+    margin-top: 4px;
+  }
 `;
 
 const ExitButton = styled.button`
