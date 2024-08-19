@@ -73,6 +73,13 @@ const ChatPage = () => {
           console.log("Received message:", receivedMessage);
           setMessages((prevMessages) => {
             const roomMessages = prevMessages[activeRoomId] || [];
+            const isJoinOrLeaveMessage =
+              receivedMessage.content.includes("님이 채팅방을 퇴장했습니다.") ||
+              receivedMessage.content.includes("님이 채팅방에 입장했습니다.");
+
+            const modifiedContent = isJoinOrLeaveMessage
+              ? `--------------${receivedMessage.content}--------------`
+              : receivedMessage.content;
             if (
               roomMessages.some(
                 (msg) =>
@@ -88,9 +95,10 @@ const ChatPage = () => {
               [activeRoomId]: [
                 ...roomMessages,
                 {
-                  content: receivedMessage.content,
+                  content: modifiedContent,
                   sender: receivedMessage.sender,
                   timestamp: receivedMessage.timestamp,
+                  type: isJoinOrLeaveMessage ? "notification" : "message",
                 },
               ],
             };
@@ -158,7 +166,6 @@ const ChatPage = () => {
 
   const handleExitRoom = () => {
     if (stompClient && stompClient.active && activeRoomId) {
-      // 서버에 퇴장 메시지 발행 -> 아직 하는중
       stompClient.publish({
         destination: `/pub/ws/chat/${activeRoomId}/quit`,
         body: JSON.stringify({
@@ -167,7 +174,6 @@ const ChatPage = () => {
         }),
       });
 
-      // UI 업데이트 및 채팅방 나가기 로직
       setActiveRoomId(null);
       setActiveRoomTitle("");
       setRoomParticipants({ current: 0, total: 0 });
@@ -201,17 +207,28 @@ const ChatPage = () => {
         </ChatRoomHeader>
         <ChatMessages ref={chatMessagesRef}>
           {(messages[activeRoomId] || []).map((message, index) => (
-            <Message key={index} sent={message.sender === userName}>
-              <SenderName sent={message.sender === userName}>
-                {message.sender}
-              </SenderName>
+            <Message
+              key={index}
+              sent={message.sender === userName}
+              type={message.type}
+            >
+              {message.type === "message" && (
+                <SenderName sent={message.sender === userName}>
+                  {message.sender}
+                </SenderName>
+              )}
               <MessageContainer sent={message.sender === userName}>
-                <MessageText sent={message.sender === userName}>
+                <MessageText
+                  sent={message.sender === userName}
+                  type={message.type}
+                >
                   {message.content}
                 </MessageText>
-                <Timestamp sent={message.sender === userName}>
-                  {formatTimestamp(message.timestamp)}
-                </Timestamp>
+                {message.type === "message" && (
+                  <Timestamp sent={message.sender === userName}>
+                    {formatTimestamp(message.timestamp)}
+                  </Timestamp>
+                )}
               </MessageContainer>
             </Message>
           ))}
@@ -302,8 +319,10 @@ const ChatMessages = styled.div`
 const Message = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: ${({ sent }) => (sent ? "flex-end" : "flex-start")};
+  align-items: ${({ sent, type }) =>
+    type === "message" ? (sent ? "flex-end" : "flex-start") : "center"};
   margin-bottom: 10px;
+  width: 100%;
 `;
 
 const MessageContainer = styled.div`
@@ -318,17 +337,27 @@ const SenderName = styled.span`
   margin-bottom: 5px;
   color: ${({ sent, theme }) =>
     sent ? theme.colors.deepBlue2 : theme.colors.black};
+  margin-left: ${({ sent }) => (sent ? "" : "5px")};
+  margin-right: ${({ sent }) => (sent ? "5px" : "")};
 `;
 
 const MessageText = styled.p`
-  background-color: ${({ sent }) =>
-    sent ? (props) => props.theme.colors.lightBlue : "#ffecd4"};
-  padding: 10px;
+  background-color: ${({ sent, type }) =>
+    type === "message"
+      ? sent
+        ? (props) => props.theme.colors.lightBlue
+        : "#ffecd4"
+      : "none"};
+  padding: ${({ type }) => (type === "message" ? "10px" : "5px 10px")};
   border-radius: 10px;
   margin: 0;
-  max-width: 70%;
+  max-width: ${({ type }) => (type === "message" ? "70%" : "100%")};
   word-break: break-word;
   display: inline-block;
+  text-align: ${({ type }) => (type === "message" ? "left" : "center")};
+  color: ${({ type, theme }) =>
+    type === "message" ? theme.colors.black : theme.colors.gray};
+  font-size: ${({ type }) => (type === "message" ? "20px" : "17px")};
 `;
 
 const Timestamp = styled.span`
