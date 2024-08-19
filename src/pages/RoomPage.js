@@ -262,6 +262,7 @@ const ContentsText = styled.p`
   height: 100%;
   display: flex;
   word-break: break-word;
+  white-space: pre-line;
 `;
 
 const Box = styled.div`

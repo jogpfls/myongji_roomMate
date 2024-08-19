@@ -17,7 +17,7 @@ const List = ({
   const [maxLength, setMaxLength] = useState(12);
   const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
   const [status, setStatus] = useState(false);
-  
+
   useEffect(() => {
     const handleResize = () => {
       setViewportWidth(window.innerWidth);
@@ -246,6 +246,7 @@ const ContentsBox = styled.div`
   height: 11vh;
   display: flex;
   align-items: center;
+  margin-top: 1vh;
 
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     height: 6vh;
@@ -254,6 +255,12 @@ const ContentsBox = styled.div`
 
 const Contents = styled.p`
   font-size: 16px;
+  white-space: pre-line;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
 `;
 
 const CategoryBox = styled.div`
