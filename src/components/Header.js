@@ -16,6 +16,7 @@ const Header = () => {
   const activePath = location.pathname.toLowerCase();
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
+  const [isLogout, setIsLogout] = useState(false);
 
   const isActive = (path) => {
     return activePath.startsWith(path.toLowerCase());
@@ -50,20 +51,15 @@ const Header = () => {
   }, [isOpen]);
 
   useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-    };
-
+    const handleResize = () => setWindowWidth(window.innerWidth);
     window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const handleLogout = async () => {
     try {
       await logout(navigate, setModalOpen, setModalMessage);
+      setIsLogout(true);
     } catch (error) {
       console.error("로그아웃 실패: ", error);
     }
@@ -71,7 +67,6 @@ const Header = () => {
 
   const handleCirClick = (path) => {
     const token = Cookies.get("accessToken");
-
     if (!token) {
       setModalMessage("로그인이 필요합니다.");
       setModalOpen(true);
@@ -83,7 +78,12 @@ const Header = () => {
 
   const handleModalClose = () => {
     setModalOpen(false);
-    navigate("/auth/login");
+    if (isLogout) {
+      navigate("/main");
+    } else {
+      navigate("/auth/login");
+    }
+    setIsLogout(false); // 초기화
   };
 
   return (

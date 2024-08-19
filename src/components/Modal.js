@@ -6,7 +6,7 @@ const Modal = ({ isOpen, onClose, title, message }) => {
   useEffect(() => {
     const handleKeyPress = (event) => {
       if (event.key === 'Enter') {
-        event.preventDefault(); // 기본 동작을 막아 handleLogin 함수 실행 방지
+        event.preventDefault();
         onClose();
       }
     };
@@ -33,7 +33,7 @@ const Modal = ({ isOpen, onClose, title, message }) => {
           <p>{message}</p>
         </Body>
         <Footer>
-          <ConfirmButton onClick={onClose}>확인</ConfirmButton>
+            <ConfirmButton onClick={onClose}>확인</ConfirmButton>
         </Footer>
       </Content>
     </Overlay>
