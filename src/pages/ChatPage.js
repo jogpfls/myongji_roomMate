@@ -547,6 +547,11 @@ const MessageText = styled.p`
   color: ${({ type, theme }) =>
     type === "message" ? theme.colors.black : theme.colors.gray};
   font-size: ${({ type }) => (type === "message" ? "20px" : "17px")};
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    font-size: ${({ type }) => (type === "message" ? "16px" : "14px")};
+    max-width: 100%;
+  }
 `;
 
 const Timestamp = styled.span`
