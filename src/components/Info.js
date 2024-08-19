@@ -164,7 +164,6 @@ const BoxItem = styled.div`
   display: flex;
   align-items: center;
   flex-basis: ${({status})=>status !== "보기" && "calc(50% - 1.1vw)"};
-  
 
   @media (max-width: ${({theme})=>theme.breakpoints.tablet}) {
     flex-basis: none;
@@ -232,6 +231,7 @@ const InputBox = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: 1vh;
 
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
     width: 75%;
@@ -270,6 +270,7 @@ const AddButton = styled.button`
   border-radius: 5px;
   cursor: pointer;
   white-space: nowrap;
+  margin-top: 1vh;
 
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: 12vw;
