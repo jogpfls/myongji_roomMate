@@ -9,6 +9,7 @@ import { getChatRooms } from "../api/ChatApi";
 import { useLocation } from "react-router-dom";
 import { Axios } from "../api/Axios";
 import OtherInfo from "../components/OtherInfo";
+import Modal from "../components/Modal";
 
 const ChatPage = () => {
   const location = useLocation();
@@ -26,6 +27,11 @@ const ChatPage = () => {
 
   const [selectedUserInfo, setSelectedUserInfo] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [errorModal, setErrorModal] = useState({
+    isOpen: false,
+    title: "",
+    message: "",
+  });
 
   const handleNameClick = async (name) => {
     try {
@@ -35,6 +41,12 @@ const ChatPage = () => {
       setIsModalOpen(true);
     } catch (error) {
       console.error("다른 유저 정보 받기 실패: ", error);
+      setErrorModal({
+        isOpen: true,
+        title: "알림",
+        message:
+          error.response?.data?.message || "유저 정보를 확인할 수 없습니다.",
+      });
     }
   };
 
@@ -319,6 +331,12 @@ const ChatPage = () => {
           onClose={() => setIsModalOpen(false)}
         />
       )}
+      <Modal
+        isOpen={errorModal.isOpen}
+        onClose={() => setErrorModal({ ...errorModal, isOpen: false })}
+        title={errorModal.title}
+        message={errorModal.message}
+      />
     </ChatContainer>
   );
 };
