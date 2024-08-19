@@ -9,7 +9,7 @@ const OtherInfo = ({ userInfo, onClose }) => {
       <ModalContent>
         <Header>
           <h2>{userInfo.name}님의 INFO</h2>
-          <img src={tag}></img>
+          <img src={tag} alt="INFO"></img>
         </Header>
         <CategoryList>
           <CategoryWrapper>
