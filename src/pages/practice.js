@@ -1,10 +1,4 @@
-import React, {
-  useEffect,
-  useState,
-  useRef,
-  useLayoutEffect,
-  useCallback,
-} from "react";
+import React, { useEffect, useState, useRef, useLayoutEffect } from "react";
 import styled from "styled-components";
 import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
@@ -12,13 +6,12 @@ import ChatOut from "../images/ChatOut.svg";
 import ChatRoomList from "../components/ChatRoomList";
 import { getUserData } from "../api/MyApi";
 import { getChatRooms } from "../api/ChatApi";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { Axios } from "../api/Axios";
 import OtherInfo from "../components/OtherInfo";
 import Modal from "../components/Modal";
 
 const ChatPage = () => {
-  const navigate = useNavigate();
   const location = useLocation();
   const [messages, setMessages] = useState({});
   const [inputMessage, setInputMessage] = useState("");
@@ -35,11 +28,6 @@ const ChatPage = () => {
   const [selectedUserInfo, setSelectedUserInfo] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [errorModal, setErrorModal] = useState({
-    isOpen: false,
-    title: "",
-    message: "",
-  });
-  const [exitModal, setExitModal] = useState({
     isOpen: false,
     title: "",
     message: "",
@@ -123,22 +111,6 @@ const ChatPage = () => {
     }
   }, [location.state]);
 
-  const isJoinOrLeaveMessage = useCallback((messageContent) => {
-    return (
-      messageContent.includes("님이 채팅방을 퇴장했습니다.") ||
-      messageContent.includes("님이 채팅방에 입장했습니다.")
-    );
-  }, []);
-
-  const getModifiedContent = useCallback(
-    (messageContent) => {
-      return isJoinOrLeaveMessage(messageContent)
-        ? `--------------${messageContent}--------------`
-        : messageContent;
-    },
-    [isJoinOrLeaveMessage]
-  );
-
   useEffect(() => {
     if (!activeRoomId || !userName) return;
 
@@ -163,20 +135,23 @@ const ChatPage = () => {
           console.log("Received message:", receivedMessage);
           setMessages((prevMessages) => {
             const roomMessages = prevMessages[activeRoomId] || [];
+            const isJoinOrLeaveMessage =
+              receivedMessage.content.includes("님이 채팅방을 퇴장했습니다.") ||
+              receivedMessage.content.includes("님이 채팅방에 입장했습니다.");
 
-            const modifiedContent = getModifiedContent(receivedMessage.content);
-
+            const modifiedContent = isJoinOrLeaveMessage
+              ? `--------------${receivedMessage.content}--------------`
+              : receivedMessage.content;
             if (
               roomMessages.some(
                 (msg) =>
-                  msg.content === modifiedContent &&
+                  msg.content === receivedMessage.content &&
                   msg.sender === receivedMessage.sender &&
                   msg.timestamp === receivedMessage.timestamp
               )
             ) {
               return prevMessages;
             }
-
             return {
               ...prevMessages,
               [activeRoomId]: [
@@ -185,15 +160,13 @@ const ChatPage = () => {
                   content: modifiedContent,
                   sender: receivedMessage.sender,
                   timestamp: receivedMessage.timestamp,
-                  type: isJoinOrLeaveMessage(receivedMessage.content)
-                    ? "notification"
-                    : "message",
+                  type: isJoinOrLeaveMessage ? "notification" : "message",
                 },
               ],
             };
           });
         } catch (error) {
-          console.error("메시지 처리 실패: ", error);
+          console.error("메시지 실패: ", error);
         }
       });
 
@@ -213,7 +186,7 @@ const ChatPage = () => {
         client.deactivate();
       }
     };
-  }, [activeRoomId, userName, getModifiedContent, isJoinOrLeaveMessage]);
+  }, [activeRoomId, userName]);
 
   useLayoutEffect(() => {
     const chatMessagesElement = chatMessagesRef.current;
@@ -268,12 +241,6 @@ const ChatPage = () => {
       setActiveRoomTitle("");
       setRoomParticipants({ current: 0, total: 0 });
       setMessages({});
-
-      setExitModal({
-        isOpen: true,
-        title: "알림",
-        message: "채팅방을 나갔습니다.",
-      });
     } else {
       console.error("STOMP client 연결되지않음 또는 선택되지않음");
     }
@@ -369,15 +336,6 @@ const ChatPage = () => {
         onClose={() => setErrorModal({ ...errorModal, isOpen: false })}
         title={errorModal.title}
         message={errorModal.message}
-      />
-      <Modal
-        isOpen={exitModal.isOpen}
-        onClose={() => {
-          setExitModal({ ...exitModal, isOpen: false });
-          navigate("/main");
-        }}
-        title={exitModal.title}
-        message={exitModal.message}
       />
     </ChatContainer>
   );
@@ -547,11 +505,6 @@ const MessageText = styled.p`
   color: ${({ type, theme }) =>
     type === "message" ? theme.colors.black : theme.colors.gray};
   font-size: ${({ type }) => (type === "message" ? "20px" : "17px")};
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
-    font-size: ${({ type }) => (type === "message" ? "16px" : "14px")};
-    max-width: 100%;
-  }
 `;
 
 const Timestamp = styled.span`
