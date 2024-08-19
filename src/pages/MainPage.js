@@ -17,7 +17,7 @@ const MainPage = () => {
   const [modal, setModal] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
-  
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -67,9 +67,7 @@ const MainPage = () => {
       try {
         const data = await getUserData(setModalOpen, setModalMessage);
         setUserData(data);
-      } catch (error) {
-        // Error handling is done in getUserData
-      }
+      } catch (error) {}
     };
     fetchData();
   }, [navigate]);
@@ -85,7 +83,7 @@ const MainPage = () => {
   const closeModal = () => {
     setModal(false);
     setModalOpen(false);
-    localStorage.setItem('modalShown', 'true'); // 모달이 한 번 표시되었음을 기록
+    localStorage.setItem("modalShown", "true");
   };
 
   return (
@@ -136,7 +134,10 @@ const MainPage = () => {
         className={mapVisible ? "visible" : ""}
         name="map-section"
       >
-        <span>룸메를 구하는 기숙사 게시글의 수를 확인하세요</span>
+        <span>
+          기숙사 게시판에 게재된 <br />
+          룸메이트 모집 공고의 수를 확인하세요
+        </span>
         <Map />
       </AnimatedMapContainer>
       {modal && <NameGender closeModal={closeModal} />}
@@ -182,6 +183,7 @@ const AnimatedMapContainer = styled.div`
     ${(props) => props.theme.fonts.logo}
     color: ${(props) => props.theme.colors.gray};
     opacity: 0.8;
+    line-height: 1.2em;
   }
 
   p {
@@ -189,6 +191,7 @@ const AnimatedMapContainer = styled.div`
     margin-bottom: 60px;
     ${(props) => props.theme.fonts.logo}
     color: red;
+    font-size: 20px;
   }
 `;
 
@@ -207,7 +210,7 @@ const BackgroundImage = styled.img`
 const ContentContainer = styled.div`
   position: relative;
   z-index: 1;
-  padding: 150px 20px;
+  padding: 120px 20px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -285,7 +288,6 @@ const Cir = styled.div`
 
 const DownArrow = styled.div`
   transform: rotate(90deg);
-  margin-top: 20px;
   cursor: pointer;
   font-size: 30px;
   color: ${(props) => props.theme.colors.blue};
