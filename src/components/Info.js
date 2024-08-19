@@ -46,6 +46,7 @@ const Info = ({ isEditing }) => {
         );
         setItems(categories);
         setNewItem("");
+        setCount(0);
       } catch (error) {
         console.error("Info 추가에 실패했습니다.", error);
       } finally {
@@ -100,7 +101,9 @@ const Info = ({ isEditing }) => {
           </>
         ) : (
           items.map((item, index) => (
-            <BoxItem key={index}>
+            <BoxItem 
+            isEditing={isEditing}
+            key={index}>
               <SquareBox>
                 {isEditing && (
                   <RemoveButton onClick={() => removeItem(index)}>
@@ -164,6 +167,8 @@ const BoxItem = styled.div`
   display: flex;
   align-items: center;
   flex-basis: ${({status})=>status !== "보기" && "calc(50% - 1.1vw)"};
+  margin-left: ${({isEditing})=>isEditing && "10px"};
+  margin-top: ${({isEditing})=>isEditing  && "5px"};
 
   @media (max-width: ${({theme})=>theme.breakpoints.tablet}) {
     flex-basis: none;
@@ -171,11 +176,11 @@ const BoxItem = styled.div`
 `;
 
 const SquareBox = styled.div`
-  width: 23px;
-  height: 23px;
+  width: 10px;
+  height: 10px;
   background-color: ${(props) =>
     props.isPlaceholder ? props.theme.colors.gray2 : props.theme.colors.blue2};
-  border-radius: 5px;
+  border-radius: 50px;
   position: relative;
   display: flex;
   align-items: center;
@@ -184,8 +189,8 @@ const SquareBox = styled.div`
 
 const RemoveButton = styled.button`
   position: absolute;
-  width: 23px;
-  height: 23px;
+  width: 20px;
+  height: 20px;
   border-radius: 5px;
   border: none;
   background-color: ${(props) => props.theme.colors.blue2};

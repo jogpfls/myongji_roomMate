@@ -256,7 +256,7 @@ const MyPage = () => {
               <Next1 src={next} alt="화살표" onClick={handleWriteNext} />
             </WriteList>
           </BBox>
-              <Title>Like</Title>
+              <Title>관심글</Title>
                 <LikeBox>
                   <Back2 src={back} alt="화살표" onClick={handleLikeBack} />
                   <LikeScrollBox ref={likeWrapperRef}>
@@ -416,7 +416,7 @@ const Title = styled.div`
 `;
 
 const InfoAllBox = styled.div`
-  border: 1.5px solid ${(props) => props.theme.colors.deepBlue2};
+  border: 1.5px solid ${(props) => props.theme.colors.gray};
   border-radius: 30px;
   height: 100%;
   width: 100%;
@@ -536,7 +536,7 @@ const ListBox = styled.div`
 `;
 
 const BBox = styled.div`
-  border: 1.5px solid ${(props) => props.theme.colors.deepBlue2};
+  border: 1.5px solid ${(props) => props.theme.colors.gray};
   border-radius: 30px;
   height: 42%;
   min-height: 100px;
@@ -624,7 +624,7 @@ const Next1 = styled.img`
 `;
 
 const LikeBox = styled.div`
-  border: 1.5px solid ${(props) => props.theme.colors.deepBlue2};
+  border: 1.5px solid ${(props) => props.theme.colors.gray};
   border-radius: 30px;
   height: 42%;
   min-height: 100px;
