@@ -125,15 +125,15 @@ const ChatPage = () => {
 
   const isJoinOrLeaveMessage = useCallback((messageContent) => {
     return (
-      messageContent.includes("님이 채팅방을 퇴장했습니다.") ||
-      messageContent.includes("님이 채팅방에 입장했습니다.")
+      messageContent.includes("님이 채팅방을 퇴장했습니다") ||
+      messageContent.includes("님이 채팅방에 입장했습니다")
     );
   }, []);
 
   const getModifiedContent = useCallback(
     (messageContent) => {
       return isJoinOrLeaveMessage(messageContent)
-        ? `--------------${messageContent}--------------`
+        ? `-------------- ${messageContent} --------------`
         : messageContent;
     },
     [isJoinOrLeaveMessage]
