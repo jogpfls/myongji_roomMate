@@ -1,44 +1,46 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 
-const Modal = ({ isOpen, onClose, title, message }) => {
+const Modal = ({ isOpen, onClose, title, message, changeName, handleName }) => {
 
-  useEffect(() => {
-    const handleKeyPress = (event) => {
-      if (event.key === 'Enter') {
-        event.preventDefault(); // 기본 동작을 막아 handleLogin 함수 실행 방지
-        onClose();
+    useEffect(() => {
+      const handleKeyPress = (event) => {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          onClose();
+        }
+      };
+  
+      if (isOpen) {
+        window.addEventListener('keydown', handleKeyPress);
       }
-    };
-
-    if (isOpen) {
-      window.addEventListener('keydown', handleKeyPress);
-    }
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyPress);
-    };
-  }, [isOpen, onClose]);
-
-  if (!isOpen) return null;
-
-  return (
-    <Overlay>
-      <Content>
-        <Header>
-          <h2>{title}</h2>
-          <CloseButton onClick={onClose}>&times;</CloseButton>
-        </Header>
-        <Body>
-          <p>{message}</p>
-        </Body>
-        <Footer>
-          <ConfirmButton onClick={onClose}>확인</ConfirmButton>
-        </Footer>
-      </Content>
-    </Overlay>
-  );
-};
+  
+      return () => {
+        window.removeEventListener('keydown', handleKeyPress);
+      };
+    }, [isOpen, onClose]);
+  
+    if (!isOpen) return null;
+  
+    return (
+      <Overlay>
+        <Content>
+          <Header>
+            <h2>{title}</h2>
+            {changeName ? <CloseButton onClick={handleName}>&times;</CloseButton> : 
+            <CloseButton onClick={onClose}>&times;</CloseButton>}
+          </Header>
+          <Body>
+            <p>{message}</p>
+          </Body>
+          <Footer>
+            {changeName ? <ConfirmButton onClick={handleName}>확인</ConfirmButton> : 
+            <ConfirmButton onClick={onClose}>확인</ConfirmButton>}
+          </Footer>
+        </Content>
+      </Overlay>
+    );
+  };
 
 const Overlay = styled.div`
   position: fixed;

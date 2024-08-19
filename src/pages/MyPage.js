@@ -27,6 +27,7 @@ const MyPage = () => {
   const [like, setLike] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
+  const [changeName, setChangeName] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -52,10 +53,12 @@ const MyPage = () => {
 
   const handleNameSubmit = async () => {
     try {
-      await updateUserName(newName);
+      await updateUserName(newName, setModalMessage, setModalOpen, navigate);
       setUserData({ ...userData, name: newName });
       setNameEditMode(false);
     } catch (error) {
+      setModalOpen(true);
+      setChangeName(true);
       console.error("이름 수정에 실패했습니다.", error);
     }
   };
@@ -77,13 +80,7 @@ const MyPage = () => {
     if (listWrapperRef.current) {
       const width = window.innerWidth;
       let scrollAmount = 0;
-      if (width > 850) {
-        scrollAmount = width * 0.26;
-      } else if (width > 480) {
-        scrollAmount = width * 0.29;
-      } else {
         scrollAmount = width * 0.58;
-      }
       listWrapperRef.current.scrollBy({
         left: scrollAmount,
         behavior: "smooth",
@@ -95,13 +92,7 @@ const MyPage = () => {
     if (likeWrapperRef.current) {
       const width = window.innerWidth;
       let scrollAmount = 0;
-      if (width > 850) {
-        scrollAmount = width * 0.26;
-      } else if (width > 480) {
-        scrollAmount = width * 0.29;
-      } else {
         scrollAmount = width * 0.58;
-      }
       likeWrapperRef.current.scrollBy({
         left: scrollAmount,
         behavior: "smooth",
@@ -113,13 +104,7 @@ const MyPage = () => {
     if (listWrapperRef.current) {
       const width = window.innerWidth;
       let scrollAmount = 0;
-      if (width > 850) {
-        scrollAmount = width * 0.26;
-      } else if (width > 480) {
-        scrollAmount = width * 0.29;
-      } else {
         scrollAmount = width * 0.58;
-      }
       listWrapperRef.current.scrollBy({
         left: -scrollAmount,
         behavior: "smooth",
@@ -131,13 +116,7 @@ const MyPage = () => {
     if (likeWrapperRef.current) {
       const width = window.innerWidth;
       let scrollAmount = 0;
-      if (width > 850) {
-        scrollAmount = width * 0.26;
-      } else if (width > 480) {
-        scrollAmount = width * 0.29;
-      } else {
         scrollAmount = width * 0.58;
-      }
       likeWrapperRef.current.scrollBy({
         left: -scrollAmount,
         behavior: "smooth",
@@ -156,7 +135,19 @@ const MyPage = () => {
     }
     fetchLike();
   }, [])
-  
+
+  const handleModalClose = () => {
+    setModalOpen(false);
+    if(changeName){
+      setModalOpen(false);
+      setChangeName(false);
+      navigate("/mypage");
+    }
+    else{
+      navigate('/auth/login');
+    }
+  };
+    
   if(!userData || !userBoards){
     return (
       <LoadingContainer>
@@ -166,17 +157,13 @@ const MyPage = () => {
     );
   }
 
-  const handleModalClose = () => {
-    setModalOpen(false);
-    navigate("/auth/login");
-  };
-
   return (
     <Container>
       <LRBox>
         <Left>
           <Title>개인정보</Title>
-          <TBox>
+          <InfoAllBox>
+            <InfoBox>
             <Profile>
               <Img></Img>
               <NameBox>
@@ -232,11 +219,24 @@ const MyPage = () => {
             <Info>
               학번: {userData.studentNumber}
               <br />
-              구분: ICT학부
-              <br />
-              소속: {userData.major}
             </Info>
-          </TBox>
+            </InfoBox>
+            <BottomBox>
+              <ListBox>
+                <BoxList isEditing={isEditing} />
+              </ListBox>
+              <BtnBox>
+                <Button
+                  onClick={() => setIsEditing(!isEditing)}
+                  bgc={isEditing ? theme.colors.deepBlue2 : theme.colors.blue2}
+                >
+                  {isEditing ? "저장하기" : "수정하기"}
+              </Button>
+            </BtnBox>
+            </BottomBox>
+          </InfoAllBox>
+        </Left>
+        <Right>
           <Title>내가 쓴 글</Title>
           <BBox>
             <WriteList>
@@ -258,12 +258,6 @@ const MyPage = () => {
               <Next1 src={next} alt="화살표" onClick={handleWriteNext} />
             </WriteList>
           </BBox>
-        </Left>
-        <Right>
-            <Title>INFO</Title>
-            <LBox>
-              <BoxList isEditing={isEditing} />
-            </LBox>
               <Title>Like</Title>
                 <LikeBox>
                   <Back2 src={back} alt="화살표" onClick={handleLikeBack} />
@@ -283,19 +277,12 @@ const MyPage = () => {
                 </LikeBox>
         </Right>
       </LRBox>
-      <BtnBox>
-        <Button
-          onClick={() => setIsEditing(!isEditing)}
-          bgc={isEditing ? theme.colors.deepBlue2 : theme.colors.blue2}
-        >
-          {isEditing ? "저장하기" : "수정하기"}
-        </Button>
-      </BtnBox>
       <Modal
         isOpen={modalOpen}
         onClose={handleModalClose}
         title="알림"
         message={modalMessage}
+        changeName={changeName}
       />
     </Container>
   );
@@ -350,11 +337,6 @@ const LoadingText = styled.div`
 `;
 
 const MyListBox = styled.div`
-  width: 25vw;
-
-  @media screen and (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
-    width: 28vw;
-  }
 
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: 57vw;
@@ -367,22 +349,21 @@ const Container = styled.div`
   height: 95vh;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
-    width: 90%;
+    width: 90vw;
   }
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    width: 85%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    height: 100%;
-    margin-top: 3vh;
+    width: 90%;
+    height: 120vh;
+    margin-top: 6vh;
   }
+
 `;
 
 const LRBox = styled.div`
   width: 100%;
   min-height: 600px;
+  max-height: 900px;
   height: 90%;
   display: flex;
   align-items: center;
@@ -392,6 +373,7 @@ const LRBox = styled.div`
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     flex-direction: column;
     height: auto;
+    gap: 0;
   }
 `;
 
@@ -401,6 +383,7 @@ const Left = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
+
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: 100%;
@@ -413,7 +396,7 @@ const Right = styled.div`
   height: 80%;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  justify-content: space-between;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: 100%;
@@ -430,42 +413,43 @@ const Title = styled.div`
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     margin-bottom: 8px;
     font-size: 25px;
-    margin-top: 3px;
+    margin-top: 3vh;
   }
 `;
 
-const TBox = styled.div`
+const InfoAllBox = styled.div`
   border: 1.5px solid ${(props) => props.theme.colors.deepBlue2};
   border-radius: 30px;
-  height: 70%;
+  height: 100%;
+  width: 100%;
   min-height: 300px;
+  min-width: 200px;
   background-color: ${(props) => props.theme.colors.white};
-  margin-bottom: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 4vw;
-  width: 100%;
-  padding: 30px 30px 30px 40px;
+  flex-direction: column;
+  gap: 2vh;
+  padding: 5vh 3vw;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    gap: 3vh;
+    gap: 1.5vh;
   }
 
+`;
+
+const InfoBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2vh;
+  align-items: center;
+
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    display: flex;
-    justify-content: space-evenly;
-    padding: 0 6vw;
-    border-radius: 20px;
-    min-height: 0px;
-    height: 200px;
-    flex-direction: row;
-    gap: 0;
-    position: relative;
+
   }
 `;
 
@@ -487,9 +471,6 @@ const Img = styled.div`
   background-color: ${(props) => props.theme.colors.lightBlue};
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}){
-    position: absolute;
-    left: 10%;
-    top: 15%;
   }
 `;
 
@@ -519,9 +500,6 @@ const Name = styled.div`
   }
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}){
-    position: absolute;
-    bottom: 15%;
-    left: 10%;
     input{
       width: 65px;
       text-align: start;
@@ -537,60 +515,54 @@ const Info = styled.div`
   white-space: nowrap;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    width: auto;
-    top: 25%;
-    position: absolute;
-    left: 55%;
+
+  }
+`;
+
+const BottomBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  height: 63%;
+  justify-content: space-between;
+  width: 100%;
+`;
+
+const ListBox = styled.div`
+  width: 100%;
+  height: 83%;
+
+  @media (max-width: ${({theme})=>theme.breakpoints.mobile}) {
+    height: 20vh;
+    margin-bottom: 2vh;
+    padding-left: 7vw;
   }
 `;
 
 const BBox = styled.div`
   border: 1.5px solid ${(props) => props.theme.colors.deepBlue2};
   border-radius: 30px;
-  height: 30%;
+  height: 42%;
   min-height: 100px;
   background-color: ${(props) => props.theme.colors.white};
   display: flex;
   justify-content: center;
   align-items: center;
-  position: relative;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    width: auto;
-    border-radius: 20px;
+  @media (max-width: ${({theme})=>theme.breakpoints.mobile}) {
+    position: relative;
   }
+
 `;
 
-const LBox = styled.div`
-  border: 1.5px solid ${(props) => props.theme.colors.deepBlue2};
-  border-radius: 30px;
-  height: 70%;
-  min-height: 300px;
-  background-color: ${(props) => props.theme.colors.white};
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 20px;
-  margin-bottom: 10px;
-
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    padding: 2vh 6vw;
-    border-radius: 20px;
-    min-height: 0px;
-    height: 200px;
-  }
-`;
 
 const BtnBox = styled.div`
   width: 100%;
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
-  margin-top: -6vh;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    margin-top: 3vh;
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    margin-right: 5vw;
   }
 `;
 
@@ -598,11 +570,9 @@ const WriteList = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 25vw;
-
-  @media screen and (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
-    width: 28vw;
-  }
+  width: 100%;
+  height: 100%;
+  padding: 3vh 0;
 
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: 57vw;
@@ -610,74 +580,109 @@ const WriteList = styled.div`
 `;
 
 const Back1 = styled.img`
-  width: 30px;
-  position: absolute;
-  cursor: pointer;
-  z-index: 999;
-  left:  0.4vw;
+  display: none;
+
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    display: flex;
+    width: 30px;
+    position: absolute;
+    cursor: pointer;
+    z-index: 999;
+    left: 5vw;
+  }
 `;
 
 const ListWrapper = styled.div`
+  overflow-y: scroll;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5vh;
+  padding: 0 2vw;
+
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
   width: 100%;
   overflow-x: hidden;
-  display: flex;
+  overflow-y: initial;
   gap: 1vw;
+  flex-direction: row;
   scroll-behavior: smooth;
+  padding: 0;
+  }
 `;
 
 const Next1 = styled.img`
-  width: 30px;
-  position: absolute;
-  right: 0.3vw;
-  cursor: pointer;
-  z-index: 999;
+  display: none;
+
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    display: flex;
+    width: 30px;
+    position: absolute;
+    right: 5vw;
+    cursor: pointer;
+    z-index: 999;
+  }
 `;
 
 const LikeBox = styled.div`
   border: 1.5px solid ${(props) => props.theme.colors.deepBlue2};
   border-radius: 30px;
-  height: 30%;
+  height: 42%;
   min-height: 100px;
   background-color: ${(props) => props.theme.colors.white};
   display: flex;
   justify-content: center;
   align-items: center;
-  position: relative;
+  padding: 3vh 0;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: auto;
     border-radius: 20px;
+    position: relative;
   }
 `;
 
 const Back2 = styled.img`
-  left: 0.3vw;
-  width: 30px;
-  position: absolute;
-  cursor: pointer;
+  display: none;
+
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    display: flex;
+    left: 5vw;
+    width: 30px;
+    position: absolute;
+    cursor: pointer;
+  }
 `;
 
 const LikeScrollBox = styled.div`
-  width: 25vw;
-  height: auto;
+  height: 100%;
+  padding: 0 2vw;
+  overflow-y: scroll;
   display: flex;
-  overflow-x: hidden;
-  gap: 1vw;
-
-  @media screen and (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
-    width: 28vw;
-  }
+  flex-direction: column;
+  gap: 1.5vw;
 
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: 57vw;
+    height: auto;
+    overflow-x: hidden;
+    overflow-y: initial;
+    flex-direction: row;
+    gap: 1vw;
+    padding: 0;
   }
 `;
 
 const Next2 = styled.img`
-  width: 30px;
-  position: absolute;
-  right: 0.3vw;
-  cursor: pointer;
+  display: none;
+  
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    display: flex;
+    width: 30px;
+    position: absolute;
+    right: 5vw;
+    cursor: pointer;
+  }
 `;
 
 export default MyPage;
