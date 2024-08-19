@@ -27,10 +27,16 @@ const DormitoryPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchDormitoryPosts(name, setModalMessage, setModalOpen).then((boardDtoList) => {
-      setPosts(boardDtoList);
-    });
-  }, [name]);
+    const fetchData = async () => {
+      try {
+        const boardDtoList = await fetchDormitoryPosts(name, setModalMessage, setModalOpen, navigate);
+        setPosts(boardDtoList);
+      } catch (error) {
+      }
+    };
+  
+    fetchData();
+  }, [name, navigate]);
 
   const handleSearchChange = (event) => {
     setSearch(event.target.value);
