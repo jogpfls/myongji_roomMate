@@ -6,9 +6,6 @@ export const getUserData = async () => {
     const response = await Axios.get("/users/info");
     return response.data.data;
   } catch (error) {
-    if (error.response && error.response.status === 401) {
-      Cookies.remove("accessToken");
-    }
     console.error("유저 정보를 가져오는데 실패했습니다.", error);
     throw error;
   }
@@ -24,11 +21,16 @@ export const updateUserName = async (newName) => {
   }
 };
 
-export const getUserBoards = async () => {
+export const getUserBoards = async (setModalMessage, setModalOpen) => {
   try {
     const response = await Axios.get("/users/board");
     return response.data.data.myBoardDtoList;
   } catch (error) {
+    if (error.response && error.response.status === 401) {
+      setModalMessage("세션이 만료되었습니다. 다시 로그인해주세요.");
+      setModalOpen(true);
+      Cookies.remove("accessToken");
+    }
     console.error("게시글을 가져오는데 실패했습니다.", error);
     throw error;
   }

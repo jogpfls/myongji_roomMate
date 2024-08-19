@@ -152,7 +152,7 @@ const ItemsContainer = styled.div`
   margin-top: 1vh;
   margin-left: 1px;
 
-  @media (max-width: 1070px) {
+  @media (max-width: 1090px) {
     display: inline;
     flex-wrap: none;
     gap: none;

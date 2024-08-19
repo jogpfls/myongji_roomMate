@@ -58,10 +58,12 @@ const NameGender = ({closeModal}) => {
           </TitleBox>
         </div>
         </InputFilledBox>
-        <ButtonBox>
-        <InfoText>성별은 한번 설정하고 난 뒤 수정할 수 없습니다.</InfoText>
-          <Submit onClick={handleSubmit} status={status}>제출</Submit>
-        </ButtonBox>
+        <div>
+          <ButtonBox>
+          <InfoText>성별은 한번 설정하고 난 뒤 수정할 수 없습니다.</InfoText>
+            <Submit onClick={handleSubmit} status={status}>제출</Submit>
+          </ButtonBox>
+        </div>
         </Box>
       </Wrapper>
     </Background>
@@ -83,65 +85,97 @@ const Background = styled.div`
 
 const Wrapper = styled.div`
   background-color: ${({theme})=>theme.colors.white};
-  width: 50vw;
-  height: 30vh;
+  width: 400px;
+  height: 250px;
   border-radius: 10px;
   display: flex;
   justify-content: center;
-  padding: 2vh 0;
+  padding: 10px 0;
+
+  @media (max-width: ${({theme})=>theme.breakpoints.mobile}) {
+    width: 270px;
+    height: 200px;
+  }
 `;
 
 const Box = styled.div`
   display: flex;
   flex-direction: column;
   align-items: end;
-  margin-bottom: 1.2vh;
+  margin-bottom: 10px;
 
+  @media (max-width: ${({theme})=>theme.breakpoints.mobile}) {
+    width: 240px;
+  }
 `;
 
 const InputFilledBox = styled.div`
-  width: auto;
-  height: 85%;
+  width: 350px;
+  height: 200px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 2.5vh;
-  margin-bottom: 0.5vh;
+  gap: 33px;
+  margin-bottom: 4px;
+
+  @media (max-width: ${({theme})=>theme.breakpoints.mobile}) {
+    width: 240px;
+    gap: 20px;
+  }
+
 `;
 
 const InputFilled = styled.input`
   background-color: ${({theme})=>theme.colors.gray3};
-  width: 36vw;
-  height: 7vh;
+  width: 287px;
+  height: 53px;
   border-radius: 7px;
-  padding-left: 2vw;
+  padding-left: 18px;
   
   outline: none;
   &:hover{
     outline: none;
   }
+
+  @media (max-width: ${({theme})=>theme.breakpoints.mobile}) {
+    width: 200px;
+    height: 45px;
+  }
 `;
 
 const BtnBox = styled.div`
   display: flex;
-  width: 36vw;
+  width: 287px;
   justify-content: space-between;
+
+  @media (max-width: ${({theme})=>theme.breakpoints.mobile}) {
+    width: 200px;
+  }
 `;
 
 const Btn = styled.button`
   ${({ theme }) => theme.fonts.default};
-  width: 17vw;
-  height: 6vh;
+  width: 130px;
+  height: 50px;
   border-radius: 7px;
   background-color: ${({ theme, selected }) =>
     selected ? theme.colors.lightBlueC : theme.colors.lightBlue};
 
+    @media (max-width: ${({theme})=>theme.breakpoints.mobile}) {
+    width: 90px;
+    height: 40px;
+    font-size: 18px;
+  }
 `;
 
 const TitleBox = styled.div`
   display: flex;
-  gap: 2vw;
+  gap: 18px;
+
+  @media (max-width: ${({theme})=>theme.breakpoints.mobile}) {
+    gap: 10px;
+  }
 `;
 
 const Title = styled.p`
@@ -157,21 +191,33 @@ const InfoText = styled.p`
   ${({theme})=>theme.fonts.text4};
   font-size: 13px;
   color: ${({theme})=>theme.colors.red};
-  margin-bottom: 0.7vh;
-  margin-left: 0.8vw;
+  margin-bottom: 5px;
+  margin-left: 7px;
+
+  @media (max-width: ${({theme})=>theme.breakpoints.mobile}) {
+    width: 125px;
+    margin-left: 15px;
+  }
+
 `;
 
 const ButtonBox = styled.div`
-  width: 100%;
+  width: 350px;
   display: flex;
   justify-content: space-between;
   align-items: end;
+  padding-right: 10px;
+
+  @media (max-width: ${({theme})=>theme.breakpoints.mobile}) {
+    width: 250px;
+    padding-right: 0;
+  }
 `;
 
 const Submit = styled.button`
   ${({theme})=>theme.fonts.default};
-  width: 10vw;
-  height: 5vh;
+  width: 100px;
+  height: 40px;
   border-radius: 7px;
   background-color: ${({theme, status}) =>
     status ? theme.colors.lightBlueC : theme.colors.gray2};
@@ -180,6 +226,12 @@ const Submit = styled.button`
   &:hover{
     background-color: ${({theme, status})=>status ? theme.colors.deepBlue2 : "none"};
     color: ${({theme, status})=>status ? theme.colors.white : "none"};
+  }
+
+  @media (max-width: ${({theme})=>theme.breakpoints.mobile}) {
+    height: 35px;
+    width: 90px;
+    font-size: 18px;
   }
 `;
 
