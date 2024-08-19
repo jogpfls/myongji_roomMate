@@ -51,9 +51,17 @@ const DormitoryPage = () => {
     setChoseModal(false);
   };
 
-  const filteredPosts = posts.filter((post) =>
-    post.title.toLowerCase().includes(filteredSearch.toLowerCase())
-  );
+  const filteredPosts = posts.filter((post) => {
+    const lowerCaseSearch = filteredSearch.toLowerCase();
+    const lowerCaseTitle = post.title.toLowerCase();
+    const lowerCaseContent = post.content.toLowerCase();
+    const lowerCaseCategories = post.categoryList.map(cat => cat.toLowerCase());
+
+    // Check if search term matches title, content, or any category
+    return lowerCaseTitle.includes(lowerCaseSearch) ||
+      lowerCaseContent.includes(lowerCaseSearch) ||
+      lowerCaseCategories.some(cat => cat.includes(lowerCaseSearch));
+  });
 
   const handleNavigate = (post) => {
     const path = `/dormitory/${name}/room/${post.id}`;
@@ -102,21 +110,27 @@ const DormitoryPage = () => {
         </TitleBox>
         <BottomWrapper>
           <ListWrapper>
-            {filteredPosts.map((post) => (
-              <List
-                key={post.id}
-                title={post.title}
-                contents={post.content}
-                search={filteredSearch}
-                date={post.createdAt}
-                total={post.total}
-                category={post.categoryList}
-                current={post.current}
-                gender={post.gender}
-                like={post.like}
-                onClick={() => handleNavigate(post)}
-              />
-            ))}
+          {filteredPosts.length === 0 && filteredSearch.trim() !== "" ? (
+              <TextWrapper>
+                <Text>찾으시는 게시물이 존재하지 않습니다.</Text>
+              </TextWrapper>
+            ) : (
+              filteredPosts.map((post) => (
+                <List
+                  key={post.id}
+                  title={post.title}
+                  contents={post.content}
+                  search={filteredSearch}
+                  date={post.createdAt}
+                  total={post.total}
+                  category={post.categoryList}
+                  current={post.current}
+                  gender={post.gender}
+                  like={post.like}
+                  onClick={() => handleNavigate(post)}
+                />
+              ))
+            )}
           </ListWrapper>
         </BottomWrapper>
       </Wrapper>
@@ -256,5 +270,15 @@ const ListWrapper = styled.div`
   display: flex;
   flex-direction: column;
 `;
+
+const TextWrapper = styled.div`
+  width: 100%;
+  height: 30vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Text = styled.p``;
 
 export default DormitoryPage;

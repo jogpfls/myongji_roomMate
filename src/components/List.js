@@ -21,11 +21,7 @@ const List = ({
   useEffect(() => {
     const handleResize = () => {
       setViewportWidth(window.innerWidth);
-      if (window.innerWidth <= 480) {
-        setMaxLength(50);
-      } else {
-        setMaxLength(100);
-      }
+      setMaxLength(window.innerWidth <= 480 ? 50 : 100);
     };
 
     window.addEventListener("resize", handleResize);
@@ -39,17 +35,14 @@ const List = ({
 
   const truncateText = (text, maxLength) => {
     if (!text) return "";
-    if (text.length > maxLength) {
-      return text.slice(0, maxLength) + "...";
-    }
-    return text;
+    return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
   };
 
-  useEffect(()=>{
-    if(total === current){
+  useEffect(() => {
+    if (total === current) {
       setStatus(true);
     }
-  },[total, current])
+  }, [total, current]);
 
   const formatDate = (dateString) => {
     if (!dateString) return "";
@@ -57,18 +50,15 @@ const List = ({
     return datePart ? datePart.replace(/-/g, ".") : "";
   };
 
-  let visibleCategoriesCount;
-  if(viewportWidth <=480){
-    visibleCategoriesCount = 1;
-  }else if (viewportWidth <= 630) {
-    visibleCategoriesCount = 2;
-  } else if (viewportWidth <= 850) {
-    visibleCategoriesCount = 3;
-  } else if (viewportWidth <= 1150) {
-    visibleCategoriesCount = 4;
-  } else {
-    visibleCategoriesCount = 6;
-  }
+  const visibleCategoriesCount = viewportWidth <= 480
+    ? 1
+    : viewportWidth <= 630
+    ? 2
+    : viewportWidth <= 850
+    ? 3
+    : viewportWidth <= 1150
+    ? 4
+    : 6;
 
   const truncateCategory = (category) => {
     if (category.length > 5) {
@@ -77,53 +67,49 @@ const List = ({
     return category;
   };
 
+  const isMatchingSearch = title.includes(search) || contents.includes(search) || category.some(cat => cat.includes(search));
+
   return (
     <div>
-      {title.includes(search) && (
-        <Wrapper
-          status={status}
-          onClick={!status ? onClick : null}
-        >
+      {isMatchingSearch && (
+        <Wrapper status={status} onClick={!status ? onClick : null}>
           <AllBox>
             <TopBox>
               <LeftBox>
-              {gender === "FEMALE" && (
-                <FemaleTitle status={status}>
-                  <span>♀</span> {title}
-                </FemaleTitle>
-              )}
-              {gender === "MALE" && (
-                <MaleTitle status={status}>
-                  <span>♂</span> {title}
-                </MaleTitle>
-              )}
-              <ChatTextBox status={status}>
-              {status ? (
-                <Count status={status}>({current}/{total}) 채팅 인원이 가득 찼습니다.</Count>
-              ) : (
-                <>
-                  <Count>
-                    {current}/{total} 채팅 중..
-                  </Count>
-                </>
-              )}
-            </ChatTextBox>
+                {gender === "FEMALE" ? (
+                  <FemaleTitle status={status}>
+                    <span>♀</span> {title}
+                  </FemaleTitle>
+                ) : gender === "MALE" ? (
+                  <MaleTitle status={status}>
+                    <span>♂</span> {title}
+                  </MaleTitle>
+                ) : (
+                  <Title status={status}>{title}</Title>
+                )}
+                <ChatTextBox status={status}>
+                  {status ? (
+                    <Count status={status}>
+                      ({current}/{total}) 채팅 인원이 가득 찼습니다.
+                    </Count>
+                  ) : (
+                    <Count>
+                      {current}/{total} 채팅 중..
+                    </Count>
+                  )}
+                </ChatTextBox>
               </LeftBox>
-              {like && <Star src={full} ></Star>}
+              {like && <Star src={full} />}
             </TopBox>
             <ContentsBox>
               <Contents>{truncateText(contents, maxLength)}</Contents>
             </ContentsBox>
             <TextBox>
               <CategoryBox>
-                {category
-                  .slice(0, visibleCategoriesCount)
-                  .map((data, index) => (
-                    <Category key={index}>#{truncateCategory(data)}</Category>
-                  ))}
-                {category.length > visibleCategoriesCount && (
-                  <Ellipsis>#···</Ellipsis>
-                )}
+                {category.slice(0, visibleCategoriesCount).map((data, index) => (
+                  <Category key={index}>#{truncateCategory(data)}</Category>
+                ))}
+                {category.length > visibleCategoriesCount && <Ellipsis>#···</Ellipsis>}
               </CategoryBox>
               <Date>{formatDate(date)}</Date>
             </TextBox>
@@ -141,7 +127,7 @@ const Wrapper = styled.div`
   height: 25vh;
   border-radius: 10px;
   display: flex;
-  cursor: ${({ status }) => (status ? "" : "pointer")};
+  cursor: ${({ status }) => (status ? "default" : "pointer")};
   transition: background-color 0.2s;
   margin-bottom: 2.3vh;
   border: solid 1px ${({ theme }) => theme.colors.gray2};
@@ -149,7 +135,7 @@ const Wrapper = styled.div`
   &:hover {
     background-color: ${({ theme, status }) =>
       status ? "none" : theme.colors.lightBlue};
-    border: ${({ status }) => (status ? "" : "none")};
+    border: ${({ status }) => (status ? "none" : "none")};
   }
 
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
@@ -167,7 +153,6 @@ const AllBox = styled.div`
 
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     padding: 1.5vh 3vw;
-    width: 100%;
   }
 `;
 
@@ -191,7 +176,7 @@ const FemaleTitle = styled.p`
   span {
     font-size: 30px;
     margin-right: 5px;
-    color : ${({theme, status})=> status ? theme.colors.gray : "red"};
+    color: ${({ theme, status }) => (status ? theme.colors.gray : "red")};
   }
 
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
@@ -204,8 +189,20 @@ const MaleTitle = styled.p`
   font-size: 25px;
   span {
     font-size: 30px;
-    color: ${({theme, status})=> status ? theme.colors.gray : "blue"};
+    color: ${({ theme, status }) => (status ? theme.colors.gray : "blue")};
     margin-right: 5px;
+  }
+
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    font-size: 20px;
+  }
+`;
+
+const Title = styled.p`
+  ${({ theme }) => theme.fonts.text4}
+  font-size: 25px;
+  span {
+    font-size: 30px;
   }
 
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
@@ -222,11 +219,11 @@ const ChatTextBox = styled.div`
   border-radius: 3px;
   margin-top: 1.3vh;
   padding: 0 0.5vw;
-  background-color: ${({theme, status})=>status ? theme.colors.gray2 : theme.colors.lightBlue};
+  background-color: ${({ theme, status }) => (status ? theme.colors.gray2 : theme.colors.lightBlue)};
 `;
 
 const Count = styled.p`
-  color: ${({ theme, status }) =>status ? "black" :  theme.colors.gray};
+  color: ${({ theme, status }) => (status ? "black" : theme.colors.gray)};
   font-size: 13px;
   white-space: nowrap;
 `;
