@@ -2,17 +2,22 @@ import React from "react";
 import styled from "styled-components";
 import Header from "./Header";
 import Footer from "./Footer";
+import { useLocation } from "react-router-dom";
 
 const Layout = ({ children }) => {
+  const location = useLocation();
+
   return (
     <LayoutContainer>
       <HeaderWrapper>
         <Header />
       </HeaderWrapper>
       <Main>{children}</Main>
-      <FooterBox>
-        <Footer />
-      </FooterBox>
+      {location.pathname !== "/chat" && (
+        <FooterBox>
+          <Footer />
+        </FooterBox>
+      )}
     </LayoutContainer>
   );
 };
@@ -32,8 +37,7 @@ const Main = styled.main`
 `;
 
 const FooterBox = styled.div`
-margin-top: 5vh;
+  margin-top: 5vh;
 `;
-
 
 export default Layout;
