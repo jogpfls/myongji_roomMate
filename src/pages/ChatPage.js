@@ -7,6 +7,9 @@ import ChatRoomList from "../components/ChatRoomList";
 import { getUserData } from "../api/MyApi";
 import { getChatRooms } from "../api/ChatApi";
 import { useLocation } from "react-router-dom";
+import { Axios } from "../api/Axios";
+import OtherInfo from "../components/OtherInfo";
+import Modal from "../components/Modal";
 
 const ChatPage = () => {
   const location = useLocation();
@@ -22,13 +25,38 @@ const ChatPage = () => {
   const chatMessagesRef = useRef(null);
   const [isRoomListOpen, setIsRoomListOpen] = useState(false);
 
+  const [selectedUserInfo, setSelectedUserInfo] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [errorModal, setErrorModal] = useState({
+    isOpen: false,
+    title: "",
+    message: "",
+  });
+
+  const handleNameClick = async (name) => {
+    try {
+      const response = await Axios.post("/users/profile", { name });
+      setSelectedUserInfo(response.data.data);
+      console.log(response.data);
+      setIsModalOpen(true);
+    } catch (error) {
+      console.error("다른 유저 정보 받기 실패: ", error);
+      setErrorModal({
+        isOpen: true,
+        title: "알림",
+        message:
+          error.response?.data?.message || "유저 정보를 확인할 수 없습니다.",
+      });
+    }
+  };
+
   useEffect(() => {
     const fetchUserName = async () => {
       try {
         const userData = await getUserData();
         setUserName(userData.name);
       } catch (error) {
-        console.error("Failed to fetch user name:", error);
+        console.error("유저 이름 받기 실패: ", error);
       }
     };
 
@@ -51,7 +79,7 @@ const ChatPage = () => {
           });
         }
       } catch (error) {
-        console.error("Failed to fetch recent chat room:", error);
+        console.error("최근 채팅방 받기 실패: ", error);
       }
     };
 
@@ -138,7 +166,7 @@ const ChatPage = () => {
             };
           });
         } catch (error) {
-          console.error("Failed to parse message:", error);
+          console.error("메시지 실패: ", error);
         }
       });
 
@@ -182,7 +210,7 @@ const ChatPage = () => {
 
       setInputMessage("");
     } else {
-      console.error("STOMP client is not connected or input is empty.");
+      console.error("STOMP client 연결되지 않음 또는 입력 빈값");
     }
   };
 
@@ -214,7 +242,7 @@ const ChatPage = () => {
       setRoomParticipants({ current: 0, total: 0 });
       setMessages({});
     } else {
-      console.error("STOMP client is not connected or room is not selected.");
+      console.error("STOMP client 연결되지않음 또는 선택되지않음");
     }
   };
 
@@ -261,7 +289,10 @@ const ChatPage = () => {
               type={message.type}
             >
               {message.type === "message" && (
-                <SenderName sent={message.sender === userName}>
+                <SenderName
+                  sent={message.sender === userName}
+                  onClick={() => handleNameClick(message.sender)}
+                >
                   {message.sender}
                 </SenderName>
               )}
@@ -294,6 +325,18 @@ const ChatPage = () => {
           </SendButton>
         </ChatInputContainer>
       </ChatRoom>
+      {isModalOpen && (
+        <OtherInfo
+          userInfo={selectedUserInfo}
+          onClose={() => setIsModalOpen(false)}
+        />
+      )}
+      <Modal
+        isOpen={errorModal.isOpen}
+        onClose={() => setErrorModal({ ...errorModal, isOpen: false })}
+        title={errorModal.title}
+        message={errorModal.message}
+      />
     </ChatContainer>
   );
 };
@@ -442,6 +485,7 @@ const SenderName = styled.span`
     sent ? theme.colors.deepBlue2 : theme.colors.black};
   margin-left: ${({ sent }) => (sent ? "" : "5px")};
   margin-right: ${({ sent }) => (sent ? "5px" : "")};
+  cursor: pointer;
 `;
 
 const MessageText = styled.p`
