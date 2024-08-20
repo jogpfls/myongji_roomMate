@@ -328,14 +328,12 @@ const AllBox = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2vh;
-  //border: 1px solid ${({ theme }) => theme.colors.gray2};
   border-radius: 5px;
 `;
 
 const Title = styled.div`
   width: 100%;
   padding: 20px 20px;
-  //border-radius: 10px;
   ${(props) => props.theme.fonts.text5}
   font-size: 25px;
 `;

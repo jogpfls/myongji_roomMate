@@ -12,7 +12,6 @@ const Login = () => {
   const navigate = useNavigate();
 
   const handleLogin = async () => {
-    //if (modalOpen) return;
     try {
       const response = await login(id, passwrd, navigate);
       if (response.status === 201) {
@@ -61,7 +60,7 @@ const Login = () => {
                   placeholder="학번(601234)을 입력해주세요"
                   type="id"
                   onChange={(event) => setId(event.target.value)}
-                  onKeyDown={handleKeyDown} // Added event listener
+                  onKeyDown={handleKeyDown}
                 />
               </InputFilledBox>
             </FilledBox>
