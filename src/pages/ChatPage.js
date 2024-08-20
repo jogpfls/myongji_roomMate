@@ -143,7 +143,8 @@ const ChatPage = () => {
     if (!activeRoomId || !userName) return;
 
     const client = new Client({
-      webSocketFactory: () => new SockJS("https://api.mju-mate.com/ws/chat"),
+      webSocketFactory: () =>
+        new SockJS(`${process.env.REACT_APP_BASE_URL}/ws/chat`),
       debug: function (str) {
         console.log(str);
       },
