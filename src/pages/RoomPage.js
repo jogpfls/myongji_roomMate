@@ -352,6 +352,7 @@ const Content = styled.div`
   height: auto;
   padding: 10px 20px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray2};
+  line-height: 1.2em;
 `;
 
 const Input = styled.textarea`
