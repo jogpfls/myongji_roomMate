@@ -50,15 +50,16 @@ const List = ({
     return datePart ? datePart.replace(/-/g, ".") : "";
   };
 
-  const visibleCategoriesCount = viewportWidth <= 480
-    ? 1
-    : viewportWidth <= 630
-    ? 2
-    : viewportWidth <= 850
-    ? 3
-    : viewportWidth <= 1150
-    ? 4
-    : 6;
+  const visibleCategoriesCount =
+    viewportWidth <= 480
+      ? 1
+      : viewportWidth <= 630
+      ? 2
+      : viewportWidth <= 850
+      ? 3
+      : viewportWidth <= 1150
+      ? 4
+      : 6;
 
   const truncateCategory = (category) => {
     if (category.length > 5) {
@@ -67,7 +68,10 @@ const List = ({
     return category;
   };
 
-  const isMatchingSearch = title.includes(search) || contents.includes(search) || category.some(cat => cat.includes(search));
+  const isMatchingSearch =
+    title.includes(search) ||
+    contents.includes(search) ||
+    category.some((cat) => cat.includes(search));
 
   return (
     <div>
@@ -106,10 +110,14 @@ const List = ({
             </ContentsBox>
             <TextBox>
               <CategoryBox>
-                {category.slice(0, visibleCategoriesCount).map((data, index) => (
-                  <Category key={index}>#{truncateCategory(data)}</Category>
-                ))}
-                {category.length > visibleCategoriesCount && <Ellipsis>#···</Ellipsis>}
+                {category
+                  .slice(0, visibleCategoriesCount)
+                  .map((data, index) => (
+                    <Category key={index}>#{truncateCategory(data)}</Category>
+                  ))}
+                {category.length > visibleCategoriesCount && (
+                  <Ellipsis>#···</Ellipsis>
+                )}
               </CategoryBox>
               <Date>{formatDate(date)}</Date>
             </TextBox>
@@ -219,7 +227,8 @@ const ChatTextBox = styled.div`
   border-radius: 3px;
   margin-top: 1.3vh;
   padding: 0 0.5vw;
-  background-color: ${({ theme, status }) => (status ? theme.colors.gray2 : theme.colors.lightBlue)};
+  background-color: ${({ theme, status }) =>
+    status ? theme.colors.gray2 : theme.colors.lightBlue};
 `;
 
 const Count = styled.p`
@@ -262,6 +271,7 @@ const Contents = styled.p`
 `;
 
 const CategoryBox = styled.div`
+  margin-top: 10px;
   display: flex;
   gap: 1vw;
   width: 70%;
