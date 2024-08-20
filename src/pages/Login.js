@@ -42,7 +42,7 @@ const Login = () => {
     <AllWrapper>
       <Wrapper>
         <TitleBox>
-          <LoginText>통합로그인(SSO)</LoginText>
+          <LoginText>명지대학교 통합로그인(SSO)</LoginText>
           <IntegrationText>
             통합로그인은 한번의 로그인을 통하여 우리대학 전체 시스템에 추가
             로그인 없이 이용 하실 수 있는 서비스 입니다.
@@ -131,6 +131,11 @@ const LoginText = styled.p`
   font-size: 40px;
   margin-bottom: 1.5vh;
   white-space: nowrap;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    word-wrap: break-word;
+    font-size: 30px;
+  }
 `;
 
 const IntegrationText = styled.p`
@@ -142,7 +147,7 @@ const IntegrationText = styled.p`
   }
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    font-size: 17px;
+    font-size: 15px;
     text-align: center;
   }
 `;
