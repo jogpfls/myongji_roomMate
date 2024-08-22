@@ -304,9 +304,14 @@ const ChatPage = () => {
             <Icon isOpen={isRoomListOpen}>{isRoomListOpen ? "×" : "<"}</Icon>
           </ToggleRoomListButton>
           <RoomInfo>
-            <RoomTitle>{activeRoomTitle}</RoomTitle>
+            <RoomTitle>
+              {activeRoomTitle}
+              <span>
+                ( {roomParticipants.current} / {roomParticipants.total} )
+              </span>
+            </RoomTitle>
             <RoomStatus>
-              ( {roomParticipants.current} / {roomParticipants.total} )
+              ※ 이름을 클릭하여 상대의 INFO를 확인하세요 ※
             </RoomStatus>
           </RoomInfo>
           <HeaderRight>
@@ -458,6 +463,19 @@ const RoomTitle = styled.h3`
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
+  }
+
+  span {
+    margin-left: 10px;
+    color: #666;
+    ${(props) => props.theme.fonts.text2};
+    font-size: 20px;
+    @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+      margin-left: 0;
+      margin-top: 4px;
+      font-size: 13px;
+    }
   }
 `;
 
@@ -467,8 +485,8 @@ const HeaderRight = styled.div`
 `;
 
 const RoomStatus = styled.span`
-  color: #666;
   ${(props) => props.theme.fonts.text2};
+  color: ${(props) => props.theme.colors.gray};
   font-size: 15px;
   margin-right: 20px;
 
@@ -478,6 +496,8 @@ const RoomStatus = styled.span`
     justify-content: center;
     margin-right: 0;
     margin-top: 4px;
+    font-size: 13px;
+    display: none;
   }
 `;
 
