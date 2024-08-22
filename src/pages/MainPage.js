@@ -184,6 +184,10 @@ const AnimatedMapContainer = styled.div`
     color: ${(props) => props.theme.colors.gray};
     opacity: 0.8;
     line-height: 1.2em;
+    @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+      font-size: 20px;
+      margin-bottom: 30px;
+    }
   }
 
   p {
@@ -215,6 +219,10 @@ const ContentContainer = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    padding: 80px 20px;
+  }
 `;
 
 const Title = styled.div`
