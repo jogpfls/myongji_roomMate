@@ -304,15 +304,23 @@ const ChatPage = () => {
             <Icon isOpen={isRoomListOpen}>{isRoomListOpen ? "×" : "<"}</Icon>
           </ToggleRoomListButton>
           <RoomInfo>
-            <RoomTitle>
-              {activeRoomTitle}
-              <span>
-                ( {roomParticipants.current} / {roomParticipants.total} )
-              </span>
-            </RoomTitle>
-            <RoomStatus>
-              ※ 이름을 클릭하여 상대의 INFO를 확인하세요 ※
-            </RoomStatus>
+            {activeRoomId ? (
+              <>
+                <RoomTitle>
+                  {activeRoomTitle}
+                  <span>
+                    ( {roomParticipants.current} / {roomParticipants.total} )
+                  </span>
+                </RoomTitle>
+                <RoomStatus>
+                  ※ 이름을 클릭하여 상대의 INFO를 확인하세요 ※
+                </RoomStatus>
+              </>
+            ) : (
+              <RoomTitle>
+                <p>참여중인 채팅방이 없습니다.</p>
+              </RoomTitle>
+            )}
           </RoomInfo>
           <HeaderRight>
             <ExitButton onClick={handleExitRoom}>
@@ -476,6 +484,12 @@ const RoomTitle = styled.h3`
       margin-top: 4px;
       font-size: 13px;
     }
+  }
+
+  p {
+    padding: 10px 0;
+    ${(props) => props.theme.fonts.text5};
+    font-size: 23px;
   }
 `;
 
