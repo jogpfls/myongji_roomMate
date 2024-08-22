@@ -78,8 +78,8 @@ const List = ({
       {isMatchingSearch && (
         <Wrapper status={status} onClick={!status ? onClick : null}>
           <AllBox>
-            <TopBox>
-              <LeftBox>
+            <TopBox status={status}>
+              <LeftBox status={status}>
                 {gender === "FEMALE" ? (
                   <FemaleTitle status={status}>
                     <span>♀</span> {title}
@@ -158,6 +158,7 @@ const AllBox = styled.div`
   width: 100%;
   height: 100%;
   padding: 3vh 2vw;
+  min-height: 150px;
 
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     padding: 1.5vh 3vw;
@@ -168,6 +169,11 @@ const TopBox = styled.div`
   display: flex;
   width: 99%;
   justify-content: space-between;
+
+  @media (max-width: 600px) {
+    justify-content: ${(status) => (status ? "flex-start" : "space-between")};
+    align-items: ${({ status }) => (status ? "flex-start" : "")};
+  }
 `;
 
 const LeftBox = styled.div`
@@ -175,6 +181,12 @@ const LeftBox = styled.div`
   display: flex;
   gap: 1.5vw;
   align-items: center;
+
+  @media (max-width: 600px) {
+    flex-direction: ${({ status }) => (status ? "column" : "row")};
+    align-items: ${({ status }) => (status ? "flex-start" : "center")};
+    gap: ${({ status }) => (status ? "0" : "1.5vw")};
+  }
 `;
 
 const FemaleTitle = styled.p`
@@ -229,6 +241,11 @@ const ChatTextBox = styled.div`
   padding: 0 0.5vw;
   background-color: ${({ theme, status }) =>
     status ? theme.colors.gray2 : theme.colors.lightBlue};
+
+  @media (max-width: 600px) {
+    margin-top: ${({ status }) => (status ? "4px" : "")};
+    margin-left: ${({ status }) => (status ? "5px" : "")};
+  }
 `;
 
 const Count = styled.p`
@@ -268,6 +285,10 @@ const Contents = styled.p`
   -webkit-line-clamp: 5;
   -webkit-box-orient: vertical;
   line-height: 1.2em;
+
+  @media (max-width: 600px) {
+    -webkit-line-clamp: 3;
+  }
 `;
 
 const CategoryBox = styled.div`
