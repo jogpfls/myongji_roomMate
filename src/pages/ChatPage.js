@@ -28,6 +28,7 @@ const ChatPage = () => {
   const [activeRoomTitle, setActiveRoomTitle] = useState("");
   const [stompClient, setStompClient] = useState(null);
   const [userName, setUserName] = useState("");
+  const [userId, setUserId] = useState("");
   const [roomParticipants, setRoomParticipants] = useState({});
   const chatMessagesRef = useRef(null);
   const [isRoomListOpen, setIsRoomListOpen] = useState(false);
@@ -67,6 +68,7 @@ const ChatPage = () => {
       try {
         const userData = await getUserData();
         setUserName(userData.name);
+        setUserId(userData.id);
       } catch (error) {
         console.error("유저 이름 받기 실패: ", error);
       }
@@ -172,6 +174,7 @@ const ChatPage = () => {
                 (msg) =>
                   msg.content === modifiedContent &&
                   msg.sender === receivedMessage.sender &&
+                  msg.userId === receivedMessage.userId &&
                   msg.timestamp === receivedMessage.timestamp
               )
             ) {
@@ -185,6 +188,7 @@ const ChatPage = () => {
                 {
                   content: modifiedContent,
                   sender: receivedMessage.sender,
+                  userId: receivedMessage.userId,
                   timestamp: receivedMessage.timestamp,
                   type: isJoinOrLeaveMessage(receivedMessage.content)
                     ? "notification"
@@ -203,6 +207,7 @@ const ChatPage = () => {
         body: JSON.stringify({
           roomId: activeRoomId,
           sender: userName,
+          userId: userId,
         }),
       });
     };
@@ -214,7 +219,13 @@ const ChatPage = () => {
         client.deactivate();
       }
     };
-  }, [activeRoomId, userName, getModifiedContent, isJoinOrLeaveMessage]);
+  }, [
+    activeRoomId,
+    userName,
+    userId,
+    getModifiedContent,
+    isJoinOrLeaveMessage,
+  ]);
 
   useLayoutEffect(() => {
     const chatMessagesElement = chatMessagesRef.current;
@@ -229,6 +240,7 @@ const ChatPage = () => {
         roomId: activeRoomId,
         content: inputMessage,
         sender: userName,
+        userId: userId,
       };
       console.log("Sending message:", JSON.stringify(messagePayload));
       stompClient.publish({
@@ -262,6 +274,7 @@ const ChatPage = () => {
         body: JSON.stringify({
           roomId: activeRoomId,
           sender: userName,
+          userId: userId,
         }),
       });
 
@@ -332,26 +345,26 @@ const ChatPage = () => {
           {(messages[activeRoomId] || []).map((message, index) => (
             <Message
               key={index}
-              sent={message.sender === userName}
+              sent={message.userId === userId}
               type={message.type}
             >
               {message.type === "message" && (
                 <SenderName
-                  sent={message.sender === userName}
+                  sent={message.userId === userId}
                   onClick={() => handleNameClick(message.sender)}
                 >
                   {message.sender}
                 </SenderName>
               )}
-              <MessageContainer sent={message.sender === userName}>
+              <MessageContainer sent={message.userId === userId}>
                 <MessageText
-                  sent={message.sender === userName}
+                  sent={message.userId === userId}
                   type={message.type}
                 >
                   {message.content}
                 </MessageText>
                 {message.type === "message" && (
-                  <Timestamp sent={message.sender === userName}>
+                  <Timestamp sent={message.userId === userId}>
                     {formatTimestamp(message.timestamp)}
                   </Timestamp>
                 )}
