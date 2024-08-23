@@ -146,8 +146,8 @@ const Wrapper = styled.div`
     border: ${({ status }) => (status ? "none" : "none")};
   }
 
-  @media screen and (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    height: 18vh;
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    height: 100%;
   }
 `;
 
