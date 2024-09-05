@@ -67,7 +67,7 @@
 <br/>
 
 <div align=center>
-	<h1>Stacks</h1>
+<h2>Stacks</h2>
 
 ### Environment
 
